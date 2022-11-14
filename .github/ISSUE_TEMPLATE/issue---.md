@@ -1,6 +1,6 @@
 ---
 name: 'Issue : '
-about: 이슈와 관련된 템플릿입니다.
+about: 이슈 템플릿입니다.
 title: ''
 labels: ''
 assignees: ''
