@@ -6,6 +6,7 @@
   },
   "devDependencies": {
     "@types/koa": "^2.13.5",
-    "@types/koa-router": "^7.4.4"
+    "@types/koa-router": "^7.4.4",
+    "nodemon": "^2.0.20"
   }
 }
