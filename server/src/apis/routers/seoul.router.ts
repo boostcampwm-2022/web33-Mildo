@@ -1,48 +1,55 @@
 import express, { Request, Response } from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import { AREA_NAMES } from '../config/constants';
+import xml2js from 'xml2js';
+
+import seoulController from '../controllers/seoul.controller';
+import { SEOUL_CITY_API_BASE_URL } from '../config/api.config';
 
 dotenv.config();
 
 const router = express.Router();
 
-router.get('/', async (_: Request, res: Response) => {
-  let count = 0;
-  const result = await Promise.all(
-    Object.keys(AREA_NAMES).map(async area => {
-      console.log(area);
-      const url = `http://openapi.seoul.go.kr:8088/${process.env.SEOUL_CITY_API_ACCESS_KEY}/json/citydata/1/5/${area}`;
-
-      try {
-        const { data } = await axios({ url: url, method: 'get' });
-        console.log(++count);
-        return data;
-      } catch (err) {
-        return false;
-      }
-    })
-  );
-  if (count === 50) {
-    res.send({ message: '성공', data: result });
-    return;
-  }
-  res.send({ message: '실패' });
-});
+router.get('/', seoulController.allAreas);
 
 router.get('/:areaName', async (req: Request, res: Response) => {
   const { areaName } = req.params;
-  const url = `http://openapi.seoul.go.kr:8088/${process.env.SEOUL_CITY_API_ACCESS_KEY}/xml/citydata/1/5/${areaName}`;
-
+  const url = `${SEOUL_CITY_API_BASE_URL}${areaName}`;
   try {
     const { data } = await axios({
       url: url,
       method: 'get'
     });
+    const json = await xml2js.parseStringPromise(data);
 
-    res.send({ message: '성공', data });
+    if (json['Map']) {
+      res.send({ ok: false });
+      return;
+    }
+
+    const { AREA_NM: areaName } = json['SeoulRtd.citydata']['CITYDATA'][0];
+    const {
+      AREA_PPLTN_MIN: min,
+      AREA_PPLTN_MAX: max,
+      AREA_CONGEST_LVL: level,
+      PPLTN_TIME: time
+    } = json['SeoulRtd.citydata']['CITYDATA'][0]['LIVE_PPLTN_STTS'][0][
+      'LIVE_PPLTN_STTS'
+    ][0];
+
+    res.status(200).send({
+      ok: true,
+      data: {
+        areaName: areaName[0],
+        max: max[0],
+        min: min[0],
+        level: level[0],
+        time: time[0]
+      }
+    });
   } catch (err) {
-    res.send({ message: '실패' });
+    console.log(err);
+    res.status(500).send({ ok: false });
   }
 });
 
