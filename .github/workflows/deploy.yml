@@ -1,0 +1,42 @@
+name: nCloud CI/CD
+
+on:
+  push:
+    branches: [ "main" ]  
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    env:
+      client-directory: ./client
+      server-directory: ./server
+    steps:
+      - name: 체크아웃
+        uses: actions/checkout@v3
+        
+      - name: 노드 버전 설치
+        uses: actions/setup-node@v3
+        with: 
+          node-version: 18.12.1
+            
+      - name: 클라이언트 설치
+        run: yarn
+        working-directory: ${{env.client-directory}}
+        
+      - name: 클라이언트 빌드
+        run: yarn build
+        working-directory: ${{env.client-directory}}
+      
+      - name: 서버 설치
+        run: yarn
+        working-directory: ${{env.server-directory}}
+        
+      - name: 서버 env 파일 설정
+        run: | 
+          touch .env
+          echo SEOUL_CITY_API_ACCESS_KEY=${{ secrets.SEOUL_CITY_API_ACCESS_KEY }}\ >> .env
+          
+      - name: 서버 빌드
+        run: yarn build
+        working-directory: ${{env.server-directory}}
