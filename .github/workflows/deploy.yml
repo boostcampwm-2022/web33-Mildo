@@ -18,7 +18,7 @@ jobs:
       - name: 노드 버전 설치
         uses: actions/setup-node@v3
         with: 
-          node-version: 18.12.1
+          node-version: 16.10.0
             
       - name: 클라이언트 설치
         run: yarn
