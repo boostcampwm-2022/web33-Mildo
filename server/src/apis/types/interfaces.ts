@@ -3,5 +3,5 @@ export interface cityDataTypes {
   populationMax: string;
   populationMin: string;
   populationLevel: string;
-  updatedAt: string;
+  populationTime: string;
 }

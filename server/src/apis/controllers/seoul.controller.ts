@@ -25,7 +25,7 @@ export default {
             populationMin: null,
             populationMax: null,
             populationLevel: null,
-            updatedAt: null
+            populationTime: null
           };
         }
         const { AREA_NM } = json['SeoulRtd.citydata']['CITYDATA'][0];
@@ -39,7 +39,7 @@ export default {
           populationMin: AREA_PPLTN_MIN[0],
           populationMax: AREA_PPLTN_MAX[0],
           populationLevel: AREA_CONGEST_LVL[0],
-          updatedAt: PPLTN_TIME[0]
+          populationTime: PPLTN_TIME[0]
         };
       });
       res.status(200).json({ ok: true, data: cityData });
