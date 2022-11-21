@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
-import mongoose from 'mongoose';
 import apiRouter from './apis';
 import dotenv from 'dotenv';
+import connectMongoDB from './apis/config/mongoDB';
 
 dotenv.config();
 
@@ -12,16 +12,8 @@ app.get('/', (_: Request, res: Response) => {
   res.send('Hello World!');
 });
 
+connectMongoDB();
 app.use('/api', apiRouter);
-
-mongoose
-  .connect(process.env.MONGODB_CONNECT_URI!)
-  .then(() => {
-    console.log('mongodb 연결됨');
-  })
-  .catch((e: Error) => {
-    console.log(e);
-  });
 
 app.listen(port, () => {
   console.log(`listening on *:${port}`);
