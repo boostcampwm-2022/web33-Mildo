@@ -1,10 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-
-interface AreaSchemaTypes {
-  areaName: string;
-  latitude: number;
-  longitude: number;
-}
+import { AreaSchemaTypes } from '../types/interfaces';
 
 const areaSchema = new Schema<AreaSchemaTypes>({
   areaName: {

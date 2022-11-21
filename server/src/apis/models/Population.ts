@@ -1,20 +1,11 @@
 import mongoose, { Schema } from 'mongoose';
-
-interface PopulationSchemaTypes {
-  areaName: string;
-  populationMax: number;
-  populationMin: number;
-  populationLevel: string;
-  populateionTime: Date;
-  created: Date;
-}
+import { PopulationSchemaTypes } from '../types/interfaces';
 
 const populationSchema = new Schema<PopulationSchemaTypes>({
   areaName: {
     type: String,
     maxlength: 20,
-    required: true,
-    unique: true
+    required: true
   },
   populationMax: {
     type: Number,
@@ -28,7 +19,7 @@ const populationSchema = new Schema<PopulationSchemaTypes>({
     type: String,
     required: true
   },
-  populateionTime: {
+  populationTime: {
     type: Date,
     required: true
   },
