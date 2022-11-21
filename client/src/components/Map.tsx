@@ -10,15 +10,15 @@ const MapComponent = styled.div`
 const Map = () => {
   const mapRef = useRef(null);
 
+  const [coordinates, setCoordinates] = useState({
+    latitude: 37.5656,
+    longitude: 126.9769
+  });
+
   const geolocation = useGeolocation({
     enableHighAccuracy: true,
     maximumAge: 15000,
     timeout: 12000
-  });
-
-  const [coordinates, useCoordinates] = useState({
-    latitude: 37.5656,
-    longitude: 126.9769
   });
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const Map = () => {
     if (!mapRef.current || !naver) return;
 
     if (geolocation.latitude && geolocation.longitude) {
-      useCoordinates({
+      setCoordinates({
         latitude: geolocation.latitude,
         longitude: geolocation.longitude
       });
