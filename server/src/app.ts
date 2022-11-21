@@ -8,7 +8,7 @@ app.get('/', (_: Request, res: Response) => {
   res.send('Hello World!');
 });
 
-app.use('/apis', apiRouter);
+app.use('/api', apiRouter);
 
 app.listen(port, () => {
   console.log(`listening on *:${port}`);
