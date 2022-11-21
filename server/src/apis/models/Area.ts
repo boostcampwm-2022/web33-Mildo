@@ -1,12 +1,12 @@
 import mongoose, { Schema } from 'mongoose';
 
-interface PlaceSchemaTypes {
+interface AreaSchemaTypes {
   areaName: string;
   latitude: number;
   longitude: number;
 }
 
-const placeSchema = new Schema<PlaceSchemaTypes>({
+const areaSchema = new Schema<AreaSchemaTypes>({
   areaName: {
     type: String,
     maxlength: 20,
@@ -23,5 +23,5 @@ const placeSchema = new Schema<PlaceSchemaTypes>({
   }
 });
 
-const Place = mongoose.model('place', placeSchema);
-export default Place;
+const Area = mongoose.model('area', areaSchema);
+export default Area;
