@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
-
 import styled from 'styled-components';
+import useGeolocation from 'react-hook-geolocation';
 
 const MapComponent = styled.div`
   width: 100%;
@@ -9,7 +9,14 @@ const MapComponent = styled.div`
 
 const Map = () => {
   const mapRef = useRef(null);
-  const [coordinates] = useState({
+
+  const geolocation = useGeolocation({
+    enableHighAccuracy: true,
+    maximumAge: 15000,
+    timeout: 12000
+  });
+
+  const [coordinates, useCoordinates] = useState({
     latitude: 37.5656,
     longitude: 126.9769
   });
@@ -27,8 +34,15 @@ const Map = () => {
 
     if (!mapRef.current || !naver) return;
 
+    if (geolocation.latitude && geolocation.longitude) {
+      useCoordinates({
+        latitude: geolocation.latitude,
+        longitude: geolocation.longitude
+      });
+    }
+
     (() => new naver.maps.Map(mapRef.current, mapOptions))();
-  }, []);
+  }, [geolocation]);
 
   return <MapComponent ref={mapRef} />;
 };
