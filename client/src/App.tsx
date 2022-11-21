@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
-import Map from './components/Map';
+import MainPage from './pages/MainPage';
 
 const GlobalStyle = createGlobalStyle`
     *, *::before, *::after {
@@ -18,7 +18,7 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <Map />
+      <MainPage />
     </>
   );
 }
