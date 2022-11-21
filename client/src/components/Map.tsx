@@ -1,4 +1,10 @@
 import { useRef, useEffect, useState } from 'react';
+import styled from 'styled-components';
+
+const MapComponent = styled.div`
+  width: 390px;
+  height: 844px;
+`;
 
 const Map = () => {
   const mapRef = useRef(null);
@@ -23,7 +29,7 @@ const Map = () => {
     (() => new naver.maps.Map(mapRef.current, mapOptions))();
   }, []);
 
-  return <div ref={mapRef} style={{ height: '400px', width: '400px' }} />;
+  return <MapComponent ref={mapRef} />;
 };
 
 export default Map;
