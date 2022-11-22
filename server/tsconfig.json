@@ -13,9 +13,10 @@
     "strictNullChecks": true /* 엄격한 null 확인 여부 */,
     "strictFunctionTypes": true /* 함수 타입에 대한 엄격한 확인 여부 */,
     "sourceMap": true /* '.map' 파일 생성 여부. */,
-    "noImplicitThis": true
+    "noImplicitThis": true,
+    "esModuleInterop": true
     // "typeRoots": ["./node_modules/@types", "./types"]
   },
-  "include": ["**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
