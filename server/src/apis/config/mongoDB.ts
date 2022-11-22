@@ -4,10 +4,10 @@ const connectMongoDB = () => {
   mongoose
     .connect(process.env.MONGODB_CONNECT_URI!)
     .then(() => {
-      console.log('mongodb 연결됨');
+      console.log('[MONDODB] CONNECTED');
     })
     .catch((e: Error) => {
-      console.log(e);
+      console.log(`[MONDODB] ERROR ${e}`);
     });
 };
 

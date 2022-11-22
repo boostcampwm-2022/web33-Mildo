@@ -77,9 +77,6 @@ export default {
         populationTime: new Date(data.populationTime)
       };
     });
-    console.log(newCityData);
-    console.log(new Date());
-
     populationRepository.saveMany(newCityData);
     return cityData;
   }

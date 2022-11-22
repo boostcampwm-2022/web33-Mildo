@@ -6,10 +6,7 @@ export default {
   allAreas: async (_: Request, res: Response) => {
     try {
       const cityData = await seoulService.getCityData();
-      console.log(cityData);
-
       seoulService.savePopulationData(cityData);
-
       res.status(200).json({ ok: true, data: cityData });
     } catch (error) {
       console.log(error);
