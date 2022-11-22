@@ -6,7 +6,7 @@ import connectMongoDB from './apis/config/mongoDB';
 dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.get('/', (_: Request, res: Response) => {
   res.send('Hello World!');
