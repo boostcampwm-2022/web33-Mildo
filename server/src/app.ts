@@ -6,7 +6,6 @@ import connectMongoDB from './apis/config/mongoDB';
 dotenv.config();
 
 const app = express();
-const port = 3000;
 
 app.get('/', (_: Request, res: Response) => {
   res.send('Hello World!');
@@ -15,6 +14,6 @@ app.get('/', (_: Request, res: Response) => {
 connectMongoDB();
 app.use('/api', apiRouter);
 
-app.listen(port, () => {
-  console.log(`[API SERVER] listening on *:${port}`);
+app.listen(process.env.API_SERVER_PORT, () => {
+  console.log(`[API SERVER] listening on *:${process.env.API_SERVER_PORT}`);
 });
