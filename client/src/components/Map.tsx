@@ -17,7 +17,7 @@ const Map = () => {
     longitude: 126.9769
   };
 
-  const [coordinates, setCoordinates] = useState({ ...defaultCoords });
+  const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
 
   const geolocation = useGeolocation({
     enableHighAccuracy: true,
@@ -33,25 +33,30 @@ const Map = () => {
     );
     const mapOptions: naver.maps.MapOptions = {
       center: location,
-      zoom: 17
+      zoom: 16,
+      minZoom: 13,
+      maxBounds: new naver.maps.LatLngBounds(
+        new naver.maps.LatLng(37.47, 126.84),
+        new naver.maps.LatLng(37.65, 127.2)
+      )
     };
 
     if (!mapRef.current || !naver) return;
 
     // 위도, 경도가 있는 경우 네이버 API에 주소 요청
     if (geolocation.latitude && geolocation.longitude) {
-      fetchGeocodeFromCoords(coordinates.latitude, coordinates.longitude).then(
+      fetchGeocodeFromCoords(geolocation.latitude, geolocation.longitude).then(
         result => {
           // 서울인 경우 -> 해당 위치를 결과 값으로 리턴
           // 서울이 아닌 경우 -> 서울 중심 위치를 결과값으로 리턴
-          if (result === '서울특별시') {
+          if (result === '서울특별시' || result === '과천시') {
             setCoordinates({
-              latitude: coordinates.latitude,
-              longitude: coordinates.longitude
+              latitude: geolocation.latitude,
+              longitude: geolocation.longitude
             });
           }
           if (result !== '서울특별시') {
-            setCoordinates(defaultCoords);
+            setCoordinates({ ...defaultCoords });
           }
         }
       );
