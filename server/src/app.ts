@@ -7,7 +7,6 @@ import cors from 'cors';
 dotenv.config();
 
 const app = express();
-const port = 3001;
 
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 
@@ -18,6 +17,6 @@ app.get('/', (_: Request, res: Response) => {
 connectMongoDB();
 app.use('/api', apiRouter);
 
-app.listen(port, () => {
-  console.log(`listening on *:${port}`);
+app.listen(process.env.API_SERVER_PORT, () => {
+  console.log(`[API SERVER] listening on *:${process.env.API_SERVER_PORT}`);
 });
