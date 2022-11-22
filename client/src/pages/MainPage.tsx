@@ -18,7 +18,10 @@ const MainPage = () => {
     longitude: 126.9769
   };
 
-  const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
+  const [coordinates, setCoordinates] = useState({
+    latitude: 0,
+    longitude: 0
+  });
   const [isLoading, setIsLoading] = useState(true);
 
   const geolocation = useGeolocation({
@@ -46,8 +49,11 @@ const MainPage = () => {
           }
         }
       );
+    } else {
+      setIsLoading(false);
+      setCoordinates({ ...defaultCoords });
     }
-  });
+  }, [geolocation]);
 
   return (
     <StyledMainPage>
