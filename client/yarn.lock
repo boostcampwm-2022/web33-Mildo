@@ -1946,6 +1946,11 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/geojson@*":
+  version "7946.0.10"
+  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.10.tgz#6dfbf5ea17142f7f9a043809f1cd4c448cb68249"
+  integrity sha512-Nmh0K3iWQJzniTuPRcJn5hxXkfB1T1pgB89SBig5PlJQU5yocazeu4jATJlaA0GYFKWMqDdvYemoSnF2pXgLVA==
+
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/@types/graceful-fs/-/graceful-fs-4.1.5.tgz#21ffba0d98da4350db64891f92a9e5db3cdb4e15"
@@ -2027,6 +2032,13 @@
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-3.0.1.tgz#5f8f2bca0a5863cb69bc0b0acd88c96cb1d4ae10"
   integrity sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA==
+
+"@types/navermaps@^3.6.1":
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/@types/navermaps/-/navermaps-3.6.1.tgz#6abb8eb49566ed179b75202bd5fe72016c2ed9ba"
+  integrity sha512-pYD2iPD1+WYiJI5A241H57Vv+Upnuo9W3Tm9PIdxYXVD3pkVyBFFGFK+4wANt8weG/3Us5x5a4FeIDgb07sBPg==
+  dependencies:
+    "@types/geojson" "*"
 
 "@types/node@*":
   version "18.11.9"
@@ -7828,6 +7840,11 @@ react-error-overlay@^6.0.11:
   version "6.0.11"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.11.tgz#92835de5841c5cf08ba00ddd2d677b6d17ff9adb"
   integrity sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg==
+
+react-hook-geolocation@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-hook-geolocation/-/react-hook-geolocation-1.1.0.tgz#922015f3cafd0ea4a7a209052a942a17cf50efb1"
+  integrity sha512-YlqFIOtozFPgcTDPDhRITIMSgIr1Op3070SCmKOTM9LD0mpZLsw7D+miwve9vD+B92Ht7f43Hn+hUMS3tHifAg==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"

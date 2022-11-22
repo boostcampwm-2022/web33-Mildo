@@ -1,23 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { createGlobalStyle } from 'styled-components';
+import MainPage from './pages/MainPage';
+
+const GlobalStyle = createGlobalStyle`
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    body {
+        font-family: "Noto Sans KR", "Helvetica", "Arial", sans-serif;
+        line-height: 1.5;
+    }
+`;
 
 function App() {
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className='App-link'
-          href='https://reactjs.org'
-          target='_blank'
-          rel='noopener noreferrer'>
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <GlobalStyle />
+      <MainPage />
+    </>
   );
 }
 
