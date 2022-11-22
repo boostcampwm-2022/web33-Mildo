@@ -80,7 +80,7 @@ export default {
     console.log(newCityData);
     console.log(new Date());
 
-    populationRepository.save(newCityData);
+    populationRepository.saveMany(newCityData);
     return cityData;
   }
 };

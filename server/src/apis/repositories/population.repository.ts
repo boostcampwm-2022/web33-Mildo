@@ -2,13 +2,12 @@ import { PopulationSchemaTypes } from './../types/interfaces';
 import Population from '../models/Population';
 
 export default {
-  save: (cityData: PopulationSchemaTypes[]) => {
-    Population.insertMany(cityData)
-      .then(() => {
-        console.log('data inserted');
-      })
-      .catch(e => {
-        console.log(e);
-      });
+  saveMany: async (cityData: PopulationSchemaTypes[]) => {
+    try {
+      const temp = await Population.insertMany(cityData);
+      console.log(`[MONGODB] INSERTED ${temp}`);
+    } catch (e) {
+      console.log(`[MONGODB] ERROR ${e}`);
+    }
   }
 };
