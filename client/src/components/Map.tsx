@@ -11,11 +11,13 @@ const MapComponent = styled.div`
 
 const Map = () => {
   const mapRef = useRef(null);
-
-  const [coordinates, setCoordinates] = useState({
+  // 기본 좌표를 시청역으로 설정
+  const defaultCoords = {
     latitude: 37.5656,
     longitude: 126.9769
-  });
+  };
+
+  const [coordinates, setCoordinates] = useState({ ...defaultCoords });
 
   const geolocation = useGeolocation({
     enableHighAccuracy: true,
@@ -36,16 +38,27 @@ const Map = () => {
 
     if (!mapRef.current || !naver) return;
 
+    // 위도, 경도가 있는 경우 네이버 API에 주소 요청
     if (geolocation.latitude && geolocation.longitude) {
-      setCoordinates({
-        latitude: geolocation.latitude,
-        longitude: geolocation.longitude
-      });
+      fetchGeocodeFromCoords(coordinates.latitude, coordinates.longitude).then(
+        result => {
+          // 서울인 경우 -> 해당 위치를 결과 값으로 리턴
+          // 서울이 아닌 경우 -> 서울 중심 위치를 결과값으로 리턴
+          if (result === '서울특별시') {
+            setCoordinates({
+              latitude: coordinates.latitude,
+              longitude: coordinates.longitude
+            });
+          }
+          if (result !== '서울특별시') {
+            setCoordinates(defaultCoords);
+          }
+        }
+      );
     }
 
+    // MapComponent DOM에 네이버 지도 렌더링
     (() => new naver.maps.Map(mapRef.current, mapOptions))();
-
-    fetchGeocodeFromCoords(coordinates.latitude, coordinates.longitude);
   }, [geolocation]);
 
   return <MapComponent ref={mapRef} />;

@@ -8,7 +8,7 @@ dotenv.config();
 export default {
   getGeoCodingFromCoords: async (req: Request, res: Response) => {
     const { lat, lng } = req.query;
-    const url = `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${lng},${lat}&sourcecrs=epsg:4326&orders=roadaddr&output=json`;
+    const url = `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${lng},${lat}&sourcecrs=epsg:4326&orders=legalcode&output=json`;
     try {
       const data = await getAxiosFromNaverApi(url);
       if (process.env.CLIENT_URL) {
