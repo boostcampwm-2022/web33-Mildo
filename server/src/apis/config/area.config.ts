@@ -1,4 +1,8 @@
-export const AREA_NAMES = {
+interface areatypes {
+  [key: string]: number[];
+}
+
+export const AREA_NAMES: areatypes = {
   '경복궁·서촌마을': [37.57992267352886, 126.97302818298341],
   '광화문·덕수궁': [37.570348086429135, 126.97579622268678],
   '창덕궁·종묘': [37.57927647015724, 126.99345588684083],

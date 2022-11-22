@@ -1,6 +1,5 @@
 import { CityDatatypes, PopulationSchemaTypes } from './../types/interfaces';
-import { TEST_AREA_NAMES } from '../config/area.config';
-// import { AREA_NAMES } from '../config/area.config';
+import { AREA_NAMES } from '../config/area.config';
 import xml2js from 'xml2js';
 import { getAxiosSeoulArea } from '../utils/axios';
 import populationRepository from '../repositories/population.repository';
@@ -40,7 +39,7 @@ const isVaildCityData = (json: jsonTypes) => {
 export default {
   getCityData: async (): Promise<CityDatatypes[]> => {
     const cityData: CityDatatypes[] = [];
-    for (const areaName in TEST_AREA_NAMES) {
+    for (const areaName in AREA_NAMES) {
       const cityDataXml = await getAxiosSeoulArea(areaName);
       const cityDataJson = await xml2js.parseStringPromise(cityDataXml);
       if (!isVaildCityData(cityDataJson)) {
@@ -67,8 +66,7 @@ export default {
     }
     return cityData;
   },
-  savePopulationData: (cityData: CityDatatypes[]) => {
-    // 대충 몽고디비에 저장하는 로직
+  savePopulationData: async (cityData: CityDatatypes[]) => {
     const newCityData: PopulationSchemaTypes[] = cityData.map(data => {
       return {
         ...data,
@@ -77,7 +75,19 @@ export default {
         populationTime: new Date(data.populationTime)
       };
     });
-    populationRepository.saveMany(newCityData);
-    return cityData;
+
+    try {
+      const savedPopulationData = await populationRepository.saveMany(
+        newCityData
+      );
+      console.log(`[MONGODB] SAVE MANY ${savedPopulationData}`);
+      return true;
+    } catch (e) {
+      console.log(`[MONGODB] ERROR ${e}`);
+      return false;
+    }
+  },
+  getRecentPopulationData: async () => {
+    await populationRepository.findRecent();
   }
 };
