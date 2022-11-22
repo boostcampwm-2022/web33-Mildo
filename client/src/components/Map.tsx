@@ -2,6 +2,8 @@ import { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useGeolocation from 'react-hook-geolocation';
 
+import fetchGeocodeFromCoords from '../apis/axios';
+
 const MapComponent = styled.div`
   width: 100%;
   height: 100%;
@@ -42,6 +44,8 @@ const Map = () => {
     }
 
     (() => new naver.maps.Map(mapRef.current, mapOptions))();
+
+    fetchGeocodeFromCoords(coordinates.latitude, coordinates.longitude);
   }, [geolocation]);
 
   return <MapComponent ref={mapRef} />;
