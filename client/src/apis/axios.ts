@@ -17,4 +17,6 @@ const fetchGeocodeFromCoords = async (lat: number, lng: number) => {
   return data?.data.results[0].region.area1.name;
 };
 
+// https://ifh.cc/g/RQcSZX.gif
+
 export default fetchGeocodeFromCoords;

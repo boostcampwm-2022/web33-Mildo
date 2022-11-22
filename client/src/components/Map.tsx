@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useGeolocation from 'react-hook-geolocation';
+import MapLoading from './MapLoading';
 
 import fetchGeocodeFromCoords from '../apis/axios';
 
@@ -18,6 +19,7 @@ const Map = () => {
   };
 
   const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
+  const [isLoading, setIsLoading] = useState(true);
 
   const geolocation = useGeolocation({
     enableHighAccuracy: true,
@@ -41,7 +43,10 @@ const Map = () => {
       )
     };
 
-    if (!mapRef.current || !naver) return;
+    if (!mapRef.current || !naver) {
+      console.log('hello!');
+      return;
+    }
 
     // 위도, 경도가 있는 경우 네이버 API에 주소 요청
     if (geolocation.latitude && geolocation.longitude) {
@@ -49,6 +54,7 @@ const Map = () => {
         result => {
           // 서울인 경우 -> 해당 위치를 결과 값으로 리턴
           // 서울이 아닌 경우 -> 서울 중심 위치를 결과값으로 리턴
+          setIsLoading(false);
           if (result === '서울특별시' || result === '과천시') {
             setCoordinates({
               latitude: geolocation.latitude,
@@ -66,7 +72,7 @@ const Map = () => {
     (() => new naver.maps.Map(mapRef.current, mapOptions))();
   }, [geolocation]);
 
-  return <MapComponent ref={mapRef} />;
+  return isLoading ? <MapLoading /> : <MapComponent ref={mapRef} />;
 };
 
 export default Map;
