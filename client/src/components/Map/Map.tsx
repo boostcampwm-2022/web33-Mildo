@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MapComponentPropsType } from '../../types/interfaces';
 import api from '../../apis/apis';
-import { createPinSvg } from '../../utils/map.util';
+import { createBigPinSvg, createPinSvg } from '../../utils/map.util';
 
 const MapComponent = styled.div`
   width: 100%;
@@ -25,6 +25,9 @@ interface GetAllAreaResponseTypes {
 
 const Map: React.FC<MapComponentPropsType> = ({ latitude, longitude }) => {
   const mapRef = useRef(null);
+  const markersRef = useRef<naver.maps.Marker[]>([]);
+  // const currentClickMarkerRef = useRef<naver.maps.Marker>(null);
+  // const focusMarkersRef = useRef<naver.maps.InfoWindow[]>([]);
   const [map, setMap] = useState<naver.maps.Map | null>(null);
 
   useEffect(() => {
@@ -38,7 +41,7 @@ const Map: React.FC<MapComponentPropsType> = ({ latitude, longitude }) => {
 
     const mapOptions: naver.maps.MapOptions = {
       center: location,
-      zoom: 16,
+      zoom: 14,
       minZoom: 12,
       maxBounds: new naver.maps.LatLngBounds(
         new naver.maps.LatLng(37.47, 126.84),
@@ -58,33 +61,33 @@ const Map: React.FC<MapComponentPropsType> = ({ latitude, longitude }) => {
     const getAllArea = async () => {
       const { data: allArea }: GetAllAreaResponseTypes = await api.getAllArea();
 
-      Object.entries(allArea)
+      markersRef.current = Object.entries(allArea)
         .sort((prev, next) => {
           // 위도순으로 오름차순 정렬
           return next[1].latitude - prev[1].latitude;
         })
-        .forEach(
-          ([
-            areaName,
-            {
-              latitude: areaLatitude,
-              longitude: areaLongitude,
-              populationLevel: areaPopulationLevel
-            }
-          ]: [string, CoordinatesTypes]) => {
-            (() =>
-              new naver.maps.Marker({
-                map,
-                position: new naver.maps.LatLng(areaLatitude, areaLongitude),
-                icon: {
-                  content: `<div class="marker" data-area="${areaName}" data-latitude="${areaLatitude}" data-longitude="${areaLongitude}">${createPinSvg(
-                    areaPopulationLevel
-                  )}</div>`,
-                  size: new naver.maps.Size(35, 50),
-                  anchor: new naver.maps.Point(17.5, 50),
-                  origin: new naver.maps.Point(0, 0)
-                }
-              }))();
+        .map(
+          (
+            [
+              areaName,
+              {
+                latitude: areaLatitude,
+                longitude: areaLongitude,
+                populationLevel: areaPopulationLevel
+              }
+            ]: [string, CoordinatesTypes],
+            index: number
+          ) => {
+            return new naver.maps.Marker({
+              map,
+              position: new naver.maps.LatLng(areaLatitude, areaLongitude),
+              icon: {
+                content: `<div class="marker" data-area="${areaName}" data-latitude="${areaLatitude}" data-longitude="${areaLongitude}" data-index="${index}" data-level="${areaPopulationLevel}">${createPinSvg(
+                  areaPopulationLevel
+                )}</div>`,
+                anchor: new naver.maps.Point(17.5, 50)
+              }
+            });
           }
         );
     };
@@ -107,8 +110,33 @@ const Map: React.FC<MapComponentPropsType> = ({ latitude, longitude }) => {
     );
 
     map.setCenter(location);
+    map.setZoom(16);
 
-    console.log(marker);
+    const markerIndex = +marker.dataset.index!;
+    const markerLevel = marker.dataset.level!;
+    const markerObject: naver.maps.Marker = markersRef.current[markerIndex];
+
+    const { content } = markerObject.getIcon() as { content: string };
+
+    console.log(content);
+
+    // focusMarkerRef.current! = new naver.maps.InfoWindow({
+    //   content: `<div class="marker">${createBigPinSvg(markerLevel)}</div>`,
+    //   pixelOffset: new naver.maps.Point(17.5, 50)
+    // });
+
+    // if (focusMarkerRef.current?.getMap()) {
+    //   focusMarkerRef.current.close();
+    // } else {
+    //   focusMarkerRef.current.open(map, markerObject);
+    // }
+
+    markerObject.setIcon({
+      content: `<div class="marker">${createBigPinSvg(markerLevel)}</div>`,
+      size: new naver.maps.Size(35, 50),
+      anchor: new naver.maps.Point(17.5, 50),
+      origin: new naver.maps.Point(0, 0)
+    });
   };
 
   return <MapComponent ref={mapRef} onTouchEnd={mapTouchEndHandler} />;
