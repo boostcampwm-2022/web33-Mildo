@@ -1,22 +1,28 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 
 const ModalLayout = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
   flex-direction: column;
+  gap: 10px;
   position: absolute;
   z-index: 10;
   width: 100%;
   max-width: 35rem;
-  height: 25%;
+  height: auto;
   background-color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
   bottom: 0%;
   left: 0%;
   border-radius: 20px 20px 0 0;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  transition: 0.2s all;
 `;
 
+// 북마크 on https://ifh.cc/v-6kHtyx.png
 const BookmarkIcon = styled.img`
   position: absolute;
   top: 0%;
@@ -63,7 +69,7 @@ const PopulationInfo = styled.div`
 
 const TomorrowButton = styled.button`
   width: 90%;
-  height: 20%;
+  height: 2.5rem;
 
   background-color: #6349ff;
   border: none;
@@ -75,10 +81,31 @@ const TomorrowButton = styled.button`
   padding-top: 4px;
 `;
 
+const Sample = styled.div`
+  height: 200px;
+  transition: 2s all;
+`;
+
 const InfoDetailModal = () => {
+  const [isSecondLevel, setIsSecondLevel] = useState(false);
+
+  const displaySecondLevelContents = () => {
+    setIsSecondLevel(true);
+  };
+
   return (
     <ModalLayout>
-      <img src='https://ifh.cc/g/ZdS1bD.png' />
+      {isSecondLevel ? (
+        <img
+          src='https://ifh.cc/g/l7kvV4.png'
+          onClick={displaySecondLevelContents}
+        />
+      ) : (
+        <img
+          src='https://ifh.cc/g/ZdS1bD.png'
+          onClick={displaySecondLevelContents}
+        />
+      )}
       <BookmarkIcon src='https://ifh.cc/g/7qPCCL.png' />
       <Title>
         현재 <TitleLocation>학동역</TitleLocation>은 놀기 좋아보여요 🙃
@@ -90,6 +117,7 @@ const InfoDetailModal = () => {
           <p>12,345명~15,000명</p>
         </PopulationInfo>
       </PopulationBox>
+      {isSecondLevel && <Sample />}
       <TomorrowButton>내일 갈꺼야? :&#41;</TomorrowButton>
     </ModalLayout>
   );
