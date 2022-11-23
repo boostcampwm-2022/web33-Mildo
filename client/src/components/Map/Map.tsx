@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MapComponentPropsType } from '../../types/interfaces';
 import api from '../../apis/apis';
+import { createPinSvg } from '../../utils/map.util';
 
 const MapComponent = styled.div`
   width: 100%;
@@ -9,14 +10,17 @@ const MapComponent = styled.div`
 `;
 
 interface CoordinatesTypes {
-  areaName: string;
+  populationMax: number;
+  populationMin: number;
+  populationLevel: string;
+  populationTime: Date;
   latitude: number;
   longitude: number;
 }
 
 interface GetAllAreaResponseTypes {
   ok: boolean;
-  data: CoordinatesTypes[];
+  data: CoordinatesTypes;
 }
 
 const Map: React.FC<MapComponentPropsType> = ({ latitude, longitude }) => {
@@ -55,15 +59,25 @@ const Map: React.FC<MapComponentPropsType> = ({ latitude, longitude }) => {
     const getAllArea = async () => {
       const { data: allArea }: GetAllAreaResponseTypes = await api.getAllArea();
 
-      allArea.forEach((area: CoordinatesTypes) => {
-        (() =>
-          new naver.maps.Marker({
-            map,
-            position: new naver.maps.LatLng(area.latitude, area.longitude)
-          }))();
-      });
-
       console.log(allArea);
+
+      Object.entries(allArea).forEach(
+        ([_, value]: [string, CoordinatesTypes]) => {
+          (() =>
+            new naver.maps.Marker({
+              map,
+              position: new naver.maps.LatLng(value.latitude, value.longitude),
+              icon: {
+                content: `<div class="marker">${createPinSvg(
+                  value.populationLevel
+                )}</div>`,
+                size: new naver.maps.Size(35, 50),
+                anchor: new naver.maps.Point(17.5, 50),
+                origin: new naver.maps.Point(0, 0)
+              }
+            }))();
+        }
+      );
     };
 
     getAllArea();

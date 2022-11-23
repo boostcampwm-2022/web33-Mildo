@@ -15,6 +15,7 @@ export default {
   },
   findRecent: async () => {
     const recentData = await Population.find().sort({ created: -1 }).limit(50);
-    console.log(recentData);
+    // console.log(recentData);
+    return recentData;
   }
 };

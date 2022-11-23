@@ -1,10 +1,28 @@
-import { CityDatatypes, PopulationSchemaTypes } from './../types/interfaces';
+import {
+  CityDataTypes,
+  PopulationSchemaTypes,
+  AreaPopulationTypes,
+  AreaCoordinateTypes
+} from './../types/interfaces';
 import { AREA_NAMES } from '../config/area.config';
 import xml2js from 'xml2js';
 import { getAxiosSeoulArea } from '../utils/axios';
 import populationRepository from '../repositories/population.repository';
+import areaService from '../services/area.service';
+import populationService from '../services/population.service';
 
-interface jsonTypes {
+interface PopulationResponseTypes {
+  [areaName: string]: {
+    populationMax: number;
+    populationMin: number;
+    populationLevel: string;
+    populationTime: Date;
+    latitude: number;
+    longitude: number;
+  };
+}
+
+interface JsonTypes {
   'SeoulRtd.citydata':
     | {
         CITYDATA: {
@@ -22,23 +40,37 @@ interface jsonTypes {
     | undefined;
 }
 
-const parseAreaName = (json: jsonTypes) => {
+const parseAreaName = (json: JsonTypes) => {
   return json['SeoulRtd.citydata']!['CITYDATA'][0];
 };
 
-const parsePopulationData = (json: jsonTypes) => {
+const parsePopulationData = (json: JsonTypes) => {
   return json['SeoulRtd.citydata']!['CITYDATA'][0]['LIVE_PPLTN_STTS'][0][
     'LIVE_PPLTN_STTS'
   ][0];
 };
 
-const isVaildCityData = (json: jsonTypes) => {
+const isVaildCityData = (json: JsonTypes) => {
   return json['SeoulRtd.citydata'];
 };
 
+const mergeAreaCoordinatePopulation = (
+  areaCoordinate: AreaCoordinateTypes,
+  areaPopulation: AreaPopulationTypes
+): PopulationResponseTypes => {
+  const result: PopulationResponseTypes = {};
+  Object.keys(areaCoordinate).map((areaName: string) => {
+    result[areaName] = {
+      ...areaPopulation[areaName],
+      ...areaCoordinate[areaName]
+    };
+  });
+  return result;
+};
+
 export default {
-  getCityData: async (): Promise<CityDatatypes[]> => {
-    const cityData: CityDatatypes[] = [];
+  getCityData: async (): Promise<CityDataTypes[]> => {
+    const cityData: CityDataTypes[] = [];
     for (const areaName in AREA_NAMES) {
       const cityDataXml = await getAxiosSeoulArea(areaName);
       const cityDataJson = await xml2js.parseStringPromise(cityDataXml);
@@ -66,7 +98,7 @@ export default {
     }
     return cityData;
   },
-  savePopulationData: async (cityData: CityDatatypes[]) => {
+  saveAreaPopulation: async (cityData: CityDataTypes[]) => {
     const newCityData: PopulationSchemaTypes[] = cityData.map(data => {
       return {
         ...data,
@@ -75,19 +107,27 @@ export default {
         populationTime: new Date(data.populationTime)
       };
     });
-
     try {
-      const savedPopulationData = await populationRepository.saveMany(
-        newCityData
-      );
-      console.log(`[MONGODB] SAVE MANY ${savedPopulationData}`);
+      const areaPopulation = await populationRepository.saveMany(newCityData);
+      console.log(`[MONGODB] SAVE MANY ${areaPopulation}`);
       return true;
     } catch (e) {
       console.log(`[MONGODB] ERROR ${e}`);
       return false;
     }
   },
-  getRecentPopulationData: async () => {
-    await populationRepository.findRecent();
+  getRecentAreaInfo: async (): Promise<PopulationResponseTypes | null> => {
+    // 데이터베이스에서 최근순 데이터 50개 가져오기
+    const recentAreaPopulation =
+      await populationService.getRecentAreaPopulation();
+    // 위도/경도 50개 가져오기
+    const allAreaCoordinate = await areaService.getAllAreaCoordinate();
+    if (recentAreaPopulation && allAreaCoordinate) {
+      return mergeAreaCoordinatePopulation(
+        allAreaCoordinate,
+        recentAreaPopulation
+      );
+    }
+    return null;
   }
 };

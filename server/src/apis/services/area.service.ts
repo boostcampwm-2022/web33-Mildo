@@ -1,16 +1,19 @@
-import { AreaSchemaTypes } from './../types/interfaces';
 import areaRepository from '../repositories/area.ropository';
+import { AreaCoordinateTypes } from '../types/interfaces';
 
 export default {
-  getAllCoordinate: async (): Promise<AreaSchemaTypes[] | null> => {
+  getAllAreaCoordinate: async (): Promise<AreaCoordinateTypes | null> => {
+    const result: AreaCoordinateTypes = {};
     try {
       const areas = await areaRepository.findAll();
       if (areas) {
-        return areas.map((area: AreaSchemaTypes) => ({
-          areaName: area.areaName,
-          latitude: area.latitude,
-          longitude: area.longitude
-        }));
+        areas.map(area => {
+          result[area.areaName] = {
+            latitude: area.latitude,
+            longitude: area.longitude
+          };
+        });
+        return result;
       }
     } catch (error) {
       console.log(error);
