@@ -81,9 +81,9 @@ const TomorrowButton = styled.button`
   padding-top: 4px;
 `;
 
-const Sample = styled.div`
-  height: 200px;
-  transition: 2s all;
+const Sample = styled.div<{ display: boolean }>`
+  height: ${props => (props.display ? '200px' : '0px')};
+  transition: 1s all;
 `;
 
 const InfoDetailModal = () => {
@@ -117,7 +117,8 @@ const InfoDetailModal = () => {
           <p>12,345명~15,000명</p>
         </PopulationInfo>
       </PopulationBox>
-      {isSecondLevel && <Sample />}
+      {/* {isSecondLevel && <Sample />} */}
+      <Sample display={isSecondLevel} />
       <TomorrowButton>내일 갈꺼야? :&#41;</TomorrowButton>
     </ModalLayout>
   );
