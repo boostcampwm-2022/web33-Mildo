@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import useGeolocation from 'react-hook-geolocation';
 
-import Map from '../components/Map';
-import MapLoading from '../components/MapLoading';
-import fetchGeocodeFromCoords from '../apis/axios';
+import Map from '../../components/Map/Map';
+import MapLoading from '../../components/MapLoading/MapLoading';
+import fetchGeocodeFromCoords from '../../apis/axios';
 
 const StyledMainPage = styled.div`
   width: 100vw;
