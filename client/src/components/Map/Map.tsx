@@ -61,8 +61,11 @@ const Map: React.FC<MapComponentPropsType> = ({ latitude, longitude }) => {
 
       console.log(allArea);
 
-      Object.entries(allArea).forEach(
-        ([_, value]: [string, CoordinatesTypes]) => {
+      Object.entries(allArea)
+        .sort((prev, next) => {
+          return next[1].latitude - prev[1].latitude;
+        })
+        .forEach(([_, value]: [string, CoordinatesTypes]) => {
           (() =>
             new naver.maps.Marker({
               map,
@@ -76,8 +79,7 @@ const Map: React.FC<MapComponentPropsType> = ({ latitude, longitude }) => {
                 origin: new naver.maps.Point(0, 0)
               }
             }))();
-        }
-      );
+        });
     };
 
     getAllArea();
