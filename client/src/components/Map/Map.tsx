@@ -26,7 +26,6 @@ interface GetAllAreaResponseTypes {
 const Map: React.FC<MapComponentPropsType> = ({ latitude, longitude }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState<naver.maps.Map | null>(null);
-  // const [areaMarkers, setAreaMarkers] = useState<naver.maps.Marker[]>([]);
 
   useEffect(() => {
     const { naver } = window;
@@ -59,33 +58,60 @@ const Map: React.FC<MapComponentPropsType> = ({ latitude, longitude }) => {
     const getAllArea = async () => {
       const { data: allArea }: GetAllAreaResponseTypes = await api.getAllArea();
 
-      console.log(allArea);
-
       Object.entries(allArea)
         .sort((prev, next) => {
+          // 위도순으로 오름차순 정렬
           return next[1].latitude - prev[1].latitude;
         })
-        .forEach(([_, value]: [string, CoordinatesTypes]) => {
-          (() =>
-            new naver.maps.Marker({
-              map,
-              position: new naver.maps.LatLng(value.latitude, value.longitude),
-              icon: {
-                content: `<div class="marker">${createPinSvg(
-                  value.populationLevel
-                )}</div>`,
-                size: new naver.maps.Size(35, 50),
-                anchor: new naver.maps.Point(17.5, 50),
-                origin: new naver.maps.Point(0, 0)
-              }
-            }))();
-        });
+        .forEach(
+          ([
+            areaName,
+            {
+              latitude: areaLatitude,
+              longitude: areaLongitude,
+              populationLevel: areaPopulationLevel
+            }
+          ]: [string, CoordinatesTypes]) => {
+            (() =>
+              new naver.maps.Marker({
+                map,
+                position: new naver.maps.LatLng(areaLatitude, areaLongitude),
+                icon: {
+                  content: `<div class="marker" data-area="${areaName}" data-latitude="${areaLatitude}" data-longitude="${areaLongitude}">${createPinSvg(
+                    areaPopulationLevel
+                  )}</div>`,
+                  size: new naver.maps.Size(35, 50),
+                  anchor: new naver.maps.Point(17.5, 50),
+                  origin: new naver.maps.Point(0, 0)
+                }
+              }))();
+          }
+        );
     };
 
     getAllArea();
   }, [map]);
 
-  return <MapComponent ref={mapRef} />;
+  const mapTouchEndHandler = (e: React.TouchEvent<HTMLDivElement>) => {
+    const marker = (e.target as HTMLDivElement).closest(
+      '.marker'
+    ) as HTMLDivElement;
+
+    if (!marker || !map) {
+      return;
+    }
+
+    const location = new naver.maps.LatLng(
+      +marker.dataset.latitude!,
+      +marker.dataset.longitude!
+    );
+
+    map.setCenter(location);
+
+    console.log(marker);
+  };
+
+  return <MapComponent ref={mapRef} onTouchEnd={mapTouchEndHandler} />;
 };
 
 export default Map;
