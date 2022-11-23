@@ -2,12 +2,14 @@ import styled from 'styled-components';
 import { useState } from 'react';
 
 const ModalLayout = styled.div`
+  position: absolute;
+  bottom: 0%;
+  left: 0%;
   display: flex;
   justify-content: space-around;
   align-items: center;
   flex-direction: column;
   gap: 10px;
-  position: absolute;
   z-index: 10;
   width: 100%;
   max-width: 35rem;
@@ -15,8 +17,6 @@ const ModalLayout = styled.div`
   background-color: white;
   padding-top: 10px;
   padding-bottom: 10px;
-  bottom: 0%;
-  left: 0%;
   border-radius: 20px 20px 0 0;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
   transition: 0.2s all;
@@ -39,15 +39,14 @@ const TitleLocation = styled.strong`
 `;
 
 const PopulationBox = styled.div`
-  width: 90%;
-  height: 30%;
-  background-color: #eeeeee;
-  border-radius: 10px;
-
   display: flex;
   justify-content: center;
-  gap: 20px;
   align-items: center;
+  width: 90%;
+  height: 30%;
+  gap: 20px;
+  background-color: #eeeeee;
+  border-radius: 10px;
 `;
 
 const PopulationInfo = styled.div`
@@ -81,16 +80,35 @@ const TomorrowButton = styled.button`
   padding-top: 4px;
 `;
 
-const Sample = styled.div<{ display: boolean }>`
-  height: ${props => (props.display ? '200px' : '0px')};
+const SecondLevelBox = styled.div<{ isDisplay: boolean }>`
+  width: 90%;
+  height: ${props => (props.isDisplay ? '10rem' : '0px')};
   transition: 1s all;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const TraceGraph = styled.div`
+  width: 100%;
+  height: 70%;
+  background-color: #eeeeee;
+  border-radius: 10px;
+`;
+
+const TomorrowRanking = styled.div`
+  width: 100%;
+  height: 30%;
+  background-color: #eeeeee;
+  border-radius: 10px;
 `;
 
 const InfoDetailModal = () => {
   const [isSecondLevel, setIsSecondLevel] = useState(false);
 
-  const displaySecondLevelContents = () => {
-    setIsSecondLevel(true);
+  const toggleSecondLevelContents = () => {
+    setIsSecondLevel(!isSecondLevel);
   };
 
   return (
@@ -98,12 +116,12 @@ const InfoDetailModal = () => {
       {isSecondLevel ? (
         <img
           src='https://ifh.cc/g/l7kvV4.png'
-          onClick={displaySecondLevelContents}
+          onClick={toggleSecondLevelContents}
         />
       ) : (
         <img
           src='https://ifh.cc/g/ZdS1bD.png'
-          onClick={displaySecondLevelContents}
+          onClick={toggleSecondLevelContents}
         />
       )}
       <BookmarkIcon src='https://ifh.cc/g/7qPCCL.png' />
@@ -117,8 +135,10 @@ const InfoDetailModal = () => {
           <p>12,345명~15,000명</p>
         </PopulationInfo>
       </PopulationBox>
-      {/* {isSecondLevel && <Sample />} */}
-      <Sample display={isSecondLevel} />
+      <SecondLevelBox isDisplay={isSecondLevel}>
+        <TraceGraph></TraceGraph>
+        <TomorrowRanking></TomorrowRanking>
+      </SecondLevelBox>
       <TomorrowButton>내일 갈꺼야? :&#41;</TomorrowButton>
     </ModalLayout>
   );
