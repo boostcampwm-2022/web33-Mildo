@@ -1,4 +1,4 @@
-export interface CityDatatypes {
+export interface CityDataTypes {
   areaName: string;
   populationMax: string;
   populationMin: string;
@@ -19,4 +19,20 @@ export interface AreaSchemaTypes {
   areaName: string;
   latitude: number;
   longitude: number;
+}
+
+export interface AreaPopulationTypes {
+  [areaName: string]: {
+    populationMax: number;
+    populationMin: number;
+    populationLevel: string;
+    populationTime: Date;
+  };
+}
+
+export interface AreaCoordinateTypes {
+  [areaName: string]: {
+    latitude: number;
+    longitude: number;
+  };
 }
