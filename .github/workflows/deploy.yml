@@ -9,8 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-18.04
     env:
-      client-directory: client
-      server-directory: server
+      client-directory: ./client
+      server-directory: ./server
     steps:
       - name: 체크아웃
         uses: actions/checkout@v3
@@ -21,22 +21,74 @@ jobs:
           node-version: 16.10.0
             
       - name: 클라이언트 설치
-        run: yarn
         working-directory: ${{env.client-directory}}
+        run: yarn
         
       - name: 클라이언트 빌드
-        run: yarn build
         working-directory: ${{env.client-directory}}
+        run: yarn build
       
       - name: 서버 설치
-        run: yarn
         working-directory: ${{env.server-directory}}
+        run: yarn
         
       - name: 서버 env 파일 설정
+        working-directory: ${{env.server-directory}}
         run: | 
           touch .env
           echo SEOUL_CITY_API_ACCESS_KEY=${{ secrets.SEOUL_CITY_API_ACCESS_KEY }}\ >> .env
+          echo SEOUL_CITY_API_ACCESS_KEY_SUB=${{ secrets.SEOUL_CITY_API_ACCESS_KEY_SUB }}\ >> .env
+          echo MONGODB_CONNECT_URI=${{ secrets.MONGODB_CONNECT_URI }}\ >> .env
+          echo NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}\ >> .env
+          echo NAVER_CLIENT_PASSWORD=${{ secrets.NAVER_CLIENT_PASSWORD }}\ >> .env
+          echo CLIENT_URL=${{ secrets.CLIENT_URL }}\ >> .env
+          echo API_SERVER_PORT=${{ secrets.API_SERVER_PORT }}\ >> .env
           
       - name: 서버 빌드
-        run: yarn build
         working-directory: ${{env.server-directory}}
+        run: npx tsc -p .
+        
+      - name: 배포 서버의 배포 관련 파일 삭제
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            rm -rf /usr/share/nginx/html/*
+            cd web33-Mildo
+            rm -rf *
+            
+      - name: 클라이언트 빌드 파일 복사
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: './client/build'
+          target: '/usr/share/nginx/html'
+            
+      - name: 서버 빌드 파일 복사
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: './server/dist'
+          target: 'web33-Mildo'
+
+      - name: 서버 실행
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            nvm use default
+            cd web33-Mildo/server/dist/src
+            pm2 start app.js
+            pm2 reload app.js
