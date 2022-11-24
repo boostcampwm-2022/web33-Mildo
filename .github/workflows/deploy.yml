@@ -89,7 +89,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            node -v
+            nvm use v16.10.0
             cd web33-Mildo/server/dist/src
             pm2 start app.js
             pm2 reload app.js
