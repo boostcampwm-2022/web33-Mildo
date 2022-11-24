@@ -2,7 +2,7 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 // 나중에 .env로 빼내어야 함
-const serverURL = '118.67.143.49:3001';
+const serverURL = 'http://118.67.143.49:3001';
 
 const fetchGeocodeFromCoords = async (lat: number, lng: number) => {
   let data;

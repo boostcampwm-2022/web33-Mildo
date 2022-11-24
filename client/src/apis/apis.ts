@@ -7,7 +7,7 @@ const request = async (
 ) => {
   try {
     const response = await axios({
-      url: `118.67.143.49:3001/api${path}`,
+      url: `http://118.67.143.49:3001/api${path}`,
       method,
       withCredentials: true,
       data
