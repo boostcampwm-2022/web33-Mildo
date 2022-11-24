@@ -88,7 +88,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: '.env'
+          source: 'server/.env'
           target: 'web33-Mildo/server/dist'
 
       - name: 서버 실행
