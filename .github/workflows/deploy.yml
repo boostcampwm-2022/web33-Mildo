@@ -90,7 +90,6 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             node -v
-            chown root web33-Mildo/server
             cd web33-Mildo/server/dist/src
             pm2 start app.js
             pm2 reload app.js
