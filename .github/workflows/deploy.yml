@@ -34,7 +34,6 @@ jobs:
         run: yarn
         
       - name: 서버 env 파일 설정
-        working-directory: ${{env.server-directory}}
         run: | 
           touch .env
           echo SEOUL_CITY_API_ACCESS_KEY=${{ secrets.SEOUL_CITY_API_ACCESS_KEY }}\ >> .env
@@ -88,7 +87,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: 'server/.env'
+          source: '.env'
           target: 'web33-Mildo/server/dist'
 
       - name: 서버 실행
@@ -100,8 +99,5 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd web33-Mildo/server/dist/src
-            node -v
-            nvm use v16.10.0
-            node -v
             pm2 start app.js
             pm2 reload app.js
