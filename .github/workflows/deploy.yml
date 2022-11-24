@@ -60,7 +60,7 @@ jobs:
             cd web33-Mildo
             rm -rf *
             
-      - name: 클라이언트 빌드 파일 복사
+      - name: 클라이언트 빌드 폴더 복사
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -70,14 +70,24 @@ jobs:
           source: './client/build/*'
           target: '/usr/share/nginx/html'
             
-      - name: 서버 빌드 파일 복사
+      - name: 서버 폴더 통째로 복사
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: './server/dist'
+          source: './server'
+          target: 'web33-Mildo'
+          
+      - name: 서버 폴더 통째로 복사
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: './server'
           target: 'web33-Mildo'
           
       - name: 서버 .env 파일 복사
