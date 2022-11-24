@@ -80,16 +80,6 @@ jobs:
           source: './server'
           target: 'web33-Mildo'
           
-      - name: 서버 폴더 통째로 복사
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          source: './server'
-          target: 'web33-Mildo'
-          
       - name: 서버 .env 파일 복사
         uses: appleboy/scp-action@master
         with:
