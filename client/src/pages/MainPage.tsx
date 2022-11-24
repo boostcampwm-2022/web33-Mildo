@@ -5,10 +5,12 @@ import useGeolocation from 'react-hook-geolocation';
 import Map from '../components/Map';
 import MapLoading from '../components/MapLoading';
 import fetchGeocodeFromCoords from '../apis/axios';
+import InfoDetailModal from '../components/InfoDetailModal';
 
 const StyledMainPage = styled.div`
   width: 100vw;
   height: 100vh;
+  position: relative;
 `;
 
 const MainPage = () => {
@@ -65,6 +67,7 @@ const MainPage = () => {
           longitude={coordinates.longitude}
         />
       )}
+      <InfoDetailModal />
     </StyledMainPage>
   );
 };
