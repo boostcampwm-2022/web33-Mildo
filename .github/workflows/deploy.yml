@@ -68,7 +68,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: './client/build'
+          source: './client/build/*'
           target: '/usr/share/nginx/html'
             
       - name: 서버 빌드 파일 복사
@@ -89,7 +89,9 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            nvm use v16.10.0
             cd web33-Mildo/server/dist/src
+            node -v
+            nvm use v16.10.0
+            node -v
             pm2 start app.js
             pm2 reload app.js
