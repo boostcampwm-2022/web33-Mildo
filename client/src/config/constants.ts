@@ -5,7 +5,6 @@ interface PopulationLevelColorTypes {
   };
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export const POPULATION_LEVEL_COLOR: PopulationLevelColorTypes = {
   여유: { fill: '#43EB40', stroke: '#03A000' },
   보통: { fill: '#FFDB1D', stroke: '#B1A000' },
@@ -43,4 +42,10 @@ export const MARKER_CLASS_NAME = 'marker';
 
 export const Z_INDEX = {
   modal: 10
+};
+
+export const COLOR_PALETTE = {
+  PRIMARY: '#6349FF',
+  GREEN: '#43EB40',
+  GREY20: '#EEEEEE'
 };
