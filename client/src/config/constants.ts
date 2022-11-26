@@ -23,25 +23,25 @@ export const DEFAULT_COORDINATES = {
 };
 
 export const GEOLOCATION_CONSTANTS = {
-  maximumAge: 15000,
-  timeout: 12000
+  MAXIMUMAGE: 15000,
+  TIMEOUT: 12000
 };
 
 export const SEOUL_BOUNDS = {
-  sw: {
-    latitude: 37.47,
-    longitude: 126.84
+  SW: {
+    LATITUDE: 37.47,
+    LONGITUDE: 126.84
   },
-  ne: {
-    latitude: 37.65,
-    longitude: 127.2
+  NE: {
+    LATITUDE: 37.65,
+    LONGITUDE: 127.2
   }
 };
 
 export const MARKER_CLASS_NAME = 'marker';
 
 export const Z_INDEX = {
-  modal: 10
+  MODAL: 10
 };
 
 export const COLOR_PALETTE = {

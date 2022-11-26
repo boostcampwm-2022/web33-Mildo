@@ -50,12 +50,12 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
       minZoom: 12,
       maxBounds: new naver.maps.LatLngBounds(
         new naver.maps.LatLng(
-          SEOUL_BOUNDS.sw.latitude,
-          SEOUL_BOUNDS.sw.longitude
+          SEOUL_BOUNDS.SW.LATITUDE,
+          SEOUL_BOUNDS.SW.LONGITUDE
         ),
         new naver.maps.LatLng(
-          SEOUL_BOUNDS.ne.latitude,
-          SEOUL_BOUNDS.ne.longitude
+          SEOUL_BOUNDS.NE.LATITUDE,
+          SEOUL_BOUNDS.NE.LONGITUDE
         )
       )
     };

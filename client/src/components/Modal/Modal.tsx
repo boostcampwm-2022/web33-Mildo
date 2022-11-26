@@ -23,7 +23,7 @@ const ModalContainer = styled.div<ModalContainerProps>`
   border-radius: 20px 20px 0 0;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
   transition: 0.2s all;
-  z-index: ${Z_INDEX.modal};
+  z-index: ${Z_INDEX.MODAL};
   ${props => props.customModalStyle && props.customModalStyle}
 `;
 

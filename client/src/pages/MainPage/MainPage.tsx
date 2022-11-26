@@ -32,8 +32,8 @@ const MainPage = () => {
 
   const geolocation = useGeolocation({
     enableHighAccuracy: true,
-    maximumAge: GEOLOCATION_CONSTANTS.maximumAge,
-    timeout: GEOLOCATION_CONSTANTS.timeout
+    maximumAge: GEOLOCATION_CONSTANTS.MAXIMUMAGE,
+    timeout: GEOLOCATION_CONSTANTS.TIMEOUT
   });
 
   useEffect(() => {
