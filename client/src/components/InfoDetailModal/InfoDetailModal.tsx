@@ -105,7 +105,7 @@ const TomorrowRanking = styled.div`
 `;
 
 const InfoDetailModal = () => {
-  const [isSecondLevel, setIsSecondLevel] = useState(false);
+  const [isSecondLevel, setIsSecondLevel] = useState<boolean>(false);
 
   const toggleSecondLevelContents = () => {
     setIsSecondLevel(!isSecondLevel);

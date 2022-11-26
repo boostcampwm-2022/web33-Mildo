@@ -11,6 +11,7 @@ import {
   GEOLOCATION_CONSTANTS,
   USERS_LOACTION
 } from '../../config/constants';
+import axios from 'axios';
 
 const StyledMainPage = styled.div`
   width: 100vw;
@@ -18,12 +19,17 @@ const StyledMainPage = styled.div`
   position: relative;
 `;
 
+interface CoordinatesTypes {
+  latitude: number;
+  longitude: number;
+}
+
 const MainPage = () => {
-  const [coordinates, setCoordinates] = useState({
+  const [coordinates, setCoordinates] = useState<CoordinatesTypes>({
     latitude: 0,
     longitude: 0
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const geolocation = useGeolocation({
     enableHighAccuracy: true,

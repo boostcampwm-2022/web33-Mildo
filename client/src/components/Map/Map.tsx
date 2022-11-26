@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { MapComponentPropsType } from '../../types/interfaces';
 import api from '../../apis/apis';
 import { createBigPinSvg, createPinSvg } from '../../utils/map.util';
 import { MARKER_CLASS_NAME, SEOUL_BOUNDS } from '../../config/constants';
@@ -10,7 +9,7 @@ const MapComponent = styled.div`
   height: 100%;
 `;
 
-interface CoordinatesTypes {
+interface CoordinatesPopulationTypes {
   populationMax: number;
   populationMin: number;
   populationLevel: string;
@@ -21,10 +20,15 @@ interface CoordinatesTypes {
 
 interface GetAllAreaResponseTypes {
   ok: boolean;
-  data: CoordinatesTypes;
+  data: CoordinatesPopulationTypes;
 }
 
-const Map: React.FC<MapComponentPropsType> = ({ latitude, longitude }) => {
+interface MapComponentProps {
+  latitude: number;
+  longitude: number;
+}
+
+const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
   const mapRef = useRef(null);
   const markersRef = useRef<naver.maps.Marker[]>([]);
   // const currentClickMarkerRef = useRef<naver.maps.Marker>(null);
@@ -82,7 +86,7 @@ const Map: React.FC<MapComponentPropsType> = ({ latitude, longitude }) => {
                 longitude: areaLongitude,
                 populationLevel: areaPopulationLevel
               }
-            ]: [string, CoordinatesTypes],
+            ]: [string, CoordinatesPopulationTypes],
             index: number
           ) => {
             return new naver.maps.Marker({
