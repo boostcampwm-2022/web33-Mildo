@@ -6,6 +6,11 @@ import Map from '../../components/Map/Map';
 import MapLoading from '../../components/MapLoading/MapLoading';
 import fetchGeocodeFromCoords from '../../apis/axios';
 import InfoDetailModal from '../../components/InfoDetailModal/InfoDetailModal';
+import {
+  DEFAULT_COORDINATES,
+  GEOLOCATION_CONSTANTS,
+  USERS_LOACTION
+} from '../../config/constants';
 
 const StyledMainPage = styled.div`
   width: 100vw;
@@ -14,12 +19,6 @@ const StyledMainPage = styled.div`
 `;
 
 const MainPage = () => {
-  // 기본 좌표를 시청역으로 설정
-  const defaultCoords = {
-    latitude: 37.5656,
-    longitude: 126.9769
-  };
-
   const [coordinates, setCoordinates] = useState({
     latitude: 0,
     longitude: 0
@@ -28,8 +27,8 @@ const MainPage = () => {
 
   const geolocation = useGeolocation({
     enableHighAccuracy: true,
-    maximumAge: 15000,
-    timeout: 12000
+    maximumAge: GEOLOCATION_CONSTANTS.maximumAge,
+    timeout: GEOLOCATION_CONSTANTS.timeout
   });
 
   useEffect(() => {
@@ -40,20 +39,23 @@ const MainPage = () => {
           // 서울인 경우 -> 해당 위치를 결과 값으로 리턴
           // 서울이 아닌 경우 -> 서울 중심 위치를 결과값으로 리턴
           setIsLoading(false);
-          if (result === '서울특별시' || result === '과천시') {
+          if (
+            result === USERS_LOACTION.SEOUL ||
+            result === USERS_LOACTION.GWACHEON
+          ) {
             setCoordinates({
               latitude: geolocation.latitude,
               longitude: geolocation.longitude
             });
           }
-          if (result !== '서울특별시') {
-            setCoordinates({ ...defaultCoords });
+          if (result !== USERS_LOACTION.SEOUL) {
+            setCoordinates({ ...DEFAULT_COORDINATES });
           }
         }
       );
     } else {
       setIsLoading(false);
-      setCoordinates({ ...defaultCoords });
+      setCoordinates({ ...DEFAULT_COORDINATES });
     }
   }, [geolocation]);
 

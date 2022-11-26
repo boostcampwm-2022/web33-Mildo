@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { MapComponentPropsType } from '../../types/interfaces';
 import api from '../../apis/apis';
 import { createBigPinSvg, createPinSvg } from '../../utils/map.util';
+import { MARKER_CLASS_NAME, SEOUL_BOUNDS } from '../../config/constants';
 
 const MapComponent = styled.div`
   width: 100%;
@@ -44,8 +45,14 @@ const Map: React.FC<MapComponentPropsType> = ({ latitude, longitude }) => {
       zoom: 14,
       minZoom: 12,
       maxBounds: new naver.maps.LatLngBounds(
-        new naver.maps.LatLng(37.47, 126.84),
-        new naver.maps.LatLng(37.65, 127.2)
+        new naver.maps.LatLng(
+          SEOUL_BOUNDS.sw.latitude,
+          SEOUL_BOUNDS.sw.longitude
+        ),
+        new naver.maps.LatLng(
+          SEOUL_BOUNDS.ne.latitude,
+          SEOUL_BOUNDS.ne.longitude
+        )
       )
     };
 
@@ -82,7 +89,7 @@ const Map: React.FC<MapComponentPropsType> = ({ latitude, longitude }) => {
               map,
               position: new naver.maps.LatLng(areaLatitude, areaLongitude),
               icon: {
-                content: `<div class="marker" data-area="${areaName}" data-latitude="${areaLatitude}" data-longitude="${areaLongitude}" data-index="${index}" data-level="${areaPopulationLevel}">${createPinSvg(
+                content: `<div class="${MARKER_CLASS_NAME}" data-area="${areaName}" data-latitude="${areaLatitude}" data-longitude="${areaLongitude}" data-index="${index}" data-level="${areaPopulationLevel}">${createPinSvg(
                   areaPopulationLevel
                 )}</div>`,
                 anchor: new naver.maps.Point(17.5, 50)
