@@ -7,7 +7,7 @@ const request = async (
 ) => {
   try {
     const response = await axios({
-      url: `http://118.67.143.49:3001/api${path}`,
+      url: `http://localhost:3001/api${path}`,
       method,
       withCredentials: true,
       data
@@ -41,5 +41,8 @@ const request = async (
 export default {
   getAllArea: () => {
     return request('/seoul', 'get');
+  },
+  getUsersLocation: (latitude: number, longitude: number) => {
+    return request(`/naver?lng=${longitude}&lat=${latitude}`, 'get');
   }
 };

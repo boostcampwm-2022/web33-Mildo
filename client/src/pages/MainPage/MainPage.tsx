@@ -4,13 +4,14 @@ import useGeolocation from 'react-hook-geolocation';
 
 import Map from '../../components/Map/Map';
 import MapLoading from '../../components/MapLoading/MapLoading';
-import fetchGeocodeFromCoords from '../../apis/axios';
+// import fetchGeocodeFromCoords from '../../apis/axios';
 import InfoDetailModal from '../../components/InfoDetailModal/InfoDetailModal';
 import {
   DEFAULT_COORDINATES,
   GEOLOCATION_CONSTANTS,
   USERS_LOACTION
 } from '../../config/constants';
+import apis from '../../apis/apis';
 
 const StyledMainPage = styled.div`
   width: 100vw;
@@ -21,6 +22,15 @@ const StyledMainPage = styled.div`
 interface CoordinatesTypes {
   latitude: number;
   longitude: number;
+}
+
+interface UsersLocationResponseTypes {
+  results: { region: { area1: { name: string } } }[];
+  status: {
+    code: number;
+    message: string;
+    name: string;
+  };
 }
 
 const MainPage = () => {
@@ -36,32 +46,41 @@ const MainPage = () => {
     timeout: GEOLOCATION_CONSTANTS.TIMEOUT
   });
 
-  useEffect(() => {
-    // 위도, 경도가 있는 경우 네이버 API에 주소 요청
-    if (geolocation.latitude && geolocation.longitude) {
-      fetchGeocodeFromCoords(geolocation.latitude, geolocation.longitude).then(
-        result => {
-          // 서울인 경우 -> 해당 위치를 결과 값으로 리턴
-          // 서울이 아닌 경우 -> 서울 중심 위치를 결과값으로 리턴
-          setIsLoading(false);
-          if (
-            result === USERS_LOACTION.SEOUL ||
-            result === USERS_LOACTION.GWACHEON
-          ) {
-            setCoordinates({
-              latitude: geolocation.latitude,
-              longitude: geolocation.longitude
-            });
-          }
-          if (result !== USERS_LOACTION.SEOUL) {
-            setCoordinates({ ...DEFAULT_COORDINATES });
-          }
-        }
-      );
-    } else {
+  const isUserInSeoulOrGwaCheon = (usersLocation: string) => {
+    return (
+      usersLocation === USERS_LOACTION.SEOUL ||
+      usersLocation === USERS_LOACTION.GWACHEON
+    );
+  };
+
+  const setMapCenter = async () => {
+    if (!geolocation.latitude || !geolocation.longitude) {
       setIsLoading(false);
       setCoordinates({ ...DEFAULT_COORDINATES });
+      return;
     }
+    // 위도, 경도가 있는 경우 네이버 API에 주소 요청
+    const usersLocationResponse: UsersLocationResponseTypes =
+      await apis.getUsersLocation(geolocation.latitude, geolocation.longitude);
+
+    setIsLoading(false);
+    if (!usersLocationResponse.results) {
+      return;
+    }
+    const userLocation = usersLocationResponse.results[0].region.area1.name;
+
+    if (isUserInSeoulOrGwaCheon(userLocation)) {
+      setCoordinates({
+        latitude: geolocation.latitude,
+        longitude: geolocation.longitude
+      });
+      return;
+    }
+    setCoordinates({ ...DEFAULT_COORDINATES });
+  };
+
+  useEffect(() => {
+    setMapCenter();
   }, [geolocation]);
 
   return (
