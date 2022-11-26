@@ -40,3 +40,7 @@ export const SEOUL_BOUNDS = {
 };
 
 export const MARKER_CLASS_NAME = 'marker';
+
+export const Z_INDEX = {
+  modal: 10
+};

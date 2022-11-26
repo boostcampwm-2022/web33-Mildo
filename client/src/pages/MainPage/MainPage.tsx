@@ -11,7 +11,6 @@ import {
   GEOLOCATION_CONSTANTS,
   USERS_LOACTION
 } from '../../config/constants';
-import axios from 'axios';
 
 const StyledMainPage = styled.div`
   width: 100vw;

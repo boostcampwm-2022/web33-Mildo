@@ -1,26 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-
-const ModalLayout = styled.div`
-  position: absolute;
-  bottom: 0%;
-  left: 0%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 10;
-  width: 100%;
-  max-width: 35rem;
-  height: auto;
-  background-color: white;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border-radius: 20px 20px 0 0;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
-  transition: 0.2s all;
-`;
+import Modal from '../Modal/Modal';
 
 // 북마크 on https://ifh.cc/v-6kHtyx.png
 const BookmarkIcon = styled.img`
@@ -84,7 +64,6 @@ const SecondLevelBox = styled.div<{ isDisplay: boolean }>`
   width: 90%;
   height: ${props => (props.isDisplay ? '10rem' : '0px')};
   transition: 1s all;
-
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -105,14 +84,15 @@ const TomorrowRanking = styled.div`
 `;
 
 const InfoDetailModal = () => {
+  const [isOpen] = useState<boolean>(true);
   const [isSecondLevel, setIsSecondLevel] = useState<boolean>(false);
 
   const toggleSecondLevelContents = () => {
-    setIsSecondLevel(!isSecondLevel);
+    setIsSecondLevel(prev => !prev);
   };
 
   return (
-    <ModalLayout>
+    <Modal isOpen={isOpen}>
       {isSecondLevel ? (
         <img
           src='https://ifh.cc/g/l7kvV4.png'
@@ -140,7 +120,7 @@ const InfoDetailModal = () => {
         <TomorrowRanking></TomorrowRanking>
       </SecondLevelBox>
       <TomorrowButton>내일 갈꺼야? :&#41;</TomorrowButton>
-    </ModalLayout>
+    </Modal>
   );
 };
 
