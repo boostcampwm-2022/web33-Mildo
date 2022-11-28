@@ -12,7 +12,7 @@ export const POPULATION_LEVEL_COLOR: PopulationLevelColorTypes = {
   '매우 붐빔': { fill: '#FF1E1E', stroke: '#970000' }
 };
 
-export const USERS_LOACTION = {
+export const USERS_LOCATION = {
   SEOUL: '서울특별시',
   GWACHEON: '과천시'
 };

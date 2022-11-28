@@ -9,7 +9,7 @@ import InfoDetailModal from '../../components/InfoDetailModal/InfoDetailModal';
 import {
   DEFAULT_COORDINATES,
   GEOLOCATION_CONSTANTS,
-  USERS_LOACTION
+  USERS_LOCATION
 } from '../../config/constants';
 import apis from '../../apis/apis';
 
@@ -48,8 +48,8 @@ const MainPage = () => {
 
   const isUserInSeoulOrGwaCheon = (usersLocation: string) => {
     return (
-      usersLocation === USERS_LOACTION.SEOUL ||
-      usersLocation === USERS_LOACTION.GWACHEON
+      usersLocation === USERS_LOCATION.SEOUL ||
+      usersLocation === USERS_LOCATION.GWACHEON
     );
   };
 
