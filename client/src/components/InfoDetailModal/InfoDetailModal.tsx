@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useAtom } from 'jotai';
+
 import {
   BookmarkIcon,
   PopulationBox,
@@ -12,9 +14,10 @@ import {
   ModalLayout
 } from '../InfoDetailModal/InfoDetailModal.style';
 import Modal from '../Modal/Modal';
+import isInfoDetailModalOpenAtom from '../../atom/infoDetail';
 
 const InfoDetailModal = () => {
-  const [isOpen] = useState<boolean>(true);
+  const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
   const [isSecondLevel, setIsSecondLevel] = useState<boolean>(false);
 
   const toggleSecondLevelContents = () => {
@@ -22,7 +25,7 @@ const InfoDetailModal = () => {
   };
 
   return (
-    <Modal isOpen={isOpen}>
+    <Modal isOpen={isInfoDetailModalOpen}>
       <ModalLayout>
         {isSecondLevel ? (
           <img

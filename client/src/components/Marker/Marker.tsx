@@ -1,6 +1,9 @@
 import { memo, useEffect } from 'react';
+import { useAtom } from 'jotai';
+
 import { createPinSvg, setBigMarkerIcon } from '../../utils/map.util';
 import { MarkerObjectTypes } from '../../types/interfaces';
+import isInfoDetailModalOpenAtom from '../../atom/infoDetail';
 
 interface CoordinatesPopulationTypes {
   populationMax: number;
@@ -20,7 +23,8 @@ interface MarkerProps {
 }
 
 const Marker: React.FC<MarkerProps> = ({ area, naverMap, onClickMarker }) => {
-  const [_, areaObject] = area;
+  const [, setIsInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
+  const [, areaObject] = area;
   const { latitude, longitude, populationLevel } = areaObject;
 
   useEffect(() => {
@@ -46,6 +50,9 @@ const Marker: React.FC<MarkerProps> = ({ area, naverMap, onClickMarker }) => {
       onClickMarker(marker, populationLevel);
 
       setBigMarkerIcon(marker, populationLevel);
+
+      // infoDetailModal 열고 닫기
+      setIsInfoDetailModalOpen(true);
     });
   }, [naverMap]);
 
