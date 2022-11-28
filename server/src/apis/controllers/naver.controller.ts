@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import dotenv from 'dotenv';
-
 import { getAxiosFromNaverApi } from '../utils/axios';
+import { DEVELOPMENT } from '../config/constants';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -10,10 +10,14 @@ export default {
     const { lat, lng } = req.query;
 
     const url = `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${lng},${lat}&sourcecrs=epsg:4326&orders=legalcode&output=json`;
+    const clientURL =
+      process.env.NODE_ENV === DEVELOPMENT
+        ? process.env.CLIENT_URL_DEVELOPMENT
+        : process.env.CLIENT_URL_PRODUCTION;
     try {
       const data = await getAxiosFromNaverApi(url);
-      if (process.env.CLIENT_URL) {
-        res.setHeader('Access-Control-Allow-origin', process.env.CLIENT_URL);
+      if (clientURL) {
+        res.setHeader('Access-Control-Allow-origin', clientURL);
       }
       res.status(200).send(data);
     } catch (error) {

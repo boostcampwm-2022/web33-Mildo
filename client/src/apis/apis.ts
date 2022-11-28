@@ -5,9 +5,16 @@ const request = async (
   method: 'get' | 'post',
   data?: Record<string, unknown> | undefined
 ) => {
+  const apiServerURL =
+    process.env.REACT_APP_CLIENT_ENV === 'development'
+      ? process.env.REACT_APP_API_SERVER_URL_DEVELOPMENT
+      : process.env.REACT_APP_API_SERVER_URL_PRODUCTION;
+
+  console.log(apiServerURL);
+
   try {
     const response = await axios({
-      url: `http://localhost:3001/api${path}`,
+      url: `${apiServerURL}${path}`,
       method,
       withCredentials: true,
       data
