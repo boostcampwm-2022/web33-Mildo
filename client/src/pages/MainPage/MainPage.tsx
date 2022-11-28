@@ -4,8 +4,14 @@ import useGeolocation from 'react-hook-geolocation';
 
 import Map from '../../components/Map/Map';
 import MapLoading from '../../components/MapLoading/MapLoading';
-import fetchGeocodeFromCoords from '../../apis/axios';
+// import fetchGeocodeFromCoords from '../../apis/axios';
 import InfoDetailModal from '../../components/InfoDetailModal/InfoDetailModal';
+import {
+  DEFAULT_COORDINATES,
+  GEOLOCATION_CONSTANTS,
+  USERS_LOCATION
+} from '../../config/constants';
+import apis from '../../apis/apis';
 
 const StyledMainPage = styled.div`
   width: 100vw;
@@ -13,48 +19,68 @@ const StyledMainPage = styled.div`
   position: relative;
 `;
 
-const MainPage = () => {
-  // 기본 좌표를 시청역으로 설정
-  const defaultCoords = {
-    latitude: 37.5656,
-    longitude: 126.9769
-  };
+interface CoordinatesTypes {
+  latitude: number;
+  longitude: number;
+}
 
-  const [coordinates, setCoordinates] = useState({
+interface UsersLocationResponseTypes {
+  results: { region: { area1: { name: string } } }[];
+  status: {
+    code: number;
+    message: string;
+    name: string;
+  };
+}
+
+const MainPage = () => {
+  const [coordinates, setCoordinates] = useState<CoordinatesTypes>({
     latitude: 0,
     longitude: 0
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const geolocation = useGeolocation({
     enableHighAccuracy: true,
-    maximumAge: 15000,
-    timeout: 12000
+    maximumAge: GEOLOCATION_CONSTANTS.MAXIMUMAGE,
+    timeout: GEOLOCATION_CONSTANTS.TIMEOUT
   });
 
-  useEffect(() => {
-    // 위도, 경도가 있는 경우 네이버 API에 주소 요청
-    if (geolocation.latitude && geolocation.longitude) {
-      fetchGeocodeFromCoords(geolocation.latitude, geolocation.longitude).then(
-        result => {
-          // 서울인 경우 -> 해당 위치를 결과 값으로 리턴
-          // 서울이 아닌 경우 -> 서울 중심 위치를 결과값으로 리턴
-          setIsLoading(false);
-          if (result === '서울특별시' || result === '과천시') {
-            setCoordinates({
-              latitude: geolocation.latitude,
-              longitude: geolocation.longitude
-            });
-          }
-          if (result !== '서울특별시') {
-            setCoordinates({ ...defaultCoords });
-          }
-        }
-      );
-    } else {
+  const isUserInSeoulOrGwaCheon = (usersLocation: string) => {
+    return (
+      usersLocation === USERS_LOCATION.SEOUL ||
+      usersLocation === USERS_LOCATION.GWACHEON
+    );
+  };
+
+  const setMapCenter = async () => {
+    if (!geolocation.latitude || !geolocation.longitude) {
       setIsLoading(false);
-      setCoordinates({ ...defaultCoords });
+      setCoordinates({ ...DEFAULT_COORDINATES });
+      return;
     }
+    // 위도, 경도가 있는 경우 네이버 API에 주소 요청
+    const usersLocationResponse: UsersLocationResponseTypes =
+      await apis.getUsersLocation(geolocation.latitude, geolocation.longitude);
+
+    setIsLoading(false);
+    if (!usersLocationResponse.results) {
+      return;
+    }
+    const userLocation = usersLocationResponse.results[0].region.area1.name;
+
+    if (isUserInSeoulOrGwaCheon(userLocation)) {
+      setCoordinates({
+        latitude: geolocation.latitude,
+        longitude: geolocation.longitude
+      });
+      return;
+    }
+    setCoordinates({ ...DEFAULT_COORDINATES });
+  };
+
+  useEffect(() => {
+    setMapCenter();
   }, [geolocation]);
 
   return (
