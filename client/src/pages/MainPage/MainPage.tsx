@@ -50,16 +50,17 @@ const MainPage = () => {
     // 위도, 경도가 있는 경우 네이버 API에 주소 요청
     const usersLocationResponse: UsersLocationResponseTypes =
       await apis.getUsersLocation(latitude, longitude);
+    const userLocation = usersLocationResponse.results[0].region.area1.name;
 
     if (!usersLocationResponse.results) {
       return;
     }
-    const userLocation = usersLocationResponse.results[0].region.area1.name;
 
     if (isUserInSeoulOrGwaCheon(userLocation)) {
       setCoordinates({ latitude, longitude });
       return;
     }
+
     setCoordinates({ ...DEFAULT_COORDINATES });
   };
 
