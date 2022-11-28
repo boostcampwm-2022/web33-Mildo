@@ -49,3 +49,14 @@ export const COLOR_PALETTE = {
   GREEN: '#43EB40',
   GREY20: '#EEEEEE'
 };
+
+interface InfoDetailTitle {
+  [key: string]: string;
+}
+
+export const INFO_DETAIL_TITLE: InfoDetailTitle = {
+  여유: '은(는) 놀기 좋아보여요 😊',
+  보통: '은(는) 보통이에요 🙂',
+  붐빔: '은(는) 붐비고 있어요 🤔',
+  '매우 붐빔': '은(는) 사람이 매우 많아요 😡'
+};

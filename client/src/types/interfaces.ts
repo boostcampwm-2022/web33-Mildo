@@ -8,3 +8,14 @@ export interface MarkerObjectTypes {
       | naver.maps.HtmlIcon
   ) => void;
 }
+
+export interface CoordinatesPopulationTypes {
+  populationMax: number;
+  populationMin: number;
+  populationLevel: string;
+  populationTime: Date;
+  latitude: number;
+  longitude: number;
+}
+
+export type SortAllAreasTypes = [string, CoordinatesPopulationTypes];

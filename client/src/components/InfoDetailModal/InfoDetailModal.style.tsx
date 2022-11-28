@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { COLOR_PALETTE } from '../../config/constants';
+import styled, { keyframes } from 'styled-components';
+import { COLOR_PALETTE, POPULATION_LEVEL_COLOR } from '../../config/constants';
 
 export const ModalLayout = styled.div`
   position: absolute;
@@ -14,8 +14,7 @@ export const ModalLayout = styled.div`
   max-width: 35rem;
   height: auto;
   background-color: white;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 10px 20px;
   border-radius: 20px 20px 0 0;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
   transition: 0.2s all;
@@ -28,20 +27,41 @@ export const BookmarkIcon = styled.img`
   right: 7%;
 `;
 
-export const Title = styled.h3`
-  font-size: 1rem;
+const marquee = keyframes`
+0% {
+  transform: translate(0%, 0);
+}
+50%{
+  transform: translate(-10%, 0);
+}
+100% {
+  transform: translate(0%, 0);
+}
 `;
 
-export const TitleLocation = styled.strong`
+export const Title = styled.h1`
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+  white-space: nowrap;
+  will-change: transform;
+  animation: ${marquee} 4s linear infinite;
+`;
+
+interface TitleLocationProps {
+  populationLevel: string;
+}
+
+export const TitleLocation = styled.strong<TitleLocationProps>`
   font-size: 1.6rem;
-  color: ${COLOR_PALETTE.GREEN};
+  color: ${props => POPULATION_LEVEL_COLOR[props.populationLevel].fill};
 `;
 
 export const PopulationBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 90%;
+  width: 100%;
   height: 30%;
   gap: 20px;
   background-color: ${COLOR_PALETTE.GREY20};
@@ -66,9 +86,8 @@ export const PopulationInfo = styled.div`
 `;
 
 export const TomorrowButton = styled.button`
-  width: 90%;
+  width: 100%;
   height: 2.5rem;
-
   background-color: ${COLOR_PALETTE.PRIMARY};
   border: none;
   border-radius: 10px;

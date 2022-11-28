@@ -2,19 +2,11 @@ import { memo, useEffect } from 'react';
 import { useAtom } from 'jotai';
 
 import { createPinSvg, setBigMarkerIcon } from '../../utils/map.util';
-import { MarkerObjectTypes } from '../../types/interfaces';
-import isInfoDetailModalOpenAtom from '../../atom/infoDetail';
-
-interface CoordinatesPopulationTypes {
-  populationMax: number;
-  populationMin: number;
-  populationLevel: string;
-  populationTime: Date;
-  latitude: number;
-  longitude: number;
-}
-
-type SortAllAreasTypes = [string, CoordinatesPopulationTypes];
+import { MarkerObjectTypes, SortAllAreasTypes } from '../../types/interfaces';
+import {
+  isInfoDetailModalOpenAtom,
+  firstInfoAtom
+} from '../../atom/infoDetail';
 
 interface MarkerProps {
   area: SortAllAreasTypes;
@@ -24,6 +16,7 @@ interface MarkerProps {
 
 const Marker: React.FC<MarkerProps> = ({ area, naverMap, onClickMarker }) => {
   const [, setIsInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
+  const [, setFirstInfo] = useAtom(firstInfoAtom);
   const [, areaObject] = area;
   const { latitude, longitude, populationLevel } = areaObject;
 
@@ -53,6 +46,7 @@ const Marker: React.FC<MarkerProps> = ({ area, naverMap, onClickMarker }) => {
 
       // infoDetailModal 열고 닫기
       setIsInfoDetailModalOpen(true);
+      setFirstInfo(area);
     });
   }, [naverMap]);
 
