@@ -1,8 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { MarkerObjectTypes } from '../../types/interfaces';
 import api from '../../apis/apis';
 import { SEOUL_BOUNDS } from '../../config/constants';
 import Marker from '../Marker/Marker';
+import { setMarkerIcon } from '../../utils/map.util';
 
 const MapComponent = styled.div`
   width: 100%;
@@ -30,10 +32,16 @@ interface MapComponentProps {
   longitude: number;
 }
 
+interface PrevPlaceTypes {
+  marker: MarkerObjectTypes;
+  populationLevel: string;
+}
+
 const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
   const mapRef = useRef(null);
   const [naverMap, setNaverMap] = useState<naver.maps.Map | null>(null);
   const [areas, setAreas] = useState<SortAllAreasTypes[]>([]);
+  const prevPlace = useRef<PrevPlaceTypes | null>(null);
 
   // MapComponent DOM에 네이버 지도 렌더링
   useEffect(() => {
@@ -84,13 +92,48 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
     getAllArea();
   }, [naverMap]);
 
+  // 이전 마커를 작은 크기로 만들고, 새로운 마커를 이전 마커로 등록
+  const onClickMarker = (
+    marker: MarkerObjectTypes,
+    populationLevel: string
+  ) => {
+    if (!prevPlace.current || !marker._nmarker_id) {
+      setMarkerIcon(marker, populationLevel);
+
+      prevPlace.current = {
+        marker,
+        populationLevel
+      };
+      return;
+    }
+
+    const { _nmarker_id: newMarkerId } = marker;
+    const { _nmarker_id: oldMarkerId } = prevPlace.current.marker;
+
+    if (newMarkerId === oldMarkerId) {
+      return;
+    }
+
+    setMarkerIcon(prevPlace.current.marker, prevPlace.current.populationLevel);
+
+    prevPlace.current = {
+      marker,
+      populationLevel
+    };
+  };
+
   return (
     <>
       <MapComponent ref={mapRef} />
       {areas &&
         naverMap &&
         areas.map((area: SortAllAreasTypes, index: number) => (
-          <Marker area={area} naverMap={naverMap} key={index} />
+          <Marker
+            area={area}
+            naverMap={naverMap}
+            key={index}
+            onClickMarker={onClickMarker}
+          />
         ))}
     </>
   );
