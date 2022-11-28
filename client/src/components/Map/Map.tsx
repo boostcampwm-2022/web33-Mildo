@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import api from '../../apis/apis';
-import { createPinSvg } from '../../utils/map.util';
-import { MARKER_CLASS_NAME, SEOUL_BOUNDS } from '../../config/constants';
+import { SEOUL_BOUNDS } from '../../config/constants';
+import Marker from '../Marker/Marker';
 
 const MapComponent = styled.div`
   width: 100%;
@@ -23,6 +23,8 @@ interface GetAllAreaResponseTypes {
   data: CoordinatesPopulationTypes;
 }
 
+type SortAllAreasTypes = [string, CoordinatesPopulationTypes];
+
 interface MapComponentProps {
   latitude: number;
   longitude: number;
@@ -30,11 +32,10 @@ interface MapComponentProps {
 
 const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
   const mapRef = useRef(null);
-  const markersRef = useRef<naver.maps.Marker[]>([]);
-  // const currentClickMarkerRef = useRef<naver.maps.Marker>(null);
-  // const focusMarkersRef = useRef<naver.maps.InfoWindow[]>([]);
-  const [map, setMap] = useState<naver.maps.Map | null>(null);
+  const [naverMap, setNaverMap] = useState<naver.maps.Map | null>(null);
+  const [areas, setAreas] = useState<SortAllAreasTypes[]>([]);
 
+  // MapComponent DOM에 네이버 지도 렌더링
   useEffect(() => {
     const { naver } = window;
 
@@ -60,111 +61,39 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
       )
     };
 
-    // MapComponent DOM에 네이버 지도 렌더링
-    setMap(new naver.maps.Map(mapRef.current, mapOptions));
+    setNaverMap(new naver.maps.Map(mapRef.current, mapOptions));
   }, []);
 
+  // DB에서 최근 장소 정보 가져오기
   useEffect(() => {
-    if (!map) {
+    if (!naverMap) {
       return;
     }
 
     const getAllArea = async () => {
-      const { data: allArea }: GetAllAreaResponseTypes = await api.getAllArea();
+      const { data: allAreas }: GetAllAreaResponseTypes =
+        await api.getAllArea();
 
-      markersRef.current = Object.entries(allArea)
-        .sort((prev, next) => {
-          // 위도순으로 오름차순 정렬
-          return next[1].latitude - prev[1].latitude;
-        })
-        .map(
-          (
-            [
-              areaName,
-              {
-                latitude: areaLatitude,
-                longitude: areaLongitude,
-                populationLevel: areaPopulationLevel
-              }
-            ]: [string, CoordinatesPopulationTypes],
-            index: number
-          ) => {
-            const marker = new naver.maps.Marker({
-              map,
-              position: new naver.maps.LatLng(areaLatitude, areaLongitude),
-              icon: {
-                content: `<div class="${MARKER_CLASS_NAME}" data-area="${areaName}" data-latitude="${areaLatitude}" data-longitude="${areaLongitude}" data-index="${index}" data-level="${areaPopulationLevel}">${createPinSvg(
-                  areaPopulationLevel
-                )}</div>`,
-                anchor: new naver.maps.Point(17.5, 50)
-              }
-            });
+      const sortAllAreas = Object.entries(allAreas).sort(
+        (prev, next) => next[1].latitude - prev[1].latitude
+      );
 
-            naver.maps.Event.addListener(marker, 'click', (e: object) => {
-              console.log(e);
-
-              const location = new naver.maps.LatLng(
-                marker.getPosition().y,
-                marker.getPosition().x
-              );
-
-              map.setCenter(location);
-              map.setZoom(16);
-            });
-
-            return marker;
-          }
-        );
+      setAreas(sortAllAreas);
     };
 
     getAllArea();
-  }, [map]);
+  }, [naverMap]);
 
-  // const mapTouchEndHandler = (e: React.TouchEvent<HTMLDivElement>) => {
-  //   const marker = (e.target as HTMLDivElement).closest(
-  //     '.marker'
-  //   ) as HTMLDivElement;
-
-  //   if (!marker || !map) {
-  //     return;
-  //   }
-
-  //   const location = new naver.maps.LatLng(
-  //     +marker.dataset.latitude!,
-  //     +marker.dataset.longitude!
-  //   );
-
-  //   map.setCenter(location);
-  //   map.setZoom(16);
-
-  //   const markerIndex = +marker.dataset.index!;
-  //   const markerLevel = marker.dataset.level!;
-  //   const markerObject: naver.maps.Marker = markersRef.current[markerIndex];
-
-  //   const { content } = markerObject.getIcon() as { content: string };
-
-  //   console.log(content);
-
-  //   // focusMarkerRef.current! = new naver.maps.InfoWindow({
-  //   //   content: `<div class="marker">${createBigPinSvg(markerLevel)}</div>`,
-  //   //   pixelOffset: new naver.maps.Point(17.5, 50)
-  //   // });
-
-  //   // if (focusMarkerRef.current?.getMap()) {
-  //   //   focusMarkerRef.current.close();
-  //   // } else {
-  //   //   focusMarkerRef.current.open(map, markerObject);
-  //   // }
-
-  //   markerObject.setIcon({
-  //     content: `<div class="marker">${createBigPinSvg(markerLevel)}</div>`,
-  //     size: new naver.maps.Size(35, 50),
-  //     anchor: new naver.maps.Point(17.5, 50),
-  //     origin: new naver.maps.Point(0, 0)
-  //   });
-  // };
-
-  return <MapComponent ref={mapRef} />;
+  return (
+    <>
+      <MapComponent ref={mapRef} />
+      {areas &&
+        naverMap &&
+        areas.map((area: SortAllAreasTypes, index: number) => (
+          <Marker area={area} naverMap={naverMap} key={index} />
+        ))}
+    </>
+  );
 };
 
 export default Map;
