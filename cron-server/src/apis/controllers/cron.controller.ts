@@ -7,7 +7,10 @@ export default {
       const seoulData = await seoulService.getSeoulData();
       console.log(new Date());
       console.log(seoulData);
-      // seoulService.savePopulationData(seoulData);
+      const responseFromMongoDBPopData = await seoulService.savePopulationData(
+        seoulData
+      );
+      console.log(responseFromMongoDBPopData);
 
       // 2. mongoDB에 데이터 넣기
     } catch (error) {

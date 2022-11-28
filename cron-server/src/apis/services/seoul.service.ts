@@ -77,7 +77,9 @@ export default {
   },
 
   // getSeouldData: 가공된 50곳의 cityData를 몽고DB에 저장하기
-  savePopulationData: (cityData: CityDataTypes[]) => {
+  savePopulationData: async (
+    cityData: CityDataTypes[]
+  ): Promise<PopulationSchemaTypes[] | null> => {
     const convertPopulationSchemaData: PopulationSchemaTypes[] = cityData.map(
       data => {
         return {
@@ -88,12 +90,14 @@ export default {
         };
       }
     );
-    console.log(convertPopulationSchemaData);
-    console.log(new Date());
-
-    populationRepository.saveMany(convertPopulationSchemaData);
-    return cityData;
-  },
-  // 몽고DB에서 50곳의 지역이름 가져오기
-  getAllAreaName: () => {}
+    let responseData = null;
+    try {
+      responseData = await populationRepository.saveMany(
+        convertPopulationSchemaData
+      );
+    } catch (error) {
+      console.log(error);
+    }
+    return responseData;
+  }
 };
