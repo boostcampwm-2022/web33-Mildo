@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import api from '../../apis/apis';
-import { createBigPinSvg, createPinSvg } from '../../utils/map.util';
+import { createPinSvg } from '../../utils/map.util';
 import { MARKER_CLASS_NAME, SEOUL_BOUNDS } from '../../config/constants';
 
 const MapComponent = styled.div`
@@ -89,7 +89,7 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
             ]: [string, CoordinatesPopulationTypes],
             index: number
           ) => {
-            return new naver.maps.Marker({
+            const marker = new naver.maps.Marker({
               map,
               position: new naver.maps.LatLng(areaLatitude, areaLongitude),
               icon: {
@@ -99,6 +99,20 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
                 anchor: new naver.maps.Point(17.5, 50)
               }
             });
+
+            naver.maps.Event.addListener(marker, 'click', (e: object) => {
+              console.log(e);
+
+              const location = new naver.maps.LatLng(
+                marker.getPosition().y,
+                marker.getPosition().x
+              );
+
+              map.setCenter(location);
+              map.setZoom(16);
+            });
+
+            return marker;
           }
         );
     };
@@ -106,51 +120,51 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
     getAllArea();
   }, [map]);
 
-  const mapTouchEndHandler = (e: React.TouchEvent<HTMLDivElement>) => {
-    const marker = (e.target as HTMLDivElement).closest(
-      '.marker'
-    ) as HTMLDivElement;
+  // const mapTouchEndHandler = (e: React.TouchEvent<HTMLDivElement>) => {
+  //   const marker = (e.target as HTMLDivElement).closest(
+  //     '.marker'
+  //   ) as HTMLDivElement;
 
-    if (!marker || !map) {
-      return;
-    }
+  //   if (!marker || !map) {
+  //     return;
+  //   }
 
-    const location = new naver.maps.LatLng(
-      +marker.dataset.latitude!,
-      +marker.dataset.longitude!
-    );
+  //   const location = new naver.maps.LatLng(
+  //     +marker.dataset.latitude!,
+  //     +marker.dataset.longitude!
+  //   );
 
-    map.setCenter(location);
-    map.setZoom(16);
+  //   map.setCenter(location);
+  //   map.setZoom(16);
 
-    const markerIndex = +marker.dataset.index!;
-    const markerLevel = marker.dataset.level!;
-    const markerObject: naver.maps.Marker = markersRef.current[markerIndex];
+  //   const markerIndex = +marker.dataset.index!;
+  //   const markerLevel = marker.dataset.level!;
+  //   const markerObject: naver.maps.Marker = markersRef.current[markerIndex];
 
-    const { content } = markerObject.getIcon() as { content: string };
+  //   const { content } = markerObject.getIcon() as { content: string };
 
-    console.log(content);
+  //   console.log(content);
 
-    // focusMarkerRef.current! = new naver.maps.InfoWindow({
-    //   content: `<div class="marker">${createBigPinSvg(markerLevel)}</div>`,
-    //   pixelOffset: new naver.maps.Point(17.5, 50)
-    // });
+  //   // focusMarkerRef.current! = new naver.maps.InfoWindow({
+  //   //   content: `<div class="marker">${createBigPinSvg(markerLevel)}</div>`,
+  //   //   pixelOffset: new naver.maps.Point(17.5, 50)
+  //   // });
 
-    // if (focusMarkerRef.current?.getMap()) {
-    //   focusMarkerRef.current.close();
-    // } else {
-    //   focusMarkerRef.current.open(map, markerObject);
-    // }
+  //   // if (focusMarkerRef.current?.getMap()) {
+  //   //   focusMarkerRef.current.close();
+  //   // } else {
+  //   //   focusMarkerRef.current.open(map, markerObject);
+  //   // }
 
-    markerObject.setIcon({
-      content: `<div class="marker">${createBigPinSvg(markerLevel)}</div>`,
-      size: new naver.maps.Size(35, 50),
-      anchor: new naver.maps.Point(17.5, 50),
-      origin: new naver.maps.Point(0, 0)
-    });
-  };
+  //   markerObject.setIcon({
+  //     content: `<div class="marker">${createBigPinSvg(markerLevel)}</div>`,
+  //     size: new naver.maps.Size(35, 50),
+  //     anchor: new naver.maps.Point(17.5, 50),
+  //     origin: new naver.maps.Point(0, 0)
+  //   });
+  // };
 
-  return <MapComponent ref={mapRef} onTouchEnd={mapTouchEndHandler} />;
+  return <MapComponent ref={mapRef} />;
 };
 
 export default Map;
