@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { createPinSvg } from '../../utils/map.util';
+import { createBigPinSvg, createPinSvg } from '../../utils/map.util';
 
 interface CoordinatesPopulationTypes {
   populationMax: number;
@@ -40,14 +40,14 @@ const Marker: React.FC<MarkerProps> = ({ area, naverMap }) => {
 
       naverMap.setCenter(location);
       naverMap.setZoom(16);
-    });
 
-    // markerObject.setIcon({
-    //   content: `<div class="marker">${createBigPinSvg(markerLevel)}</div>`,
-    //   size: new naver.maps.Size(35, 50),
-    //   anchor: new naver.maps.Point(17.5, 50),
-    //   origin: new naver.maps.Point(0, 0)
-    // });
+      marker.setIcon({
+        content: `<div>${createBigPinSvg(populationLevel)}</div>`,
+        size: new naver.maps.Size(35, 50),
+        anchor: new naver.maps.Point(17.5, 50),
+        origin: new naver.maps.Point(0, 0)
+      });
+    });
   };
 
   a();
