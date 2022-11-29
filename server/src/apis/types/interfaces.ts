@@ -36,3 +36,9 @@ export interface AreaCoordinateTypes {
     longitude: number;
   };
 }
+
+export interface UserSchemaTypes {
+  snsId: string;
+  provider: string;
+  email: string;
+}

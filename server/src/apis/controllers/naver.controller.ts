@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { getAxiosFromNaverApi } from '../utils/axios';
 import { DEVELOPMENT } from '../config/constants';
 import dotenv from 'dotenv';
+import passport from 'passport';
 
 dotenv.config();
 
@@ -27,5 +28,12 @@ export default {
         message: '좌표값을 기반으로 주소를 가져오지 못했습니다! :('
       });
     }
+  },
+  naverPassportLogin: passport.authenticate('naver'),
+  naverPassportAuthMiddleware: passport.authenticate('naver', {
+    failureRedirect: `${process.env.CLIENT_URL_DEVELOPMENT}`
+  }),
+  getNaverPassportRedirectionSuccess: (_: Request, res: Response) => {
+    res.redirect(`${process.env.CLIENT_URL_DEVELOPMENT}`);
   }
 };

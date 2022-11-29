@@ -1,21 +1,23 @@
 import express, { Request, Response } from 'express';
-import passport from 'passport';
-
+import dotenv from 'dotenv';
 import naverController from '../controllers/naver.controller';
+// import passport from 'passport';
+
+dotenv.config();
 
 const router = express.Router();
 
 router.get('/', naverController.getGeoCodingFromCoords);
-router.get('/auth/login', passport.authenticate('naver'));
+router.get('/auth/login', naverController.naverPassportLogin);
 // router.get('/auth/logout');
 router.get(
   '/auth/callback',
-  passport.authenticate('naver', { failureRedirect: '/', session: false }),
-  (_: Request, res: Response) => {
-    res.redirect('http://localhost:3000/');
-  }
-
-  // naver?lng=${longitude}&lat=${latitude}
+  naverController.naverPassportAuthMiddleware,
+  naverController.getNaverPassportRedirectionSuccess
 );
+router.get('/session', (req: Request, res: Response) => {
+  console.log(req.session);
+  res.json({ ok: true });
+});
 
 export default router;

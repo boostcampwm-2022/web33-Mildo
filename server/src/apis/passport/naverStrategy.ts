@@ -5,6 +5,8 @@ import {
 } from 'passport-naver-v2';
 import dotenv from 'dotenv';
 
+import User from '../models/User';
+
 dotenv.config();
 console.log(process.env.OAUTH_NAVER_CLIENT_ID);
 console.log(process.env.OAUTH_NAVER_CLIENT_SECRET);
@@ -25,10 +27,25 @@ export default () => {
         profile: NaverProfile,
         done: (error: any, user?: any, info?: any) => void
       ) => {
-        console.log('naver profile : ', profile);
-        console.log('naver Id : ', profile.id);
-        console.log('naver Email : ', profile.email);
-        done(null, profile);
+        try {
+          const exUser = await User.findOne({
+            snsId: profile.id,
+            provider: 'naver'
+          });
+          if (exUser) {
+            done(null, exUser);
+            return;
+          }
+
+          const newUser = await User.create({
+            snsId: profile.id,
+            provider: 'naver',
+            email: profile.email
+          });
+          done(null, newUser);
+        } catch (error) {
+          done(error);
+        }
       }
     )
   );
