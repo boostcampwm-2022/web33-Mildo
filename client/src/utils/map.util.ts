@@ -31,8 +31,8 @@ export const setBigMarkerIcon = (
 ) => {
   marker.setIcon({
     content: `<div>${createBigPinSvg(populationLevel)}</div>`,
-    size: new naver.maps.Size(35, 50),
-    anchor: new naver.maps.Point(17.5, 50),
+    size: new naver.maps.Size(60, 85),
+    anchor: new naver.maps.Point(30, 85),
     origin: new naver.maps.Point(0, 0)
   });
 };
