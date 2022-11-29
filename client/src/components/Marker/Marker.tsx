@@ -5,7 +5,7 @@ import { createPinSvg, setBigMarkerIcon } from '../../utils/map.util';
 import { MarkerObjectTypes, SortAllAreasTypes } from '../../types/interfaces';
 import {
   isInfoDetailModalOpenAtom,
-  firstInfoAtom
+  firstLevelInfoAtom
 } from '../../atom/infoDetail';
 
 interface MarkerProps {
@@ -16,7 +16,7 @@ interface MarkerProps {
 
 const Marker: React.FC<MarkerProps> = ({ area, naverMap, onClickMarker }) => {
   const [, setIsInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
-  const [, setFirstInfo] = useAtom(firstInfoAtom);
+  const [, setFirstLevelInfo] = useAtom(firstLevelInfoAtom);
   const [, areaObject] = area;
   const { latitude, longitude, populationLevel } = areaObject;
 
@@ -46,7 +46,7 @@ const Marker: React.FC<MarkerProps> = ({ area, naverMap, onClickMarker }) => {
 
       // infoDetailModal 열고 닫기
       setIsInfoDetailModalOpen(true);
-      setFirstInfo(area);
+      setFirstLevelInfo(area);
     });
   }, []);
 

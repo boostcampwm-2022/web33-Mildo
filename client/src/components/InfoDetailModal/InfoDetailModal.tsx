@@ -16,14 +16,16 @@ import {
 import Modal from '../Modal/Modal';
 import {
   isInfoDetailModalOpenAtom,
-  firstInfoAtom
+  firstLevelInfoAtom
 } from '../../atom/infoDetail';
 import { SortAllAreasTypes } from '../../types/interfaces';
 import { INFO_DETAIL_TITLE } from '../../config/constants';
 
 const InfoDetailModal = () => {
   const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
-  const [firstInfo] = useAtom<SortAllAreasTypes | null>(firstInfoAtom);
+  const [firstLevelInfo] = useAtom<SortAllAreasTypes | null>(
+    firstLevelInfoAtom
+  );
   const [isSecondLevel, setIsSecondLevel] = useState<boolean>(false);
 
   const toggleSecondLevelContents = () => {
@@ -32,7 +34,7 @@ const InfoDetailModal = () => {
 
   return (
     <Modal isOpen={isInfoDetailModalOpen}>
-      {firstInfo && (
+      {firstLevelInfo && (
         <ModalLayout>
           {isSecondLevel ? (
             <img
@@ -48,18 +50,18 @@ const InfoDetailModal = () => {
           <BookmarkIcon src='https://ifh.cc/g/7qPCCL.png' />
           <Title>
             현재&nbsp;
-            <TitleLocation populationLevel={firstInfo[1].populationLevel}>
-              {firstInfo[0]}
+            <TitleLocation populationLevel={firstLevelInfo[1].populationLevel}>
+              {firstLevelInfo[0]}
             </TitleLocation>
-            {INFO_DETAIL_TITLE[firstInfo[1].populationLevel]}
+            {INFO_DETAIL_TITLE[firstLevelInfo[1].populationLevel]}
           </Title>
           <PopulationBox>
             <img src='https://ifh.cc/g/2GQfXw.png' />
             <PopulationInfo>
               <p>현재 인구</p>
               <p>
-                {firstInfo[1].populationMin.toLocaleString()}명~
-                {firstInfo[1].populationMax.toLocaleString()}명
+                {firstLevelInfo[1].populationMin.toLocaleString()}명~
+                {firstLevelInfo[1].populationMax.toLocaleString()}명
               </p>
             </PopulationInfo>
           </PopulationBox>
