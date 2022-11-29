@@ -9,7 +9,9 @@ import xml2js from 'xml2js';
 import { getAxiosSeoulArea } from '../utils/axios';
 import populationRepository from '../repositories/population.repository';
 import areaService from '../services/area.service';
-import populationService from '../services/population.service';
+// import populationService from '../services/population.service';
+import redisService from './redis.service';
+// import redisRepository from '../repositories/redis.repository';
 
 interface PopulationResponseTypes {
   [areaName: string]: {
@@ -117,9 +119,8 @@ export default {
     }
   },
   getRecentAreaInfo: async (): Promise<PopulationResponseTypes | null> => {
-    // 데이터베이스에서 최근순 데이터 50개 가져오기
-    const recentAreaPopulation =
-      await populationService.getRecentAreaPopulation();
+    // redis에서 최근순 데이터 50개 가져오기
+    const recentAreaPopulation = await redisService.getRecentAreaPopulation();
     // 위도/경도 50개 가져오기
     const allAreaCoordinate = await areaService.getAllAreaCoordinate();
     if (recentAreaPopulation && allAreaCoordinate) {

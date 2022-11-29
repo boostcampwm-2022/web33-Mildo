@@ -12,18 +12,11 @@ export default {
         25 * 60 * 60,
         JSON.stringify(cityData)
       );
+      await redisClient.set('recent', populationTime);
       return true;
     } catch (e) {
       console.log(e);
       return false;
-    }
-  },
-  get: async (populationTime: string): Promise<string | null> => {
-    try {
-      return await redisClient.get(populationTime);
-    } catch (e) {
-      console.log(e);
-      return null;
     }
   }
 };

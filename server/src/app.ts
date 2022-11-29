@@ -1,9 +1,11 @@
+// import { redisClient } from './apis/config/redis.connect';
 import express, { Request, Response } from 'express';
 import apiRouter from './apis';
 import dotenv from 'dotenv';
-import connectMongoDB from './apis/config/mongoDB';
+import connectMongoDB from './apis/config/mongodb.connect';
 import cors from 'cors';
 import { DEVELOPMENT } from './apis/config/constants';
+import { connectRedis } from './apis/config/redis.connect';
 
 dotenv.config();
 
@@ -20,6 +22,7 @@ app.get('/', (_: Request, res: Response) => {
 });
 
 connectMongoDB();
+connectRedis();
 app.use('/api', apiRouter);
 
 app.listen(process.env.API_SERVER_PORT, () => {
