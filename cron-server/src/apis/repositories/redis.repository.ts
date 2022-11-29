@@ -7,7 +7,11 @@ export default {
     populationTime: string
   ): Promise<boolean> => {
     try {
-      await redisClient.set(populationTime, JSON.stringify(cityData));
+      await redisClient.setEx(
+        populationTime,
+        25 * 60 * 60,
+        JSON.stringify(cityData)
+      );
       return true;
     } catch (e) {
       console.log(e);

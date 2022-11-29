@@ -10,4 +10,4 @@ dotenv.config();
 connectMongoDB();
 connectRedis();
 
-cron.schedule(`34 * * * *`, cronController.cronSeoulData);
+cron.schedule(`0,30 * * * *`, cronController.cronSeoulData);
