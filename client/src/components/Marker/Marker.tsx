@@ -48,7 +48,7 @@ const Marker: React.FC<MarkerProps> = ({ area, naverMap, onClickMarker }) => {
       setIsInfoDetailModalOpen(true);
       setFirstInfo(area);
     });
-  }, [naverMap]);
+  }, []);
 
   return <div></div>;
 };
