@@ -36,3 +36,11 @@ export interface AreaCoordinateTypes {
     longitude: number;
   };
 }
+
+export interface RedisAllAreasResponseTypes {
+  [key: string]: {
+    populationMin: number;
+    populationMax: number;
+    populationLevel: string;
+  };
+}

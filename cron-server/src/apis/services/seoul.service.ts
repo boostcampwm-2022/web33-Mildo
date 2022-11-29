@@ -3,7 +3,7 @@ import xml2js from 'xml2js';
 import { getAxiosSeoulArea } from '../utils/axios';
 import populationRepository from '../repositories/population.repository';
 import areaService from './area.service';
-import redisRepository from '../repositories/redis.repository';
+import redisService from './redis.service';
 
 interface jsonTypes {
   'SeoulRtd.citydata':
@@ -99,7 +99,7 @@ export default {
         convertPopulationSchemaData
       );
       // redis에 저장
-      await redisRepository.set(convertPopulationSchemaData, populationTime);
+      await redisService.save(cityData);
     } catch (error) {
       console.log(error);
     }

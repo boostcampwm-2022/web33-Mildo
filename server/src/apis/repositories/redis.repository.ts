@@ -20,5 +20,13 @@ export default {
       console.log(e);
     }
     return null;
+  },
+  getAllKeys: async (): Promise<string[] | null> => {
+    try {
+      return await redisClient.keys('*');
+    } catch (e) {
+      console.log(e);
+    }
+    return null;
   }
 };

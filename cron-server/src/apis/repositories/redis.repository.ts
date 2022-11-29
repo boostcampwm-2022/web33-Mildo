@@ -1,9 +1,9 @@
 import { redisClient } from '../connect/redis.connect';
-import { PopulationSchemaTypes } from '../types/interfaces';
+import { AreaPopulationTypes } from '../types/interfaces';
 
 export default {
   set: async (
-    cityData: PopulationSchemaTypes[],
+    cityData: AreaPopulationTypes,
     populationTime: string
   ): Promise<boolean> => {
     try {

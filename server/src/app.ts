@@ -6,6 +6,7 @@ import connectMongoDB from './apis/config/mongodb.connect';
 import cors from 'cors';
 import { DEVELOPMENT } from './apis/config/constants';
 import { connectRedis } from './apis/config/redis.connect';
+import redisService from './apis/services/redis.service';
 
 dotenv.config();
 
@@ -24,6 +25,8 @@ app.get('/', (_: Request, res: Response) => {
 connectMongoDB();
 connectRedis();
 app.use('/api', apiRouter);
+
+redisService.getAllAreaPopulation('서울역');
 
 app.listen(process.env.API_SERVER_PORT, () => {
   console.log(`[API SERVER] listening on *:${process.env.API_SERVER_PORT}`);

@@ -11,7 +11,6 @@ dotenv.config();
 const router = express.Router();
 
 router.get('/', seoulController.allAreas);
-router.get('/cron', seoulController.cronAreas);
 
 router.get('/:areaName', async (req: Request, res: Response) => {
   const { areaName } = req.params;
