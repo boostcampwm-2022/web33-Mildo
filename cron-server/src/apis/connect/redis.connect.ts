@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const redisClient: RedisClientType = createClient({
+export const redisClient: RedisClientType = createClient({
   socket: {
     host: process.env.REDIS_HOST,
     port: parseInt(process.env.REDIS_PORT),
@@ -15,7 +15,7 @@ const redisClient: RedisClientType = createClient({
 });
 
 redisClient.on('connect', () => {
-  console.log('연결됨');
+  console.log('[REDIS] CONNECTED');
 });
 
 redisClient.on('error', err => {

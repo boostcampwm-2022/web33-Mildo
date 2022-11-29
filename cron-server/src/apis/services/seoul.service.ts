@@ -3,6 +3,7 @@ import xml2js from 'xml2js';
 import { getAxiosSeoulArea } from '../utils/axios';
 import populationRepository from '../repositories/population.repository';
 import areaService from './area.service';
+import redisRepository from '../repositories/redis.repository';
 
 interface jsonTypes {
   'SeoulRtd.citydata':
@@ -79,8 +80,10 @@ export default {
   savePopulationData: async (
     cityData: CityDataTypes[]
   ): Promise<PopulationSchemaTypes[] | null> => {
+    let populationTime = '';
     const convertPopulationSchemaData: PopulationSchemaTypes[] = cityData.map(
       data => {
+        populationTime === '' ? (populationTime = data.populationTime) : '';
         return {
           ...data,
           populationMin: +data.populationMin,
@@ -91,9 +94,12 @@ export default {
     );
     let responseData = null;
     try {
+      // MongoDB에 저장
       responseData = await populationRepository.saveMany(
         convertPopulationSchemaData
       );
+      // redis에 저장
+      await redisRepository.set(convertPopulationSchemaData, populationTime);
     } catch (error) {
       console.log(error);
     }
