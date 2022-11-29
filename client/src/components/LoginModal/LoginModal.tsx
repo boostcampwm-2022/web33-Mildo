@@ -62,12 +62,15 @@ const TitleBar = styled.div`
 const NaverLoginBtn = styled.button`
   background-color: white;
   border: none;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const LoginModal = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useAtom(isLoginModalOpenAtom);
 
-  // (update: SetStateAction<boolean>) => void
   return (
     <Modal isOpen={isLoginModalOpen}>
       <ModalFilter isClickModalFilter={setIsLoginModalOpen} />
@@ -85,10 +88,13 @@ const LoginModal = () => {
           </button>
           <h2>로그인</h2>
         </TitleBar>
-        <NaverLoginBtn
-          dangerouslySetInnerHTML={{
-            __html: createNaverLoginSvg()
-          }}></NaverLoginBtn>
+        <a href='http://localhost:3001/api/naver/auth/login'>
+          <NaverLoginBtn
+            dangerouslySetInnerHTML={{
+              __html: createNaverLoginSvg()
+            }}
+          />
+        </a>
       </LoginModalLayout>
     </Modal>
   );
