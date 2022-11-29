@@ -7,8 +7,6 @@ import InfoDetailModal from '../../components/InfoDetailModal/InfoDetailModal';
 import { DEFAULT_COORDINATES, USERS_LOCATION } from '../../config/constants';
 import apis from '../../apis/apis';
 
-// GEOLOCATION_CONSTANTS
-
 const StyledMainPage = styled.div`
   width: 100vw;
   height: 100vh;
@@ -32,12 +30,6 @@ interface UsersLocationResponseTypes {
 const MainPage = () => {
   const [coordinates, setCoordinates] = useState<CoordinatesTypes | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  // const geolocation = useGeolocation({
-  //   enableHighAccuracy: true,
-  //   maximumAge: GEOLOCATION_CONSTANTS.MAXIMUMAGE,
-  //   timeout: GEOLOCATION_CONSTANTS.TIMEOUT
-  // });
 
   const isUserInSeoulOrGwaCheon = (usersLocation: string) => {
     return (
@@ -68,7 +60,6 @@ const MainPage = () => {
     // 사용자 위치 정보 알아내기
     const success = (geolocationPosition: GeolocationPosition) => {
       // 위도/경도 : geolocationPosition.coords.longitude, geolocationPosition.coords.latitude,
-      console.log('위치 정보 허용: ', geolocationPosition);
       setMapCenter(
         geolocationPosition.coords.latitude,
         geolocationPosition.coords.longitude
@@ -76,7 +67,6 @@ const MainPage = () => {
     };
 
     const error = (value: GeolocationPositionError) => {
-      console.log('위치 정보 거부');
       console.log(value.code, value.message);
       setCoordinates({ ...DEFAULT_COORDINATES });
     };
@@ -89,7 +79,6 @@ const MainPage = () => {
       return;
     }
     // 서울 중심 여부 혹은 사용자 위치 정보 허용 여부에 따라 다른 초기 위치 랜더링
-    console.log(coordinates);
     setIsLoading(false);
   }, [coordinates]);
 
