@@ -10,8 +10,6 @@ const request = async (
       ? process.env.REACT_APP_API_SERVER_URL_DEVELOPMENT
       : process.env.REACT_APP_API_SERVER_URL_PRODUCTION;
 
-  console.log(apiServerURL);
-
   try {
     const response = await axios({
       url: `${apiServerURL}${path}`,

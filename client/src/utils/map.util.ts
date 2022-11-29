@@ -1,4 +1,5 @@
 import { POPULATION_LEVEL_COLOR } from '../config/constants';
+import { MarkerObjectTypes } from '../types/interfaces';
 
 // eslint-disable-next-line import/prefer-default-export
 export const createPinSvg = (populationLevel: string) => {
@@ -10,4 +11,28 @@ export const createBigPinSvg = (populationLevel: string) => {
   <path d="M59 32.8818C59 37.1889 57.2079 42.5932 54.4126 48.3621C51.6302 54.1042 47.9104 60.0952 44.1753 65.5426C40.4425 70.9865 36.7076 75.8684 33.905 79.3903C32.5041 81.1507 31.3371 82.5701 30.5211 83.5485C30.327 83.7812 30.1528 83.989 30 84.1704C29.8472 83.989 29.673 83.7812 29.4789 83.5485C28.6629 82.5701 27.4959 81.1507 26.095 79.3903C23.2924 75.8684 19.5575 70.9865 15.8247 65.5426C12.0896 60.0952 8.36979 54.1042 5.58742 48.3621C2.79208 42.5932 1 37.1889 1 32.8818C1 15.1857 14.0681 1 30 1C45.9319 1 59 15.1857 59 32.8818Z" fill="${POPULATION_LEVEL_COLOR[populationLevel].fill}" stroke="${POPULATION_LEVEL_COLOR[populationLevel].stroke}" stroke-width="2"/>
   </svg>
   `;
+};
+
+export const setMarkerIcon = (
+  marker: MarkerObjectTypes,
+  populationLevel: string
+) => {
+  marker.setIcon({
+    content: `<div>${createPinSvg(populationLevel)}</div>`,
+    size: new naver.maps.Size(35, 50),
+    anchor: new naver.maps.Point(17.5, 50),
+    origin: new naver.maps.Point(0, 0)
+  });
+};
+
+export const setBigMarkerIcon = (
+  marker: MarkerObjectTypes,
+  populationLevel: string
+) => {
+  marker.setIcon({
+    content: `<div>${createBigPinSvg(populationLevel)}</div>`,
+    size: new naver.maps.Size(60, 85),
+    anchor: new naver.maps.Point(30, 85),
+    origin: new naver.maps.Point(0, 0)
+  });
 };

@@ -1,8 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { MarkerObjectTypes } from '../../types/interfaces';
 import api from '../../apis/apis';
-import { createBigPinSvg, createPinSvg } from '../../utils/map.util';
-import { MARKER_CLASS_NAME, SEOUL_BOUNDS } from '../../config/constants';
+import { SEOUL_BOUNDS } from '../../config/constants';
+import Marker from '../Marker/Marker';
+import { setMarkerIcon } from '../../utils/map.util';
 
 const MapComponent = styled.div`
   width: 100%;
@@ -23,18 +25,25 @@ interface GetAllAreaResponseTypes {
   data: CoordinatesPopulationTypes;
 }
 
+type SortAllAreasTypes = [string, CoordinatesPopulationTypes];
+
 interface MapComponentProps {
   latitude: number;
   longitude: number;
 }
 
+interface PrevPlaceTypes {
+  marker: MarkerObjectTypes;
+  populationLevel: string;
+}
+
 const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
   const mapRef = useRef(null);
-  const markersRef = useRef<naver.maps.Marker[]>([]);
-  // const currentClickMarkerRef = useRef<naver.maps.Marker>(null);
-  // const focusMarkersRef = useRef<naver.maps.InfoWindow[]>([]);
-  const [map, setMap] = useState<naver.maps.Map | null>(null);
+  const [naverMap, setNaverMap] = useState<naver.maps.Map | null>(null);
+  const [areas, setAreas] = useState<SortAllAreasTypes[]>([]);
+  const prevPlace = useRef<PrevPlaceTypes | null>(null);
 
+  // MapComponent DOM에 네이버 지도 렌더링
   useEffect(() => {
     const { naver } = window;
 
@@ -60,97 +69,74 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
       )
     };
 
-    // MapComponent DOM에 네이버 지도 렌더링
-    setMap(new naver.maps.Map(mapRef.current, mapOptions));
+    setNaverMap(new naver.maps.Map(mapRef.current, mapOptions));
   }, []);
 
+  // DB에서 최근 장소 정보 가져오기
   useEffect(() => {
-    if (!map) {
+    if (!naverMap) {
       return;
     }
 
     const getAllArea = async () => {
-      const { data: allArea }: GetAllAreaResponseTypes = await api.getAllArea();
+      const { data: allAreas }: GetAllAreaResponseTypes =
+        await api.getAllArea();
 
-      markersRef.current = Object.entries(allArea)
-        .sort((prev, next) => {
-          // 위도순으로 오름차순 정렬
-          return next[1].latitude - prev[1].latitude;
-        })
-        .map(
-          (
-            [
-              areaName,
-              {
-                latitude: areaLatitude,
-                longitude: areaLongitude,
-                populationLevel: areaPopulationLevel
-              }
-            ]: [string, CoordinatesPopulationTypes],
-            index: number
-          ) => {
-            return new naver.maps.Marker({
-              map,
-              position: new naver.maps.LatLng(areaLatitude, areaLongitude),
-              icon: {
-                content: `<div class="${MARKER_CLASS_NAME}" data-area="${areaName}" data-latitude="${areaLatitude}" data-longitude="${areaLongitude}" data-index="${index}" data-level="${areaPopulationLevel}">${createPinSvg(
-                  areaPopulationLevel
-                )}</div>`,
-                anchor: new naver.maps.Point(17.5, 50)
-              }
-            });
-          }
-        );
+      const sortAllAreas = Object.entries(allAreas).sort(
+        (prev, next) => next[1].latitude - prev[1].latitude
+      );
+
+      setAreas(sortAllAreas);
     };
 
     getAllArea();
-  }, [map]);
+  }, [naverMap]);
 
-  const mapTouchEndHandler = (e: React.TouchEvent<HTMLDivElement>) => {
-    const marker = (e.target as HTMLDivElement).closest(
-      '.marker'
-    ) as HTMLDivElement;
+  // 이전 마커를 작은 크기로 만들고, 새로운 마커를 이전 마커로 등록
+  const onClickMarker = (
+    marker: MarkerObjectTypes,
+    populationLevel: string
+  ) => {
+    if (!prevPlace.current || !marker._nmarker_id) {
+      setMarkerIcon(marker, populationLevel);
 
-    if (!marker || !map) {
+      prevPlace.current = {
+        marker,
+        populationLevel
+      };
       return;
     }
 
-    const location = new naver.maps.LatLng(
-      +marker.dataset.latitude!,
-      +marker.dataset.longitude!
-    );
+    const { _nmarker_id: newMarkerId } = marker;
+    const { _nmarker_id: oldMarkerId } = prevPlace.current.marker;
 
-    map.setCenter(location);
-    map.setZoom(16);
+    if (newMarkerId === oldMarkerId) {
+      return;
+    }
 
-    const markerIndex = +marker.dataset.index!;
-    const markerLevel = marker.dataset.level!;
-    const markerObject: naver.maps.Marker = markersRef.current[markerIndex];
+    setMarkerIcon(prevPlace.current.marker, prevPlace.current.populationLevel);
 
-    const { content } = markerObject.getIcon() as { content: string };
-
-    console.log(content);
-
-    // focusMarkerRef.current! = new naver.maps.InfoWindow({
-    //   content: `<div class="marker">${createBigPinSvg(markerLevel)}</div>`,
-    //   pixelOffset: new naver.maps.Point(17.5, 50)
-    // });
-
-    // if (focusMarkerRef.current?.getMap()) {
-    //   focusMarkerRef.current.close();
-    // } else {
-    //   focusMarkerRef.current.open(map, markerObject);
-    // }
-
-    markerObject.setIcon({
-      content: `<div class="marker">${createBigPinSvg(markerLevel)}</div>`,
-      size: new naver.maps.Size(35, 50),
-      anchor: new naver.maps.Point(17.5, 50),
-      origin: new naver.maps.Point(0, 0)
-    });
+    prevPlace.current = {
+      marker,
+      populationLevel
+    };
   };
 
-  return <MapComponent ref={mapRef} onTouchEnd={mapTouchEndHandler} />;
+  return (
+    <>
+      <MapComponent ref={mapRef} />
+      {areas &&
+        naverMap &&
+        areas.map((area: SortAllAreasTypes, index: number) => (
+          <Marker
+            area={area}
+            naverMap={naverMap}
+            key={index}
+            onClickMarker={onClickMarker}
+          />
+        ))}
+    </>
+  );
 };
 
 export default Map;
