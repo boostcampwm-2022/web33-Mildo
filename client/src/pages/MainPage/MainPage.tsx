@@ -4,6 +4,7 @@ import Map from '../../components/Map/Map';
 import MapLoading from '../../components/MapLoading/MapLoading';
 // import fetchGeocodeFromCoords from '../../apis/axios';
 import InfoDetailModal from '../../components/InfoDetailModal/InfoDetailModal';
+import LoginModal from '../../components/LoginModal/LoginModal';
 import { DEFAULT_COORDINATES, USERS_LOCATION } from '../../config/constants';
 import apis from '../../apis/apis';
 
@@ -93,6 +94,7 @@ const MainPage = () => {
         />
       )}
       <InfoDetailModal />
+      <LoginModal />
     </StyledMainPage>
   );
 };

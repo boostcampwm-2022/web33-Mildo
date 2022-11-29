@@ -41,7 +41,8 @@ export const SEOUL_BOUNDS = {
 export const MARKER_CLASS_NAME = 'marker';
 
 export const Z_INDEX = {
-  MODAL: 10
+  MODAL: 10,
+  FILTER: 0
 };
 
 export const COLOR_PALETTE = {
