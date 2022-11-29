@@ -1,5 +1,5 @@
 export const createNaverLoginSvg = () => {
-  return `<svg width="280" height="51" viewBox="0 0 280 51" fill="none" xmlns="http://www.w3.org/2000/svg">
+  return `<svg width="250" height="51" viewBox="0 0 280 51" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g filter="url(#filter0_d_21_257)">
     <rect x="3" y="1" width="274" height="45" rx="10" fill="#19CE60"/>
     <rect x="3.5" y="1.5" width="273" height="44" rx="9.5" stroke="#15C654"/>

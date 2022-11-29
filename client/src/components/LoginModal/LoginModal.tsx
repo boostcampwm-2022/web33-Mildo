@@ -15,7 +15,7 @@ const LoginModalLayout = styled.div`
 
   width: 80%;
   max-width: 300px;
-  min-width: 250px;
+  min-width: 265px;
   height: 150px;
   background-color: white;
   border-radius: 10px;
@@ -65,15 +65,17 @@ const NaverLoginBtn = styled.button`
 `;
 
 const LoginModal = () => {
-  const [isLoginModalOpen] = useAtom(isLoginModalOpenAtom);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useAtom(isLoginModalOpenAtom);
 
+  // (update: SetStateAction<boolean>) => void
   return (
     <Modal isOpen={isLoginModalOpen}>
-      <ModalFilter />
+      <ModalFilter isClickModalFilter={setIsLoginModalOpen} />
       <LoginModalLayout>
         <TitleBar>
           <button>
             <IoClose
+              onClick={() => setIsLoginModalOpen(false)}
               style={{
                 color: 'white',
                 width: '18px',

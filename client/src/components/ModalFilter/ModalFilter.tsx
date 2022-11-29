@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { SetStateAction } from 'react';
 
 import { Z_INDEX } from '../../config/constants';
 
@@ -13,8 +14,12 @@ const Filter = styled.div`
   display: block;
 `;
 
-const ModalFilter = () => {
-  return <Filter></Filter>;
+interface ModalFilterProps {
+  isClickModalFilter: (update: SetStateAction<boolean>) => void;
+}
+
+const ModalFilter: React.FC<ModalFilterProps> = ({ isClickModalFilter }) => {
+  return <Filter onClick={() => isClickModalFilter(false)}></Filter>;
 };
 
 export default ModalFilter;
