@@ -1,6 +1,4 @@
 import { CityDataTypes, PopulationSchemaTypes } from './../types/interfaces';
-// import { TEST_AREA_NAMES } from '../config/area.config';
-// import { AREA_NAMES } from '../config/area.config';
 import xml2js from 'xml2js';
 import { getAxiosSeoulArea } from '../utils/axios';
 import populationRepository from '../repositories/population.repository';
@@ -48,6 +46,7 @@ export default {
       for (const areaName of Object.keys(allAreaNames!)) {
         const cityDataXml = await getAxiosSeoulArea(areaName);
         const cityDataJson = await xml2js.parseStringPromise(cityDataXml);
+
         if (!isVaildCityData(cityDataJson)) {
           cityData.push({
             areaName: areaName,

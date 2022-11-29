@@ -1,16 +1,28 @@
-import redis from 'redis';
+import type { RedisClientType } from 'redis';
+import { createClient } from 'redis';
+import dotenv from 'dotenv';
 
-const redisClient = redis.createClient({
-  url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_CONNECT_URI}/0`,
-  legacyMode: true // 반드시 설정 !!
+dotenv.config();
+
+const redisClient: RedisClientType = createClient({
+  socket: {
+    host: process.env.REDIS_HOST,
+    port: parseInt(process.env.REDIS_PORT),
+    connectTimeout: 50000
+  },
+  username: process.env.REDIS_USERNAME,
+  password: process.env.REDIS_PASSWORD
 });
+
 redisClient.on('connect', () => {
-  console.info('Redis connected!');
+  console.log('연결됨');
 });
-redisClient.on('error', err => {
-  console.error('Redis Client Error', err);
-});
-redisClient.connect().then(); // redis v4 연결 (비동기)
-const redisCli = redisClient.v4; // 기본 redisClient 객체는 콜백기반인데 v4버젼은 프로미스 기반이라 사용
 
-export default redisCli;
+redisClient.on('error', err => {
+  console.log(err);
+});
+
+export const connectRedis = async () => {
+  await redisClient.connect();
+  return;
+};

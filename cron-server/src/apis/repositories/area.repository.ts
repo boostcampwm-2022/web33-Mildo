@@ -6,7 +6,6 @@ export default {
     let allAreas: AreaSchemaTypes[] | null = null;
     try {
       allAreas = await Area.find({});
-      console.log(allAreas);
     } catch (error) {
       console.log(error);
     }
