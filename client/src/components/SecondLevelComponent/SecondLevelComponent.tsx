@@ -8,6 +8,7 @@ import {
   TraceGraph,
   TomorrowRanking
 } from './SecondLevelComponent.style';
+import { COLOR_PALETTE } from '../../config/constants';
 
 interface SecondLevelComponentProps {
   isDisplay: boolean;
@@ -18,24 +19,23 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
   isDisplay,
   graphInfo
 }) => {
-  // useEffect(() => {
-
-  // }, [graphInfo])
-
   const getHourDiff = (date: string) => {
     const msDiff =
       new Date(Object.keys(graphInfo)[0]).getTime() - new Date(date).getTime();
     const hourDiff = msDiff / (1000 * 60 * 60);
 
-    return Number.isInteger(hourDiff) ? hourDiff : hourDiff.toFixed(1);
+    return hourDiff.toFixed(0);
   };
 
   const options: ApexOptions = {
     chart: {
-      width: '5000',
-      height: '5000',
       zoom: {
         enabled: true
+      },
+      toolbar: {
+        tools: {
+          download: false
+        }
       }
     },
     plotOptions: {
@@ -52,7 +52,56 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
     xaxis: {
       categories: Object.keys(graphInfo)
         .slice(1)
-        .map(item => `${getHourDiff(item)}시간 전`)
+        .map(item => `${getHourDiff(item)}시간 전`),
+      labels: {
+        show: false
+      }
+    },
+    yaxis: {
+      labels: {
+        show: true,
+        style: {
+          colors: [],
+          fontSize: '14px',
+          fontWeight: 600
+        },
+        offsetX: 7,
+        offsetY: 0
+      }
+    },
+    colors: ['#9F8FFF', `${COLOR_PALETTE.PRIMARY}`],
+    stroke: {
+      show: true,
+      width: 0.5,
+      colors: [`${COLOR_PALETTE.GREY20}`]
+    },
+    dataLabels: {
+      enabled: true,
+      offsetX: 6,
+      style: {
+        fontSize: '12px',
+        colors: [`${COLOR_PALETTE.WHITE}`]
+      },
+      formatter: value => value.toLocaleString()
+    },
+    grid: {
+      show: false,
+      padding: {
+        top: -30,
+        left: 0,
+        bottom: -20,
+        right: 5
+      },
+      yaxis: {
+        lines: {
+          show: false
+        }
+      }
+    },
+    tooltip: {
+      x: {
+        show: false
+      }
     }
   };
 
@@ -74,7 +123,14 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
   return (
     <SecondLevelBox isDisplay={isDisplay}>
       <TraceGraph>
-        <Chart type='bar' options={options} series={series} />
+        <Chart
+          // style={{ border: '1px solid black' }}
+          type='bar'
+          options={options}
+          series={series}
+          width='100%'
+          height={700}
+        />
       </TraceGraph>
       <TomorrowRanking></TomorrowRanking>
     </SecondLevelBox>

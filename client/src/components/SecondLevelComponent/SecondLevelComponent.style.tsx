@@ -11,6 +11,8 @@ export const SecondLevelBox = styled.div<{ isDisplay: boolean }>`
 `;
 
 export const TraceGraph = styled.div`
+  padding: 10px;
+  padding-bottom: 0px;
   width: 100%;
   height: 70%;
   background-color: ${COLOR_PALETTE.GREY20};

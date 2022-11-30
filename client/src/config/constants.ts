@@ -29,11 +29,11 @@ export const GEOLOCATION_CONSTANTS = {
 
 export const SEOUL_BOUNDS = {
   SW: {
-    LATITUDE: 37.47,
+    LATITUDE: 37.41,
     LONGITUDE: 126.84
   },
   NE: {
-    LATITUDE: 37.65,
+    LATITUDE: 37.68,
     LONGITUDE: 127.2
   }
 };
@@ -47,7 +47,8 @@ export const Z_INDEX = {
 export const COLOR_PALETTE = {
   PRIMARY: '#6349FF',
   GREEN: '#43EB40',
-  GREY20: '#EEEEEE'
+  GREY20: '#EEEEEE',
+  WHITE: '#FFFFFF'
 };
 
 interface InfoDetailTitle {
