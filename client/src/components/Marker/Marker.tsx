@@ -50,7 +50,7 @@ const Marker: React.FC<MarkerProps> = ({ area, naverMap, onClickMarker }) => {
     });
   }, []);
 
-  return <div></div>;
+  return <></>;
 };
 
 export default memo(Marker);

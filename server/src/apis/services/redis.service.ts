@@ -32,7 +32,7 @@ export default {
     }
     return null;
   },
-  getAllAreaPopulation: async (
+  getPastInfomation: async (
     areaName: string
   ): Promise<RedisAllAreasResponseTypes | null> => {
     const keys = await redisRepository.getAllKeys();
