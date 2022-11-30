@@ -18,11 +18,17 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
   isDisplay,
   graphInfo
 }) => {
-  // const graphOptionsRef = useRef(null);
   // useEffect(() => {
 
   // }, [graphInfo])
-  console.log(graphInfo);
+
+  const getHourDiff = (date: string) => {
+    const msDiff =
+      new Date(Object.keys(graphInfo)[0]).getTime() - new Date(date).getTime();
+    const hourDiff = msDiff / (1000 * 60 * 60);
+
+    return Number.isInteger(hourDiff) ? hourDiff : hourDiff.toFixed(1);
+  };
 
   const options: ApexOptions = {
     chart: {
@@ -45,17 +51,23 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
     },
     xaxis: {
       categories: Object.keys(graphInfo)
+        .slice(1)
+        .map(item => `${getHourDiff(item)}시간 전`)
     }
   };
 
   const series = [
     {
       name: '최솟값',
-      data: Object.values(graphInfo).map(item => item.populationMin)
+      data: Object.values(graphInfo)
+        .slice(1)
+        .map(item => item.populationMin)
     },
     {
       name: '최댓값',
-      data: Object.values(graphInfo).map(item => item.populationMax)
+      data: Object.values(graphInfo)
+        .slice(1)
+        .map(item => item.populationMax)
     }
   ];
 

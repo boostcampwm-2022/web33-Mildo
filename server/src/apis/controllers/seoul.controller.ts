@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import redisService from '../services/redis.service';
 import seoulService from '../services/seoul.service';
-import { RedisAllAreasResponseTypes } from '../types/interfaces';
 
 export default {
   allAreas: async (_: Request, res: Response) => {
@@ -19,19 +18,15 @@ export default {
   },
   pastInfo: async (req: Request, res: Response) => {
     const { areaName } = req.params;
-    const pastInfomation = await redisService.getPastInfomation(areaName);
-    if (!pastInfomation) {
+    const pastInformation = await redisService.getPastInfomation(areaName);
+    if (!pastInformation) {
       return res.status(500).json({ ok: false });
     }
 
-    const initObject: RedisAllAreasResponseTypes = {};
-    const sortedInfomation = Object.keys(pastInfomation)
-      .sort()
-      .reduce((prev, key) => {
-        prev[key] = pastInfomation[key];
-        return prev;
-      }, initObject);
+    const sortedInformation = await seoulService.getSortedPastInformation(
+      pastInformation
+    );
 
-    return res.status(200).json({ ok: true, data: sortedInfomation });
+    return res.status(200).json({ ok: true, data: sortedInformation });
   }
 };

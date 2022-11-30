@@ -9,7 +9,15 @@ export default {
       return null;
     }
   },
-  getRecentKey: async (): Promise<string | null> => {
+  getRecentPopulationDate: async (): Promise<string | null> => {
+    try {
+      return await redisClient.get('recent');
+    } catch (e) {
+      console.log(e);
+    }
+    return null;
+  },
+  getRecentInfo: async (): Promise<string | null> => {
     try {
       const recentKey = await redisClient.get('recent');
 

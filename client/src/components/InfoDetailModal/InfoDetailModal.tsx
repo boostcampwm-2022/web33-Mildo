@@ -49,7 +49,6 @@ const InfoDetailModal = () => {
     const { data } = await apis.getPastInfomation(areaName);
 
     setSecondLevelInfoCache({ ...secondLevelInfoCache, [areaName]: data });
-
     setGraphInfo(data);
 
     // eslint-disable-next-line no-useless-return

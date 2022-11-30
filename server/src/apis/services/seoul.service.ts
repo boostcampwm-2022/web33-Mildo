@@ -2,7 +2,8 @@ import {
   CityDataTypes,
   PopulationSchemaTypes,
   AreaPopulationTypes,
-  AreaCoordinateTypes
+  AreaCoordinateTypes,
+  RedisAllAreasResponseTypes
 } from './../types/interfaces';
 import { AREA_NAMES } from '../config/area.config';
 import xml2js from 'xml2js';
@@ -128,5 +129,19 @@ export default {
       );
     }
     return null;
+  },
+  getSortedPastInformation: async (
+    pastInfomation: RedisAllAreasResponseTypes
+  ) => {
+    const initObject: RedisAllAreasResponseTypes = {};
+    const sortedInformation = Object.keys(pastInfomation)
+      .sort()
+      .reverse()
+      .reduce((prev, key) => {
+        prev[key] = pastInfomation[key];
+        return prev;
+      }, initObject);
+
+    return sortedInformation;
   }
 };

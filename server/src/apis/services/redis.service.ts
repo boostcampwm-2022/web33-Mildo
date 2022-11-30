@@ -9,7 +9,7 @@ export default {
   getRecentAreaPopulation: async (): Promise<AreaPopulationTypes | null> => {
     const result: AreaPopulationTypes = {};
     try {
-      const redisRecentAreaPopulation = await redisRepository.getRecentKey();
+      const redisRecentAreaPopulation = await redisRepository.getRecentInfo();
       if (!redisRecentAreaPopulation) {
         return null;
       }
