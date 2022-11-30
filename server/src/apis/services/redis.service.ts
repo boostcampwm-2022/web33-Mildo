@@ -9,13 +9,13 @@ export default {
   getRecentAreaPopulation: async (): Promise<AreaPopulationTypes | null> => {
     const result: AreaPopulationTypes = {};
     try {
-      const redisRecentAreaPopulation = await redisRepository.getRecent();
+      const redisRecentAreaPopulation = await redisRepository.getRecentKey();
       if (!redisRecentAreaPopulation) {
         return null;
       }
-      const areaPopulation: CityDataTypes[] = JSON.parse(
-        redisRecentAreaPopulation
-      );
+      const areaPopulationJson = JSON.parse(redisRecentAreaPopulation);
+      const areaPopulation: CityDataTypes[] = Object.values(areaPopulationJson);
+
       if (areaPopulation) {
         areaPopulation.map((populationInfo: CityDataTypes) => {
           result[populationInfo.areaName] = {

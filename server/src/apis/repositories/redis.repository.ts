@@ -9,9 +9,10 @@ export default {
       return null;
     }
   },
-  getRecent: async (): Promise<string | null> => {
+  getRecentKey: async (): Promise<string | null> => {
     try {
       const recentKey = await redisClient.get('recent');
+
       if (recentKey) {
         return await redisClient.get(recentKey);
       }
