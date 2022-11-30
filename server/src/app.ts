@@ -1,4 +1,3 @@
-// import { redisClient } from './apis/config/redis.connect';
 import express, { Request, Response } from 'express';
 import apiRouter from './apis';
 import dotenv from 'dotenv';

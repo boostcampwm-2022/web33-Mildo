@@ -9,9 +9,7 @@ import xml2js from 'xml2js';
 import { getAxiosSeoulArea } from '../utils/axios';
 import populationRepository from '../repositories/population.repository';
 import areaService from '../services/area.service';
-// import populationService from '../services/population.service';
 import redisService from './redis.service';
-// import redisRepository from '../repositories/redis.repository';
 
 interface PopulationResponseTypes {
   [areaName: string]: {

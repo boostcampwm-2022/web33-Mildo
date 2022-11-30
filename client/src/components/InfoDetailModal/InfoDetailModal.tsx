@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
-
 import {
   BookmarkIcon,
   PopulationBox,
@@ -16,21 +15,56 @@ import {
 import Modal from '../Modal/Modal';
 import {
   isInfoDetailModalOpenAtom,
-  firstLevelInfoAtom
+  firstLevelInfoAtom,
+  secondLevelInfoAtom
 } from '../../atom/infoDetail';
-import { SortAllAreasTypes } from '../../types/interfaces';
+import { SecondLevelTimeInfoTypes } from '../../types/interfaces';
 import { INFO_DETAIL_TITLE } from '../../config/constants';
+import apis from '../../apis/apis';
 
 const InfoDetailModal = () => {
   const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
-  const [firstLevelInfo] = useAtom<SortAllAreasTypes | null>(
-    firstLevelInfoAtom
-  );
+  const [firstLevelInfo] = useAtom(firstLevelInfoAtom);
   const [isSecondLevel, setIsSecondLevel] = useState<boolean>(false);
+  const [secondLevelInfo, setSecondLevelInfo] = useAtom(secondLevelInfoAtom);
 
   const toggleSecondLevelContents = () => {
     setIsSecondLevel(prev => !prev);
   };
+
+  const getPastInformation =
+    async (): Promise<SecondLevelTimeInfoTypes | null> => {
+      if (!firstLevelInfo) {
+        return null;
+      }
+      const [areaName] = firstLevelInfo;
+
+      // 전역에 areaName을 키로 갖고 있는 속성이 있으면 hit
+      if (secondLevelInfo[areaName]) {
+        return secondLevelInfo[areaName];
+      }
+
+      // 아니면 api 호출
+      const { data } = await apis.getPastInfomation(areaName);
+
+      setSecondLevelInfo({ ...secondLevelInfo, [areaName]: data });
+
+      return data;
+    };
+
+  const paintGraph = async () => {
+    const pastInformation = await getPastInformation();
+
+    console.log(pastInformation);
+  };
+
+  useEffect(() => {
+    if (!isSecondLevel) {
+      return;
+    }
+
+    paintGraph();
+  }, [isSecondLevel]);
 
   return (
     <Modal isOpen={isInfoDetailModalOpen}>
