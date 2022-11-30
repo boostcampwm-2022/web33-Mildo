@@ -8,8 +8,6 @@ import dotenv from 'dotenv';
 import User from '../models/User';
 
 dotenv.config();
-console.log(process.env.OAUTH_NAVER_CLIENT_ID);
-console.log(process.env.OAUTH_NAVER_CLIENT_SECRET);
 
 export default () => {
   passport.use(
@@ -20,7 +18,6 @@ export default () => {
         clientSecret: process.env.OAUTH_NAVER_CLIENT_SECRET,
         callbackURL: '/api/naver/auth/callback'
       },
-      // (error: Error, profile?: Profile) => void
       async (
         _: string,
         __: string,

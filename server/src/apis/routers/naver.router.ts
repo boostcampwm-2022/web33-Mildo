@@ -10,11 +10,7 @@ const router = express.Router();
 router.get('/', naverController.getGeoCodingFromCoords);
 router.get('/auth/login', naverController.naverPassportLogin);
 // router.get('/auth/logout');
-router.get(
-  '/auth/callback',
-  naverController.naverPassportAuthMiddleware,
-  naverController.getNaverPassportRedirectionSuccess
-);
+router.get('/auth/callback', naverController.naverPassportAuthMiddleware);
 router.get('/session', (req: Request, res: Response) => {
   console.log(req.session);
   res.json({ ok: true });

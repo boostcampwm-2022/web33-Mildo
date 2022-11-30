@@ -29,11 +29,11 @@ export default {
       });
     }
   },
-  naverPassportLogin: passport.authenticate('naver'),
-  naverPassportAuthMiddleware: passport.authenticate('naver', {
-    failureRedirect: `${process.env.CLIENT_URL_DEVELOPMENT}`
+  naverPassportLogin: passport.authenticate('naver', {
+    authType: 'reprompt'
   }),
-  getNaverPassportRedirectionSuccess: (_: Request, res: Response) => {
-    res.redirect(`${process.env.CLIENT_URL_DEVELOPMENT}`);
-  }
+  naverPassportAuthMiddleware: passport.authenticate('naver', {
+    successRedirect: `${process.env.CLIENT_URL_DEVELOPMENT}`,
+    failureRedirect: `${process.env.CLIENT_URL_DEVELOPMENT}`
+  })
 };

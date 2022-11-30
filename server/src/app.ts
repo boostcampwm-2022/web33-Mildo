@@ -42,5 +42,4 @@ app.use('/api', apiRouter);
 app.listen(process.env.API_SERVER_PORT, () => {
   console.log(`[API SERVER] listening on *:${process.env.API_SERVER_PORT}`);
   console.log(`[NODE MODE] ${process.env.NODE_ENV}`);
-  console.log(clientURL);
 });
