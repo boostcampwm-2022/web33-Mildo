@@ -97,26 +97,3 @@ export const TomorrowButton = styled.button`
 
   padding-top: 4px;
 `;
-
-export const SecondLevelBox = styled.div<{ isDisplay: boolean }>`
-  width: 90%;
-  height: ${props => (props.isDisplay ? '10rem' : '0px')};
-  transition: 1s all;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-export const TraceGraph = styled.div`
-  width: 100%;
-  height: 70%;
-  background-color: ${COLOR_PALETTE.GREY20};
-  border-radius: 10px;
-`;
-
-export const TomorrowRanking = styled.div`
-  width: 100%;
-  height: 30%;
-  background-color: ${COLOR_PALETTE.GREY20};
-  border-radius: 10px;
-`;

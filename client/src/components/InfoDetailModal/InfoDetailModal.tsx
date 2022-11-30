@@ -4,58 +4,56 @@ import {
   BookmarkIcon,
   PopulationBox,
   PopulationInfo,
-  SecondLevelBox,
   Title,
   TitleLocation,
   TomorrowButton,
-  TomorrowRanking,
-  TraceGraph,
   ModalLayout
 } from '../InfoDetailModal/InfoDetailModal.style';
 import Modal from '../Modal/Modal';
 import {
   isInfoDetailModalOpenAtom,
   firstLevelInfoAtom,
-  secondLevelInfoAtom
+  secondLevelInfoCacheAtom
 } from '../../atom/infoDetail';
-import { SecondLevelTimeInfoTypes } from '../../types/interfaces';
+import { SecondLevelTimeInfoCacheTypes } from '../../types/interfaces';
 import { INFO_DETAIL_TITLE } from '../../config/constants';
 import apis from '../../apis/apis';
+import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';
 
 const InfoDetailModal = () => {
   const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
   const [firstLevelInfo] = useAtom(firstLevelInfoAtom);
   const [isSecondLevel, setIsSecondLevel] = useState<boolean>(false);
-  const [secondLevelInfo, setSecondLevelInfo] = useAtom(secondLevelInfoAtom);
+  const [secondLevelInfoCache, setSecondLevelInfoCache] = useAtom(
+    secondLevelInfoCacheAtom
+  );
+  const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
 
   const toggleSecondLevelContents = () => {
     setIsSecondLevel(prev => !prev);
   };
 
-  const getPastInformation =
-    async (): Promise<SecondLevelTimeInfoTypes | null> => {
-      if (!firstLevelInfo) {
-        return null;
-      }
-      const [areaName] = firstLevelInfo;
+  const setPastInformation = async (): Promise<undefined> => {
+    if (!firstLevelInfo) {
+      return;
+    }
+    const [areaName] = firstLevelInfo;
 
-      // 전역에 areaName을 키로 갖고 있는 속성이 있으면 hit
-      if (secondLevelInfo[areaName]) {
-        return secondLevelInfo[areaName];
-      }
+    // 전역에 areaName을 키로 갖고 있는 속성이 있으면 hit
+    if (secondLevelInfoCache[areaName]) {
+      setGraphInfo(secondLevelInfoCache[areaName]);
+      return;
+    }
 
-      // 아니면 api 호출
-      const { data } = await apis.getPastInfomation(areaName);
+    // 아니면 api 호출
+    const { data } = await apis.getPastInfomation(areaName);
 
-      setSecondLevelInfo({ ...secondLevelInfo, [areaName]: data });
+    setSecondLevelInfoCache({ ...secondLevelInfoCache, [areaName]: data });
 
-      return data;
-    };
+    setGraphInfo(data);
 
-  const paintGraph = async () => {
-    const pastInformation = await getPastInformation();
-
-    console.log(pastInformation);
+    // eslint-disable-next-line no-useless-return
+    return;
   };
 
   useEffect(() => {
@@ -63,7 +61,7 @@ const InfoDetailModal = () => {
       return;
     }
 
-    paintGraph();
+    setPastInformation();
   }, [isSecondLevel]);
 
   return (
@@ -99,10 +97,10 @@ const InfoDetailModal = () => {
               </p>
             </PopulationInfo>
           </PopulationBox>
-          <SecondLevelBox isDisplay={isSecondLevel}>
-            <TraceGraph></TraceGraph>
-            <TomorrowRanking></TomorrowRanking>
-          </SecondLevelBox>
+          <SecondLevelComponent
+            isDisplay={isSecondLevel}
+            graphInfo={graphInfo}
+          />
           <TomorrowButton>내일 갈 거야! :&#41;</TomorrowButton>
         </ModalLayout>
       )}
