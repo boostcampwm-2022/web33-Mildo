@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import { IoClose } from 'react-icons/io5';
 
 import Modal from '../Modal/Modal';
-import { isLoginModalOpenAtom } from '../../atom/login';
+import { isLoginModalOpenAtom } from '../../atom/loginModal';
 import ModalFilter from '../ModalFilter/ModalFilter';
 import { createNaverLoginSvg } from '../../utils/login.util';
+import { Z_INDEX } from '../../config/constants';
 
 const LoginModalLayout = styled.div`
   position: absolute;
@@ -24,6 +25,8 @@ const LoginModalLayout = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 30px;
+
+  z-index: ${Z_INDEX.MODAL};
 `;
 
 const TitleBar = styled.div`
