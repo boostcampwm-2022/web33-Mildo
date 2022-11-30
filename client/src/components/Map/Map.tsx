@@ -1,10 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useUpdateAtom } from 'jotai/utils';
+
 import { MarkerObjectTypes } from '../../types/interfaces';
 import api from '../../apis/apis';
 import { SEOUL_BOUNDS } from '../../config/constants';
 import Marker from '../Marker/Marker';
 import { setMarkerIcon } from '../../utils/map.util';
+import {
+  isInfoDetailModalOpenAtom,
+  isSecondLevelAtom
+} from '../../atom/infoDetail';
 
 const MapComponent = styled.div`
   width: 100%;
@@ -42,6 +48,8 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
   const [naverMap, setNaverMap] = useState<naver.maps.Map | null>(null);
   const [areas, setAreas] = useState<SortAllAreasTypes[]>([]);
   const prevPlace = useRef<PrevPlaceTypes | null>(null);
+  const setIsInfoDetailModalOpen = useUpdateAtom(isInfoDetailModalOpenAtom);
+  const setIsSecondLevel = useUpdateAtom(isSecondLevelAtom);
 
   // MapComponent DOM에 네이버 지도 렌더링
   useEffect(() => {
@@ -122,9 +130,19 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
     };
   };
 
+  const onClickMap = () => {
+    if (!prevPlace.current) {
+      return;
+    }
+    setIsInfoDetailModalOpen(false);
+    setMarkerIcon(prevPlace.current.marker, prevPlace.current.populationLevel);
+    prevPlace.current = null;
+    setIsSecondLevel(false);
+  };
+
   return (
     <>
-      <MapComponent ref={mapRef} />
+      <MapComponent ref={mapRef} onClick={onClickMap} />
       {areas &&
         naverMap &&
         areas.map((area: SortAllAreasTypes, index: number) => (

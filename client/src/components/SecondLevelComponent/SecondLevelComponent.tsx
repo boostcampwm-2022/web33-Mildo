@@ -69,7 +69,7 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
         offsetY: 0
       }
     },
-    colors: ['#9F8FFF', `${COLOR_PALETTE.PRIMARY}`],
+    colors: [`#9F8FFF`, `${COLOR_PALETTE.PRIMARY}`],
     stroke: {
       show: true,
       width: 0.5,
@@ -122,16 +122,17 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
 
   return (
     <SecondLevelBox isDisplay={isDisplay}>
-      <TraceGraph>
-        <Chart
-          // style={{ border: '1px solid black' }}
-          type='bar'
-          options={options}
-          series={series}
-          width='100%'
-          height={700}
-        />
-      </TraceGraph>
+      {isDisplay && (
+        <TraceGraph>
+          <Chart
+            type='bar'
+            options={options}
+            series={series}
+            width='100%'
+            height={700}
+          />
+        </TraceGraph>
+      )}
       <TomorrowRanking></TomorrowRanking>
     </SecondLevelBox>
   );

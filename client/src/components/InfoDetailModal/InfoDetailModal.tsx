@@ -13,7 +13,8 @@ import Modal from '../Modal/Modal';
 import {
   isInfoDetailModalOpenAtom,
   firstLevelInfoAtom,
-  secondLevelInfoCacheAtom
+  secondLevelInfoCacheAtom,
+  isSecondLevelAtom
 } from '../../atom/infoDetail';
 import { SecondLevelTimeInfoCacheTypes } from '../../types/interfaces';
 import { INFO_DETAIL_TITLE } from '../../config/constants';
@@ -23,14 +24,14 @@ import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';
 const InfoDetailModal = () => {
   const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
   const [firstLevelInfo] = useAtom(firstLevelInfoAtom);
-  const [isSecondLevel, setIsSecondLevel] = useState<boolean>(false);
+  const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
   const [secondLevelInfoCache, setSecondLevelInfoCache] = useAtom(
     secondLevelInfoCacheAtom
   );
   const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
 
   const toggleSecondLevelContents = () => {
-    setIsSecondLevel(prev => !prev);
+    setIsSecondLevel(!isSecondLevel);
   };
 
   const setPastInformation = async (): Promise<undefined> => {

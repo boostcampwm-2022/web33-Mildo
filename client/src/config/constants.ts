@@ -46,6 +46,7 @@ export const Z_INDEX = {
 
 export const COLOR_PALETTE = {
   PRIMARY: '#6349FF',
+  PRIMARY50: '#9F8FFF',
   GREEN: '#43EB40',
   GREY20: '#EEEEEE',
   WHITE: '#FFFFFF'

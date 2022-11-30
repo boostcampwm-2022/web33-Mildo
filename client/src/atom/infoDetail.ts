@@ -9,3 +9,5 @@ export const isInfoDetailModalOpenAtom = atom<boolean>(false);
 export const firstLevelInfoAtom = atom<SortAllAreasTypes | null>(null);
 
 export const secondLevelInfoCacheAtom = atom<SecondLevelInfoCacheTypes>({});
+
+export const isSecondLevelAtom = atom<boolean>(false);
