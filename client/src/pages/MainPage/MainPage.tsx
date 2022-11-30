@@ -31,6 +31,7 @@ interface UsersLocationResponseTypes {
 const MainPage = () => {
   const [coordinates, setCoordinates] = useState<CoordinatesTypes | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const isUserInSeoulOrGwaCheon = (usersLocation: string) => {
     return (
@@ -76,6 +77,21 @@ const MainPage = () => {
   }, []);
 
   useEffect(() => {
+    // 로그인 여부 확인하기 -> '로그아웃' 기능 구현 시 재사용 여부를 판단하여 커스텀 훅으로 빼야함
+    const checkLoggedInFunction = async () => {
+      const LogInStatus = await apis.getWhetherUserLoggedIn();
+
+      if (LogInStatus.ok === true) {
+        setIsLoggedIn(true);
+        return;
+      }
+      setIsLoading(false);
+    };
+
+    checkLoggedInFunction();
+  }, []);
+
+  useEffect(() => {
     if (!coordinates) {
       return;
     }
@@ -94,7 +110,7 @@ const MainPage = () => {
         />
       )}
       <InfoDetailModal />
-      <LoginModal />
+      {isLoggedIn === false ? <LoginModal /> : <></>}
     </StyledMainPage>
   );
 };

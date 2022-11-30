@@ -50,7 +50,7 @@ export default {
   getUsersLocation: (latitude: number, longitude: number) => {
     return request(`/naver?lng=${longitude}&lat=${latitude}`, 'get');
   },
-  postNaverLogin: () => {
-    return request('/naver/auth/login', 'get');
+  getWhetherUserLoggedIn: () => {
+    return request('/auth', 'get');
   }
 };

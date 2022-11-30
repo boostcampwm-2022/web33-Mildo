@@ -33,7 +33,7 @@ export default () => {
           done(null, false);
           return;
         }
-        done(null, exUser);
+        done(null, exUser); // user 객체 말고 id를 넣는게 메모리 관점에서 좋지 않을까?
       } catch (error) {
         done(error, false);
       }
