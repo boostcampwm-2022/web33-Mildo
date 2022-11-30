@@ -15,6 +15,7 @@ export const TraceGraph = styled.div`
   height: 70%;
   background-color: ${COLOR_PALETTE.GREY20};
   border-radius: 10px;
+  overflow: auto;
 `;
 
 export const TomorrowRanking = styled.div`

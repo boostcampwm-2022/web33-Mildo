@@ -24,7 +24,7 @@ export interface SecondLevelTimeInfoCacheTypes {
   [date: string]: {
     populationLevel: string;
     populationMax: number;
-    PopulationMin: number;
+    populationMin: number;
   };
 }
 
