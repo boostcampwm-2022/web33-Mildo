@@ -33,18 +33,19 @@ export default () => {
             provider: 'naver'
           });
           if (exUser) {
-            done(null, exUser);
-            return;
-          }
+            return done(null, exUser);
+          } else {
+            const newUser = await User.create({
+              snsId: profile.id,
+              provider: 'naver',
+              email: profile.email
+            });
 
-          const newUser = await User.create({
-            snsId: profile.id,
-            provider: 'naver',
-            email: profile.email
-          });
-          done(null, newUser);
+            return done(null, newUser);
+          }
         } catch (error) {
           done(error);
+          return;
         }
       }
     )

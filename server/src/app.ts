@@ -17,27 +17,26 @@ const clientURL =
     ? process.env.CLIENT_URL_DEVELOPMENT
     : process.env.CLIENT_URL_PRODUCTION;
 
+connectMongoDB();
+
 app.use(cors({ origin: clientURL, credentials: true }));
 app.use(
   expressSession({
     secret: 'SECRET',
-    cookie: { maxAge: 60 * 60 * 1000 },
+    cookie: { maxAge: 60 * 60 * 1000, secure: false },
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false
   })
 );
 
-// passport 초기화, session 연결
 app.use(passport.initialize());
 app.use(passport.session());
-
 passports();
 
 app.get('/', (_: Request, res: Response) => {
   res.send('Hello World!');
 });
-
-connectMongoDB();
+// passport 초기화, session 연결
 app.use('/api', apiRouter);
 
 app.listen(process.env.API_SERVER_PORT, () => {
