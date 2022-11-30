@@ -1,6 +1,13 @@
+import React from 'react';
 import styled from 'styled-components';
 
-const LoadingPageStyle = styled.div`
+interface MapLoadingProps {
+  message?: string | null;
+  width?: string;
+  height?: string;
+}
+
+const LoadingPageStyle = styled.div<MapLoadingProps>`
   width: 100%;
   height: 100%;
   display: flex;
@@ -9,11 +16,15 @@ const LoadingPageStyle = styled.div`
   align-items: center;
 `;
 
-const MapLoading = () => {
+const MapLoading: React.FC<MapLoadingProps> = ({
+  message = '로딩중입니다...',
+  width = '200px',
+  height = '200px'
+}) => {
   return (
     <LoadingPageStyle>
-      <h1>로딩중입니다...</h1>
-      <img src='https://ifh.cc/g/RQcSZX.gif' />
+      {message && <h1>{message}</h1>}
+      <img src='https://ifh.cc/g/RQcSZX.gif' width={width} height={height} />
     </LoadingPageStyle>
   );
 };

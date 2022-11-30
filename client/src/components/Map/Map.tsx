@@ -130,6 +130,7 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
     };
   };
 
+  // 마커 이외의 영역을 클릭하면 1단계, 2단계 모달창이 닫힘
   const onClickMap = () => {
     if (!prevPlace.current) {
       return;

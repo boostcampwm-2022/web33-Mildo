@@ -58,6 +58,7 @@ const InfoDetailModal = () => {
 
   useEffect(() => {
     if (!isSecondLevel) {
+      setGraphInfo({});
       return;
     }
 

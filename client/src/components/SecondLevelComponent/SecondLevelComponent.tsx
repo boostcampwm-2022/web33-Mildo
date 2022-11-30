@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 
@@ -9,6 +9,7 @@ import {
   TomorrowRanking
 } from './SecondLevelComponent.style';
 import { COLOR_PALETTE } from '../../config/constants';
+import MapLoading from '../MapLoading/MapLoading';
 
 interface SecondLevelComponentProps {
   isDisplay: boolean;
@@ -19,6 +20,22 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
   isDisplay,
   graphInfo
 }) => {
+  const [isGraphLoading, setIsGraphLoading] = useState<boolean>(true);
+
+  // graphInfo가 들어오면 loading을 false로 만들어줌
+  useEffect(() => {
+    if (Object.keys(graphInfo).length !== 0) {
+      setIsGraphLoading(false);
+    }
+  }, [graphInfo]);
+
+  // isSecondLevel이 false가 되면 setIsGraphLoading를 true로 바꿈
+  useEffect(() => {
+    if (!isDisplay) {
+      setIsGraphLoading(true);
+    }
+  }, [isDisplay]);
+
   const getHourDiff = (date: string) => {
     const msDiff =
       new Date(Object.keys(graphInfo)[0]).getTime() - new Date(date).getTime();
@@ -124,13 +141,17 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
     <SecondLevelBox isDisplay={isDisplay}>
       {isDisplay && (
         <TraceGraph>
-          <Chart
-            type='bar'
-            options={options}
-            series={series}
-            width='100%'
-            height={700}
-          />
+          {isGraphLoading ? (
+            <MapLoading message={null} width='50px' height='50px' />
+          ) : (
+            <Chart
+              type='bar'
+              options={options}
+              series={series}
+              width='100%'
+              height={700}
+            />
+          )}
         </TraceGraph>
       )}
       <TomorrowRanking></TomorrowRanking>
