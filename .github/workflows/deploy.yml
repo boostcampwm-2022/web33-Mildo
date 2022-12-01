@@ -239,6 +239,15 @@ jobs:
             cd web33-Mildo/server/dist
             pm2 start src/app.js --name api
             pm2 reload api
-            cd ~web33-Mildo/cron-server/dist
+            
+      - name: cron 서버 실행
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd web33-Mildo/cron-server/dist
             pm2 start src/app.js --name cron
             pm2 reload cron
