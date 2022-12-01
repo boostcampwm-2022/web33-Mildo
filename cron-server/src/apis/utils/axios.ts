@@ -1,16 +1,16 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
 
-import { SEOUL_CITY_API_BASE_URL } from '../config/api.config';
-
 dotenv.config();
 
-const axiosSeoulCity = axios.create({
-  baseURL: SEOUL_CITY_API_BASE_URL
-});
+export const getAxiosSeoulArea = async (path: string, accessKey: string) => {
+  console.log(accessKey);
 
-export const getAxiosSeoulArea = async (path: string) => {
-  return await axiosSeoulCity(path).then(response => response.data);
+  return await axios
+    .get(
+      `http://openapi.seoul.go.kr:8088/${accessKey}/xml/citydata/1/5/${path}`
+    )
+    .then(response => response.data);
 };
 
 // 로직상 거의 차이가 없는데도 불구하고 계속해서 함수를 만들어야 하는 상황

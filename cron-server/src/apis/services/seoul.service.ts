@@ -1,9 +1,13 @@
-import { CityDataTypes, PopulationSchemaTypes } from './../types/interfaces';
 import xml2js from 'xml2js';
+import dotenv from 'dotenv';
+
+import { CityDataTypes, PopulationSchemaTypes } from './../types/interfaces';
 import { getAxiosSeoulArea } from '../utils/axios';
 import populationRepository from '../repositories/population.repository';
 import areaService from './area.service';
 import redisService from './redis.service';
+
+dotenv.config();
 
 interface jsonTypes {
   'SeoulRtd.citydata':
@@ -42,10 +46,14 @@ export default {
   getSeoulData: async (): Promise<CityDataTypes[]> => {
     const cityData: CityDataTypes[] = [];
     let allAreaNames = null;
+    const turn = new Date().getHours() % 3;
     try {
       allAreaNames = await areaService.getAllAreaCoordinate();
       for (const areaName of Object.keys(allAreaNames!)) {
-        const cityDataXml = await getAxiosSeoulArea(areaName);
+        const cityDataXml = await getAxiosSeoulArea(
+          areaName,
+          `${process.env[`SEOUL_CITY_API_ACCESS_KEY_${turn}`]}`
+        );
         const cityDataJson = await xml2js.parseStringPromise(cityDataXml);
 
         if (!isVaildCityData(cityDataJson)) {
