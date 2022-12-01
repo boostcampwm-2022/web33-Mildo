@@ -5,9 +5,14 @@ const request = async (
   method: 'get' | 'post',
   data?: Record<string, unknown> | undefined
 ) => {
+  const apiServerURL =
+    process.env.REACT_APP_CLIENT_ENV === 'development'
+      ? process.env.REACT_APP_API_SERVER_URL_DEVELOPMENT
+      : process.env.REACT_APP_API_SERVER_URL_PRODUCTION;
+
   try {
     const response = await axios({
-      url: `http://118.67.143.49:3001/api${path}`,
+      url: `${apiServerURL}${path}`,
       method,
       withCredentials: true,
       data
@@ -41,5 +46,14 @@ const request = async (
 export default {
   getAllArea: () => {
     return request('/seoul', 'get');
+  },
+  getUsersLocation: (latitude: number, longitude: number) => {
+    return request(`/naver?lng=${longitude}&lat=${latitude}`, 'get');
+  },
+  getWhetherUserLoggedIn: () => {
+    return request('/auth', 'get');
+  },
+  getPastInformation: (areaName: string) => {
+    return request(`/seoul/${areaName}`, 'get');
   }
 };

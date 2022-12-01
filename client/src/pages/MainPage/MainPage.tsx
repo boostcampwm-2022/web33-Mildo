@@ -1,11 +1,17 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import useGeolocation from 'react-hook-geolocation';
+import { useUpdateAtom } from 'jotai/utils';
 
 import Map from '../../components/Map/Map';
 import MapLoading from '../../components/MapLoading/MapLoading';
-import fetchGeocodeFromCoords from '../../apis/axios';
 import InfoDetailModal from '../../components/InfoDetailModal/InfoDetailModal';
+import LoginModal from '../../components/LoginModal/LoginModal';
+import SearchBarAndMyBtn from '../../components/SearchBarAndMyBtn/SearchBarAndMyBtn';
+import MyInfoSideBar from '../../components/MyInfoSideBar/MyInfoSideBar';
+
+import { DEFAULT_COORDINATES, USERS_LOCATION } from '../../config/constants';
+import apis from '../../apis/apis';
+import { isLoginModalOpenAtom } from '../../atom/loginModal';
 
 const StyledMainPage = styled.div`
   width: 100vw;
@@ -13,61 +19,111 @@ const StyledMainPage = styled.div`
   position: relative;
 `;
 
+interface CoordinatesTypes {
+  latitude: number;
+  longitude: number;
+}
+
+interface UsersLocationResponseTypes {
+  results: { region: { area1: { name: string } } }[];
+  status: {
+    code: number;
+    message: string;
+    name: string;
+  };
+}
+
 const MainPage = () => {
-  // 기본 좌표를 시청역으로 설정
-  const defaultCoords = {
-    latitude: 37.5656,
-    longitude: 126.9769
+  const [coordinates, setCoordinates] = useState<CoordinatesTypes | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  const setIsLoginModalOpen = useUpdateAtom(isLoginModalOpenAtom);
+
+  const isUserInSeoulOrGwaCheon = (usersLocation: string) => {
+    return (
+      usersLocation === USERS_LOCATION.SEOUL ||
+      usersLocation === USERS_LOCATION.GWACHEON
+    );
   };
 
-  const [coordinates, setCoordinates] = useState({
-    latitude: 0,
-    longitude: 0
-  });
-  const [isLoading, setIsLoading] = useState(true);
+  const setMapCenter = async (latitude: number, longitude: number) => {
+    // 위도, 경도가 있는 경우 네이버 API에 주소 요청
+    const usersLocationResponse: UsersLocationResponseTypes =
+      await apis.getUsersLocation(latitude, longitude);
+    const userLocation = usersLocationResponse.results[0].region.area1.name;
 
-  const geolocation = useGeolocation({
-    enableHighAccuracy: true,
-    maximumAge: 15000,
-    timeout: 12000
-  });
+    if (!usersLocationResponse.results) {
+      return;
+    }
+
+    if (isUserInSeoulOrGwaCheon(userLocation)) {
+      setCoordinates({ latitude, longitude });
+      return;
+    }
+
+    setCoordinates({ ...DEFAULT_COORDINATES });
+  };
 
   useEffect(() => {
-    // 위도, 경도가 있는 경우 네이버 API에 주소 요청
-    if (geolocation.latitude && geolocation.longitude) {
-      fetchGeocodeFromCoords(geolocation.latitude, geolocation.longitude).then(
-        result => {
-          // 서울인 경우 -> 해당 위치를 결과 값으로 리턴
-          // 서울이 아닌 경우 -> 서울 중심 위치를 결과값으로 리턴
-          setIsLoading(false);
-          if (result === '서울특별시' || result === '과천시') {
-            setCoordinates({
-              latitude: geolocation.latitude,
-              longitude: geolocation.longitude
-            });
-          }
-          if (result !== '서울특별시') {
-            setCoordinates({ ...defaultCoords });
-          }
-        }
+    // 로그인 여부 확인하기 -> '로그아웃' 기능 구현 시 재사용 여부를 판단하여 커스텀 훅으로 빼야함
+    const checkLoggedInFunction = async () => {
+      const LogInStatus = await apis.getWhetherUserLoggedIn();
+
+      if (LogInStatus.ok === true) {
+        setIsLoggedIn(true);
+        setIsLoginModalOpen(false);
+        return;
+      }
+      setIsLoggedIn(false);
+    };
+
+    checkLoggedInFunction();
+  }, []);
+
+  useEffect(() => {
+    // 사용자 위치 정보 알아내기
+    const success = (geolocationPosition: GeolocationPosition) => {
+      // 위도/경도 : geolocationPosition.coords.longitude, geolocationPosition.coords.latitude,
+
+      setMapCenter(
+        geolocationPosition.coords.latitude,
+        geolocationPosition.coords.longitude
       );
-    } else {
-      setIsLoading(false);
-      setCoordinates({ ...defaultCoords });
+    };
+
+    const error = (value: GeolocationPositionError) => {
+      console.log(value.code, value.message);
+      setCoordinates({ ...DEFAULT_COORDINATES });
+    };
+
+    navigator.geolocation.watchPosition(success, error);
+  }, []);
+
+  useEffect(() => {
+    if (!coordinates) {
+      return;
     }
-  }, [geolocation]);
+    // 서울 중심 여부 혹은 사용자 위치 정보 허용 여부에 따라 다른 초기 위치 랜더링
+    setIsLoading(false);
+  }, [coordinates]);
 
   return (
     <StyledMainPage>
       {isLoading ? (
         <MapLoading />
       ) : (
-        <Map
-          latitude={coordinates.latitude}
-          longitude={coordinates.longitude}
-        />
+        <>
+          <Map
+            latitude={coordinates!.latitude}
+            longitude={coordinates!.longitude}
+          />
+          <SearchBarAndMyBtn isLoggedIn={isLoggedIn} />
+          <InfoDetailModal />
+          <LoginModal />
+          <MyInfoSideBar />
+        </>
       )}
-      <InfoDetailModal />
     </StyledMainPage>
   );
 };

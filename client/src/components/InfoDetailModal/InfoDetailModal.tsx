@@ -1,146 +1,111 @@
-import styled from 'styled-components';
-import { useState } from 'react';
-
-const ModalLayout = styled.div`
-  position: absolute;
-  bottom: 0%;
-  left: 0%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 10;
-  width: 100%;
-  max-width: 35rem;
-  height: auto;
-  background-color: white;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border-radius: 20px 20px 0 0;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
-  transition: 0.2s all;
-`;
-
-// 북마크 on https://ifh.cc/v-6kHtyx.png
-const BookmarkIcon = styled.img`
-  position: absolute;
-  top: 0%;
-  right: 7%;
-`;
-
-const Title = styled.h3`
-  font-size: 1rem;
-`;
-
-const TitleLocation = styled.strong`
-  font-size: 1.6rem;
-  color: #43eb40;
-`;
-
-const PopulationBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 90%;
-  height: 30%;
-  gap: 20px;
-  background-color: #eeeeee;
-  border-radius: 10px;
-`;
-
-const PopulationInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-  padding-top: 7px;
-
-  p:first-child {
-    font-size: 1rem;
-    font-weight: 700;
-  }
-
-  p:last-child {
-    font-size: 1.5rem;
-    font-weight: 700;
-  }
-`;
-
-const TomorrowButton = styled.button`
-  width: 90%;
-  height: 2.5rem;
-
-  background-color: #6349ff;
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-size: 1.2rem;
-  font-weight: 500;
-
-  padding-top: 4px;
-`;
-
-const SecondLevelBox = styled.div<{ isDisplay: boolean }>`
-  width: 90%;
-  height: ${props => (props.isDisplay ? '10rem' : '0px')};
-  transition: 1s all;
-
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const TraceGraph = styled.div`
-  width: 100%;
-  height: 70%;
-  background-color: #eeeeee;
-  border-radius: 10px;
-`;
-
-const TomorrowRanking = styled.div`
-  width: 100%;
-  height: 30%;
-  background-color: #eeeeee;
-  border-radius: 10px;
-`;
+import { useEffect, useState } from 'react';
+import { useAtom, useAtomValue } from 'jotai';
+import {
+  BookmarkIcon,
+  PopulationBox,
+  PopulationInfo,
+  Title,
+  TitleLocation,
+  TomorrowButton,
+  ModalLayout
+} from '../InfoDetailModal/InfoDetailModal.style';
+import Modal from '../Modal/Modal';
+import {
+  isInfoDetailModalOpenAtom,
+  firstLevelInfoAtom,
+  secondLevelInfoCacheAtom,
+  isSecondLevelAtom
+} from '../../atom/infoDetail';
+import { SecondLevelTimeInfoCacheTypes } from '../../types/interfaces';
+import { INFO_DETAIL_TITLE } from '../../config/constants';
+import apis from '../../apis/apis';
+import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';
 
 const InfoDetailModal = () => {
-  const [isSecondLevel, setIsSecondLevel] = useState(false);
+  const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
+  const firstLevelInfo = useAtomValue(firstLevelInfoAtom);
+  const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
+  const [secondLevelInfoCache, setSecondLevelInfoCache] = useAtom(
+    secondLevelInfoCacheAtom
+  );
+  const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
 
   const toggleSecondLevelContents = () => {
-    setIsSecondLevel(!isSecondLevel);
+    setIsSecondLevel(prev => !prev);
   };
 
+  const setPastInformation = async (): Promise<undefined> => {
+    if (!firstLevelInfo) {
+      return;
+    }
+    const [areaName] = firstLevelInfo;
+
+    // 전역에 areaName을 키로 갖고 있는 속성이 있으면 hit
+    if (secondLevelInfoCache[areaName]) {
+      setGraphInfo(secondLevelInfoCache[areaName]);
+      return;
+    }
+
+    // 아니면 api 호출
+    const { data } = await apis.getPastInformation(areaName);
+
+    setSecondLevelInfoCache({ ...secondLevelInfoCache, [areaName]: data });
+    setGraphInfo(data);
+
+    // eslint-disable-next-line no-useless-return
+    return;
+  };
+
+  useEffect(() => {
+    if (!isSecondLevel) {
+      setGraphInfo({});
+      return;
+    }
+
+    setPastInformation();
+  }, [isSecondLevel]);
+
   return (
-    <ModalLayout>
-      {isSecondLevel ? (
-        <img
-          src='https://ifh.cc/g/l7kvV4.png'
-          onClick={toggleSecondLevelContents}
-        />
-      ) : (
-        <img
-          src='https://ifh.cc/g/ZdS1bD.png'
-          onClick={toggleSecondLevelContents}
-        />
+    <Modal isOpen={isInfoDetailModalOpen}>
+      {firstLevelInfo && (
+        <ModalLayout>
+          {isSecondLevel ? (
+            <img
+              src='https://ifh.cc/g/l7kvV4.png'
+              onClick={toggleSecondLevelContents}
+            />
+          ) : (
+            <img
+              src='https://ifh.cc/g/ZdS1bD.png'
+              onClick={toggleSecondLevelContents}
+            />
+          )}
+          <BookmarkIcon src='https://ifh.cc/g/7qPCCL.png' />
+          <Title>
+            현재&nbsp;
+            <TitleLocation populationLevel={firstLevelInfo[1].populationLevel}>
+              {firstLevelInfo[0]}
+            </TitleLocation>
+            {INFO_DETAIL_TITLE[firstLevelInfo[1].populationLevel]}
+          </Title>
+          <PopulationBox>
+            <img src='https://ifh.cc/g/2GQfXw.png' />
+            <PopulationInfo>
+              <p>현재 인구</p>
+              <p>
+                {firstLevelInfo[1].populationMin.toLocaleString()}명~
+                {firstLevelInfo[1].populationMax.toLocaleString()}명
+              </p>
+            </PopulationInfo>
+          </PopulationBox>
+          <SecondLevelComponent
+            isDisplay={isSecondLevel}
+            graphInfo={graphInfo}
+          />
+          <TomorrowButton>내일 갈 거야! :&#41;</TomorrowButton>
+        </ModalLayout>
       )}
-      <BookmarkIcon src='https://ifh.cc/g/7qPCCL.png' />
-      <Title>
-        현재 <TitleLocation>학동역</TitleLocation>은 놀기 좋아보여요 🙃
-      </Title>
-      <PopulationBox>
-        <img src='https://ifh.cc/g/2GQfXw.png' />
-        <PopulationInfo>
-          <p>현재 인구</p>
-          <p>12,345명~15,000명</p>
-        </PopulationInfo>
-      </PopulationBox>
-      <SecondLevelBox isDisplay={isSecondLevel}>
-        <TraceGraph></TraceGraph>
-        <TomorrowRanking></TomorrowRanking>
-      </SecondLevelBox>
-      <TomorrowButton>내일 갈꺼야? :&#41;</TomorrowButton>
-    </ModalLayout>
+    </Modal>
   );
 };
 

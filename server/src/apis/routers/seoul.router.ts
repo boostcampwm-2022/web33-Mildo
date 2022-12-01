@@ -11,9 +11,9 @@ dotenv.config();
 const router = express.Router();
 
 router.get('/', seoulController.allAreas);
-router.get('/cron', seoulController.cronAreas);
+router.get('/:areaName', seoulController.pastInfo);
 
-router.get('/:areaName', async (req: Request, res: Response) => {
+router.get('/test/:areaName', async (req: Request, res: Response) => {
   const { areaName } = req.params;
   const url = `${SEOUL_CITY_API_BASE_URL}${areaName}`;
   try {
