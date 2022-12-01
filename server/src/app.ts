@@ -1,12 +1,14 @@
 import express, { Request, Response } from 'express';
 import passport from 'passport';
-import apiRouter from './apis';
-import dotenv from 'dotenv';
-import connectMongoDB from './apis/config/mongoDB';
 import cors from 'cors';
+import expressSession from 'express-session';
+import dotenv from 'dotenv';
+
+import apiRouter from './apis';
+import connectMongoDB from './apis/config/mongodb.connect';
 import { DEVELOPMENT } from './apis/config/constants';
 import passports from './apis/passport';
-import expressSession from 'express-session';
+import { connectRedis } from './apis/config/redis.connect';
 
 dotenv.config();
 
@@ -38,7 +40,9 @@ passports();
 app.get('/', (_: Request, res: Response) => {
   res.send('Hello World!');
 });
-// passport 초기화, session 연결
+
+connectMongoDB();
+connectRedis();
 app.use('/api', apiRouter);
 
 app.listen(process.env.API_SERVER_PORT, () => {

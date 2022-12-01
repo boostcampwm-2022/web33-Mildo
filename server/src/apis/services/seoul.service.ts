@@ -2,14 +2,15 @@ import {
   CityDataTypes,
   PopulationSchemaTypes,
   AreaPopulationTypes,
-  AreaCoordinateTypes
+  AreaCoordinateTypes,
+  RedisAllAreasResponseTypes
 } from './../types/interfaces';
 import { AREA_NAMES } from '../config/area.config';
 import xml2js from 'xml2js';
 import { getAxiosSeoulArea } from '../utils/axios';
 import populationRepository from '../repositories/population.repository';
 import areaService from '../services/area.service';
-import populationService from '../services/population.service';
+import redisService from './redis.service';
 
 interface PopulationResponseTypes {
   [areaName: string]: {
@@ -117,9 +118,8 @@ export default {
     }
   },
   getRecentAreaInfo: async (): Promise<PopulationResponseTypes | null> => {
-    // 데이터베이스에서 최근순 데이터 50개 가져오기
-    const recentAreaPopulation =
-      await populationService.getRecentAreaPopulation();
+    // redis에서 최근순 데이터 50개 가져오기
+    const recentAreaPopulation = await redisService.getRecentAreaPopulation();
     // 위도/경도 50개 가져오기
     const allAreaCoordinate = await areaService.getAllAreaCoordinate();
     if (recentAreaPopulation && allAreaCoordinate) {
@@ -129,5 +129,19 @@ export default {
       );
     }
     return null;
+  },
+  getSortedPastInformation: async (
+    pastInfomation: RedisAllAreasResponseTypes
+  ) => {
+    const initObject: RedisAllAreasResponseTypes = {};
+    const sortedInformation = Object.keys(pastInfomation)
+      .sort()
+      .reverse()
+      .reduce((prev, key) => {
+        prev[key] = pastInfomation[key];
+        return prev;
+      }, initObject);
+
+    return sortedInformation;
   }
 };

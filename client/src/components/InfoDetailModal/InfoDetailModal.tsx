@@ -1,36 +1,69 @@
-import { useState } from 'react';
-import { useAtom } from 'jotai';
-
+import { useEffect, useState } from 'react';
+import { useAtom, useAtomValue } from 'jotai';
 import {
   BookmarkIcon,
   PopulationBox,
   PopulationInfo,
-  SecondLevelBox,
   Title,
   TitleLocation,
   TomorrowButton,
-  TomorrowRanking,
-  TraceGraph,
   ModalLayout
 } from '../InfoDetailModal/InfoDetailModal.style';
 import Modal from '../Modal/Modal';
 import {
   isInfoDetailModalOpenAtom,
-  firstLevelInfoAtom
+  firstLevelInfoAtom,
+  secondLevelInfoCacheAtom,
+  isSecondLevelAtom
 } from '../../atom/infoDetail';
-import { SortAllAreasTypes } from '../../types/interfaces';
+import { SecondLevelTimeInfoCacheTypes } from '../../types/interfaces';
 import { INFO_DETAIL_TITLE } from '../../config/constants';
+import apis from '../../apis/apis';
+import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';
 
 const InfoDetailModal = () => {
   const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
-  const [firstLevelInfo] = useAtom<SortAllAreasTypes | null>(
-    firstLevelInfoAtom
+  const firstLevelInfo = useAtomValue(firstLevelInfoAtom);
+  const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
+  const [secondLevelInfoCache, setSecondLevelInfoCache] = useAtom(
+    secondLevelInfoCacheAtom
   );
-  const [isSecondLevel, setIsSecondLevel] = useState<boolean>(false);
+  const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
 
   const toggleSecondLevelContents = () => {
     setIsSecondLevel(prev => !prev);
   };
+
+  const setPastInformation = async (): Promise<undefined> => {
+    if (!firstLevelInfo) {
+      return;
+    }
+    const [areaName] = firstLevelInfo;
+
+    // 전역에 areaName을 키로 갖고 있는 속성이 있으면 hit
+    if (secondLevelInfoCache[areaName]) {
+      setGraphInfo(secondLevelInfoCache[areaName]);
+      return;
+    }
+
+    // 아니면 api 호출
+    const { data } = await apis.getPastInformation(areaName);
+
+    setSecondLevelInfoCache({ ...secondLevelInfoCache, [areaName]: data });
+    setGraphInfo(data);
+
+    // eslint-disable-next-line no-useless-return
+    return;
+  };
+
+  useEffect(() => {
+    if (!isSecondLevel) {
+      setGraphInfo({});
+      return;
+    }
+
+    setPastInformation();
+  }, [isSecondLevel]);
 
   return (
     <Modal isOpen={isInfoDetailModalOpen}>
@@ -65,10 +98,10 @@ const InfoDetailModal = () => {
               </p>
             </PopulationInfo>
           </PopulationBox>
-          <SecondLevelBox isDisplay={isSecondLevel}>
-            <TraceGraph></TraceGraph>
-            <TomorrowRanking></TomorrowRanking>
-          </SecondLevelBox>
+          <SecondLevelComponent
+            isDisplay={isSecondLevel}
+            graphInfo={graphInfo}
+          />
           <TomorrowButton>내일 갈 거야! :&#41;</TomorrowButton>
         </ModalLayout>
       )}

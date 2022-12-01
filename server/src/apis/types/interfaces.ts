@@ -43,3 +43,11 @@ export interface UserSchemaTypes {
   provider: string;
   email: string;
 }
+
+export interface RedisAllAreasResponseTypes {
+  [key: string]: {
+    populationMin: number;
+    populationMax: number;
+    populationLevel: string;
+  };
+}

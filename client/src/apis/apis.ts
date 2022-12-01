@@ -52,5 +52,8 @@ export default {
   },
   getWhetherUserLoggedIn: () => {
     return request('/auth', 'get');
+  },
+  getPastInformation: (areaName: string) => {
+    return request(`/seoul/${areaName}`, 'get');
   }
 };
