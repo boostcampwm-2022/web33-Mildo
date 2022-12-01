@@ -37,6 +37,13 @@ export interface AreaCoordinateTypes {
   };
 }
 
+export interface UserSchemaTypes {
+  _id?: string;
+  snsId: string;
+  provider: string;
+  email: string;
+}
+
 export interface RedisAllAreasResponseTypes {
   [key: string]: {
     populationMin: number;

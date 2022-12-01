@@ -1,11 +1,17 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
+import { useUpdateAtom } from 'jotai/utils';
+
 import Map from '../../components/Map/Map';
 import MapLoading from '../../components/MapLoading/MapLoading';
-// import fetchGeocodeFromCoords from '../../apis/axios';
 import InfoDetailModal from '../../components/InfoDetailModal/InfoDetailModal';
+import LoginModal from '../../components/LoginModal/LoginModal';
+import SearchBarAndMyBtn from '../../components/SearchBarAndMyBtn/SearchBarAndMyBtn';
+import MyInfoSideBar from '../../components/MyInfoSideBar/MyInfoSideBar';
+
 import { DEFAULT_COORDINATES, USERS_LOCATION } from '../../config/constants';
 import apis from '../../apis/apis';
+import { isLoginModalOpenAtom } from '../../atom/loginModal';
 
 const StyledMainPage = styled.div`
   width: 100vw;
@@ -30,6 +36,9 @@ interface UsersLocationResponseTypes {
 const MainPage = () => {
   const [coordinates, setCoordinates] = useState<CoordinatesTypes | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  const setIsLoginModalOpen = useUpdateAtom(isLoginModalOpenAtom);
 
   const isUserInSeoulOrGwaCheon = (usersLocation: string) => {
     return (
@@ -57,9 +66,26 @@ const MainPage = () => {
   };
 
   useEffect(() => {
+    // 로그인 여부 확인하기 -> '로그아웃' 기능 구현 시 재사용 여부를 판단하여 커스텀 훅으로 빼야함
+    const checkLoggedInFunction = async () => {
+      const LogInStatus = await apis.getWhetherUserLoggedIn();
+
+      if (LogInStatus.ok === true) {
+        setIsLoggedIn(true);
+        setIsLoginModalOpen(false);
+        return;
+      }
+      setIsLoggedIn(false);
+    };
+
+    checkLoggedInFunction();
+  }, []);
+
+  useEffect(() => {
     // 사용자 위치 정보 알아내기
     const success = (geolocationPosition: GeolocationPosition) => {
       // 위도/경도 : geolocationPosition.coords.longitude, geolocationPosition.coords.latitude,
+
       setMapCenter(
         geolocationPosition.coords.latitude,
         geolocationPosition.coords.longitude
@@ -87,12 +113,17 @@ const MainPage = () => {
       {isLoading ? (
         <MapLoading />
       ) : (
-        <Map
-          latitude={coordinates!.latitude}
-          longitude={coordinates!.longitude}
-        />
+        <>
+          <Map
+            latitude={coordinates!.latitude}
+            longitude={coordinates!.longitude}
+          />
+          <SearchBarAndMyBtn isLoggedIn={isLoggedIn} />
+          <InfoDetailModal />
+          <LoginModal />
+          <MyInfoSideBar />
+        </>
       )}
-      <InfoDetailModal />
     </StyledMainPage>
   );
 };
