@@ -127,27 +127,27 @@ jobs:
           target: "web33-Mildo/server"
           strip_components: 1
           
-#       - name: API 서버 node_modules 폴더 복사
-#         uses: appleboy/scp-action@master
-#         with:
-#           host: ${{ secrets.HOST }}
-#           username: ${{ secrets.USERNAME }}
-#           password: ${{ secrets.PASSWORD }}
-#           port: ${{ secrets.PORT }}
-#           source: server/node_modules
-#           target: "web33-Mildo/server"
-#           strip_components: 1
-
-      - name: API 서버 package.json, yarn.lock 파일 복사
+      - name: API 서버 node_modules 폴더 복사
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: server/package.json, server/yarn.lock
+          source: server/node_modules
           target: "web33-Mildo/server"
           strip_components: 1
+
+#       - name: API 서버 package.json, yarn.lock 파일 복사
+#         uses: appleboy/scp-action@master
+#         with:
+#           host: ${{ secrets.HOST }}
+#           username: ${{ secrets.USERNAME }}
+#           password: ${{ secrets.PASSWORD }}
+#           port: ${{ secrets.PORT }}
+#           source: server/package.json, server/yarn.lock
+#           target: "web33-Mildo/server"
+#           strip_components: 1
           
       - name: API 서버 .env 파일 복사
         uses: appleboy/scp-action@master
@@ -171,27 +171,27 @@ jobs:
           target: "web33-Mildo/cron-server"
           strip_components: 1
           
-#       - name: cron 서버 node_modules 폴더 복사
-#         uses: appleboy/scp-action@master
-#         with:
-#           host: ${{ secrets.HOST }}
-#           username: ${{ secrets.USERNAME }}
-#           password: ${{ secrets.PASSWORD }}
-#           port: ${{ secrets.PORT }}
-#           source: cron-server/node_modules
-#           target: "web33-Mildo/cron-server"
-#           strip_components: 1
-
-      - name: cron 서버 package.json, yarn.lock 파일 복사
+      - name: cron 서버 node_modules 폴더 복사
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: cron-server/package.json, cron-server/yarn.lock
+          source: cron-server/node_modules
           target: "web33-Mildo/cron-server"
           strip_components: 1
+
+#       - name: cron 서버 package.json, yarn.lock 파일 복사
+#         uses: appleboy/scp-action@master
+#         with:
+#           host: ${{ secrets.HOST }}
+#           username: ${{ secrets.USERNAME }}
+#           password: ${{ secrets.PASSWORD }}
+#           port: ${{ secrets.PORT }}
+#           source: cron-server/package.json, cron-server/yarn.lock
+#           target: "web33-Mildo/cron-server"
+#           strip_components: 1
           
       - name: cron 서버 .env 파일 복사
         uses: appleboy/scp-action@master
@@ -204,27 +204,27 @@ jobs:
           target: "web33-Mildo/cron-server/dist"
           strip_components: 1
           
-      - name: API 서버 라이브러리 설치
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          script: |
-            cd web33-Mildo/server
-            yarn
+#       - name: API 서버 라이브러리 설치
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.HOST }}
+#           username: ${{ secrets.USERNAME }}
+#           password: ${{ secrets.PASSWORD }}
+#           port: ${{ secrets.PORT }}
+#           script: |
+#             cd web33-Mildo/server
+#             yarn
             
-      - name: cron 서버 라이브러리 설치
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          script: |
-            cd web33-Mildo/cron-server
-            yarn
+#       - name: cron 서버 라이브러리 설치
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.HOST }}
+#           username: ${{ secrets.USERNAME }}
+#           password: ${{ secrets.PASSWORD }}
+#           port: ${{ secrets.PORT }}
+#           script: |
+#             cd web33-Mildo/cron-server
+#             yarn
 
       - name: API 서버 실행
         uses: appleboy/ssh-action@master
@@ -239,3 +239,4 @@ jobs:
             pm2 reload api
             pm2 start cron-server/dist/src/app.js --name cron
             pm2 reload cron
+            yarn -v
