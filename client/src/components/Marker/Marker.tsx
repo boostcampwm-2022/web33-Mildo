@@ -1,11 +1,12 @@
 import { memo, useEffect } from 'react';
-import { useAtom } from 'jotai';
+import { useUpdateAtom } from 'jotai/utils';
 
 import { createPinSvg, setBigMarkerIcon } from '../../utils/map.util';
 import { MarkerObjectTypes, SortAllAreasTypes } from '../../types/interfaces';
 import {
   isInfoDetailModalOpenAtom,
-  firstLevelInfoAtom
+  firstLevelInfoAtom,
+  isSecondLevelAtom
 } from '../../atom/infoDetail';
 
 interface MarkerProps {
@@ -15,8 +16,9 @@ interface MarkerProps {
 }
 
 const Marker: React.FC<MarkerProps> = ({ area, naverMap, onClickMarker }) => {
-  const [, setIsInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
-  const [, setFirstLevelInfo] = useAtom(firstLevelInfoAtom);
+  const setIsInfoDetailModalOpen = useUpdateAtom(isInfoDetailModalOpenAtom);
+  const setFirstLevelInfo = useUpdateAtom(firstLevelInfoAtom);
+  const setIsSecondLevel = useUpdateAtom(isSecondLevelAtom);
   const [, areaObject] = area;
   const { latitude, longitude, populationLevel } = areaObject;
 
@@ -47,10 +49,13 @@ const Marker: React.FC<MarkerProps> = ({ area, naverMap, onClickMarker }) => {
       // infoDetailModal 열고 닫기
       setIsInfoDetailModalOpen(true);
       setFirstLevelInfo(area);
+
+      // 2단계 상세정보 모달 닫기
+      setIsSecondLevel(false);
     });
   }, []);
 
-  return <div></div>;
+  return <></>;
 };
 
 export default memo(Marker);

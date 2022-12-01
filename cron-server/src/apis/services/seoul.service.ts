@@ -1,10 +1,9 @@
 import { CityDataTypes, PopulationSchemaTypes } from './../types/interfaces';
-// import { TEST_AREA_NAMES } from '../config/area.config';
-// import { AREA_NAMES } from '../config/area.config';
 import xml2js from 'xml2js';
 import { getAxiosSeoulArea } from '../utils/axios';
 import populationRepository from '../repositories/population.repository';
 import areaService from './area.service';
+import redisService from './redis.service';
 
 interface jsonTypes {
   'SeoulRtd.citydata':
@@ -48,6 +47,7 @@ export default {
       for (const areaName of Object.keys(allAreaNames!)) {
         const cityDataXml = await getAxiosSeoulArea(areaName);
         const cityDataJson = await xml2js.parseStringPromise(cityDataXml);
+
         if (!isVaildCityData(cityDataJson)) {
           cityData.push({
             areaName: areaName,
@@ -80,8 +80,10 @@ export default {
   savePopulationData: async (
     cityData: CityDataTypes[]
   ): Promise<PopulationSchemaTypes[] | null> => {
+    let populationTime = '';
     const convertPopulationSchemaData: PopulationSchemaTypes[] = cityData.map(
       data => {
+        populationTime === '' ? (populationTime = data.populationTime) : '';
         return {
           ...data,
           populationMin: +data.populationMin,
@@ -92,9 +94,12 @@ export default {
     );
     let responseData = null;
     try {
+      // MongoDB에 저장
       responseData = await populationRepository.saveMany(
         convertPopulationSchemaData
       );
+      // redis에 저장
+      await redisService.save(cityData);
     } catch (error) {
       console.log(error);
     }

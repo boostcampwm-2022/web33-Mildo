@@ -19,3 +19,15 @@ export interface CoordinatesPopulationTypes {
 }
 
 export type SortAllAreasTypes = [string, CoordinatesPopulationTypes];
+
+export interface SecondLevelTimeInfoCacheTypes {
+  [date: string]: {
+    populationLevel: string;
+    populationMax: number;
+    populationMin: number;
+  };
+}
+
+export interface SecondLevelInfoCacheTypes {
+  [areaName: string]: SecondLevelTimeInfoCacheTypes;
+}
