@@ -127,6 +127,17 @@ jobs:
           target: "web33-Mildo/server"
           strip_components: 1
           
+      - name: API 서버 node_modules 폴더 복사
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: server/node_modules
+          target: "web33-Mildo/server"
+          strip_components: 1
+          
       - name: API 서버 .env 파일 복사
         uses: appleboy/scp-action@master
         with:
@@ -146,6 +157,17 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           source: cron-server/dist/
+          target: "web33-Mildo/cron-server"
+          strip_components: 1
+          
+      - name: cron 서버 node_modules 폴더 복사
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: cron-server/node_modules
           target: "web33-Mildo/cron-server"
           strip_components: 1
           
