@@ -20,6 +20,7 @@ const clientURL =
     : process.env.CLIENT_URL_PRODUCTION;
 
 connectMongoDB();
+connectRedis();
 
 const SESSION_COOKIE_MAX_AGE = 60 * 60 * 1000;
 
@@ -41,8 +42,6 @@ app.get('/', (_: Request, res: Response) => {
   res.send('Hello World!');
 });
 
-connectMongoDB();
-connectRedis();
 app.use('/api', apiRouter);
 
 app.listen(process.env.API_SERVER_PORT, () => {

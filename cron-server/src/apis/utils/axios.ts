@@ -4,8 +4,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const getAxiosSeoulArea = async (path: string, accessKey: string) => {
-  console.log(accessKey);
-
   return await axios
     .get(
       `http://openapi.seoul.go.kr:8088/${accessKey}/xml/citydata/1/5/${path}`
