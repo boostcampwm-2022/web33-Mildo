@@ -17,7 +17,7 @@ export default {
       const areaPopulation: CityDataTypes[] = Object.values(areaPopulationJson);
 
       if (areaPopulation) {
-        areaPopulation.map((populationInfo: CityDataTypes) => {
+        areaPopulation.forEach((populationInfo: CityDataTypes) => {
           result[populationInfo.areaName] = {
             populationMax: +populationInfo.populationMax,
             populationMin: +populationInfo.populationMin,

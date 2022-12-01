@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import {
   BookmarkIcon,
   PopulationBox,
@@ -23,7 +23,7 @@ import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';
 
 const InfoDetailModal = () => {
   const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
-  const [firstLevelInfo] = useAtom(firstLevelInfoAtom);
+  const firstLevelInfo = useAtomValue(firstLevelInfoAtom);
   const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
   const [secondLevelInfoCache, setSecondLevelInfoCache] = useAtom(
     secondLevelInfoCacheAtom
@@ -31,7 +31,7 @@ const InfoDetailModal = () => {
   const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
 
   const toggleSecondLevelContents = () => {
-    setIsSecondLevel(!isSecondLevel);
+    setIsSecondLevel(prev => !prev);
   };
 
   const setPastInformation = async (): Promise<undefined> => {
