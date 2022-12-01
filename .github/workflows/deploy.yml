@@ -203,6 +203,28 @@ jobs:
           source: cron-server/.env
           target: "web33-Mildo/cron-server/dist"
           strip_components: 1
+          
+      - name: API 서버 라이브러리 설치
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd web33-Mildo/server
+            yarn
+            
+      - name: cron 서버 라이브러리 설치
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd web33-Mildo/cron-server
+            yarn
 
       - name: API 서버 실행
         uses: appleboy/ssh-action@master
@@ -213,11 +235,6 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd web33-Mildo
-            cd server
-            yarn
-            cd ../cron-server
-            yarn
-            cd ..
             pm2 start server/dist/src/app.js --name api
             pm2 reload api
             pm2 start cron-server/dist/src/app.js --name cron
