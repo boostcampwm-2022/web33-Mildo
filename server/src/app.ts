@@ -19,11 +19,13 @@ const clientURL =
 
 connectMongoDB();
 
+const SESSION_COOKIE_MAX_AGE = 60 * 60 * 1000;
+
 app.use(cors({ origin: clientURL, credentials: true }));
 app.use(
   expressSession({
-    secret: 'SECRET',
-    cookie: { maxAge: 60 * 60 * 1000, secure: false },
+    secret: `${process.env.SESSION_SECRET}`,
+    cookie: { maxAge: SESSION_COOKIE_MAX_AGE, secure: false },
     resave: false,
     saveUninitialized: false
   })

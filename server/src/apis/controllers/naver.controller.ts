@@ -6,15 +6,16 @@ import passport from 'passport';
 
 dotenv.config();
 
+const clientURL =
+  process.env.NODE_ENV === DEVELOPMENT
+    ? process.env.CLIENT_URL_DEVELOPMENT
+    : process.env.CLIENT_URL_PRODUCTION;
+
 export default {
   getGeoCodingFromCoords: async (req: Request, res: Response) => {
     const { lat, lng } = req.query;
 
     const url = `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${lng},${lat}&sourcecrs=epsg:4326&orders=legalcode&output=json`;
-    const clientURL =
-      process.env.NODE_ENV === DEVELOPMENT
-        ? process.env.CLIENT_URL_DEVELOPMENT
-        : process.env.CLIENT_URL_PRODUCTION;
     try {
       const data = await getAxiosFromNaverApi(url);
       if (clientURL) {
@@ -33,7 +34,7 @@ export default {
     authType: 'reprompt'
   }),
   naverPassportAuthMiddleware: passport.authenticate('naver', {
-    successRedirect: `${process.env.CLIENT_URL_DEVELOPMENT}`,
-    failureRedirect: `${process.env.CLIENT_URL_DEVELOPMENT}`
+    successRedirect: `${clientURL}`,
+    failureRedirect: `${clientURL}`
   })
 };

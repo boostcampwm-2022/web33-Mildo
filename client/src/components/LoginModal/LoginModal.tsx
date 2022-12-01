@@ -71,6 +71,11 @@ const NaverLoginBtn = styled.button`
   }
 `;
 
+const apiServerURL =
+  process.env.REACT_APP_CLIENT_ENV === 'development'
+    ? process.env.REACT_APP_API_SERVER_URL_DEVELOPMENT
+    : process.env.REACT_APP_API_SERVER_URL_PRODUCTION;
+
 const LoginModal = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useAtom(isLoginModalOpenAtom);
 
@@ -91,7 +96,7 @@ const LoginModal = () => {
           </button>
           <h2>로그인</h2>
         </TitleBar>
-        <a href='http://localhost:3001/api/naver/auth/login'>
+        <a href={`${apiServerURL}/naver/auth/login`}>
           <NaverLoginBtn
             dangerouslySetInnerHTML={{
               __html: createNaverLoginSvg()

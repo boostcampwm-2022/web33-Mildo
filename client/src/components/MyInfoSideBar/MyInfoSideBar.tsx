@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useAtom } from 'jotai';
 import styled from 'styled-components';
 
@@ -11,10 +10,6 @@ const MyInfoSideBar = () => {
   const [isMyInfoSideBarOpen, setIsMyInfoSideBarOpen] = useAtom(
     isMyInfoSideBarOpenAtom
   );
-
-  useEffect(() => {
-    console.log('my info sidebar render');
-  }, []);
 
   const SideBarLayout = styled.div`
     z-index: ${Z_INDEX.MODAL};
