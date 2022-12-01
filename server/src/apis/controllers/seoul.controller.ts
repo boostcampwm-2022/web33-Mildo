@@ -18,7 +18,7 @@ export default {
   },
   pastInfo: async (req: Request, res: Response) => {
     const { areaName } = req.params;
-    const pastInformation = await redisService.getPastInfomation(areaName);
+    const pastInformation = await redisService.getPastInformation(areaName);
     if (!pastInformation) {
       return res.status(500).json({ ok: false });
     }

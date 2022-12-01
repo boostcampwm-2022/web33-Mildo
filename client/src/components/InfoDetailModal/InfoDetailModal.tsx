@@ -47,7 +47,7 @@ const InfoDetailModal = () => {
     }
 
     // 아니면 api 호출
-    const { data } = await apis.getPastInfomation(areaName);
+    const { data } = await apis.getPastInformation(areaName);
 
     setSecondLevelInfoCache({ ...secondLevelInfoCache, [areaName]: data });
     setGraphInfo(data);

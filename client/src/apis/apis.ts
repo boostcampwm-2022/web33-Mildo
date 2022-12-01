@@ -50,7 +50,7 @@ export default {
   getUsersLocation: (latitude: number, longitude: number) => {
     return request(`/naver?lng=${longitude}&lat=${latitude}`, 'get');
   },
-  getPastInfomation: (areaName: string) => {
+  getPastInformation: (areaName: string) => {
     return request(`/seoul/${areaName}`, 'get');
   }
 };
