@@ -1,5 +1,9 @@
 import styled, { keyframes } from 'styled-components';
-import { COLOR_PALETTE, POPULATION_LEVEL_COLOR } from '../../config/constants';
+import {
+  COLOR_PALETTE,
+  POPULATION_LEVEL_COLOR,
+  Z_INDEX
+} from '../../config/constants';
 
 export const ModalLayout = styled.div`
   position: absolute;
@@ -20,6 +24,7 @@ export const ModalLayout = styled.div`
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
   transition: 0.2s all;
   overflow-x: hidden;
+  z-index: ${Z_INDEX.MODAL};
 `;
 
 // 북마크 on https://ifh.cc/v-6kHtyx.png
