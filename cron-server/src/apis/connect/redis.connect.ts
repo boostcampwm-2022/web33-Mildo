@@ -7,7 +7,7 @@ dotenv.config();
 export const redisClient: RedisClientType = createClient({
   socket: {
     host: process.env.REDIS_HOST,
-    port: parseInt(process.env.REDIS_PORT),
+    port: +process.env.REDIS_PORT,
     connectTimeout: 50000
   },
   username: process.env.REDIS_USERNAME,

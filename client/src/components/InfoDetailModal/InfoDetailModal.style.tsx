@@ -4,7 +4,8 @@ import { COLOR_PALETTE, POPULATION_LEVEL_COLOR } from '../../config/constants';
 export const ModalLayout = styled.div`
   position: absolute;
   bottom: 0%;
-  left: 0%;
+  left: 50%;
+  transform: translate(-50%, 0);
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -18,6 +19,7 @@ export const ModalLayout = styled.div`
   border-radius: 20px 20px 0 0;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
   transition: 0.2s all;
+  overflow-x: hidden;
 `;
 
 // 북마크 on https://ifh.cc/v-6kHtyx.png
@@ -45,7 +47,7 @@ export const Title = styled.h1`
   font-size: 1rem;
   white-space: nowrap;
   will-change: transform;
-  animation: ${marquee} 5s linear infinite;
+  animation: ${marquee} 4s linear infinite;
 `;
 
 interface TitleLocationProps {

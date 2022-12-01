@@ -1,5 +1,6 @@
 import { redisClient } from '../connect/redis.connect';
 import { AreaPopulationTypes } from '../types/interfaces';
+import { REDIS_EXPIRIRATION } from '../config/constants';
 
 export default {
   set: async (
@@ -9,7 +10,7 @@ export default {
     try {
       await redisClient.setEx(
         populationTime,
-        25 * 60 * 60,
+        REDIS_EXPIRIRATION,
         JSON.stringify(cityData)
       );
       await redisClient.set('recent', populationTime);
