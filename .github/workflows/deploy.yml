@@ -236,9 +236,9 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cd web33-Mildo
-            pm2 start server/dist/src/app.js --name api
+            cd web33-Mildo/server/dist
+            pm2 start src/app.js --name api
             pm2 reload api
-            pm2 start cron-server/dist/src/app.js --name cron
+            cd ~web33-Mildo/cron-server/dist
+            pm2 start src/app.js --name cron
             pm2 reload cron
-            yarn -v
