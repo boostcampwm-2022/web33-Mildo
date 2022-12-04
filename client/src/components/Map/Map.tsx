@@ -5,12 +5,12 @@ import { useUpdateAtom } from 'jotai/utils';
 import { MarkerObjectTypes } from '../../types/interfaces';
 import api from '../../apis/apis';
 import { SEOUL_BOUNDS } from '../../config/constants';
-import Marker from '../Marker/Marker';
 import { setMarkerIcon } from '../../utils/map.util';
 import {
   isInfoDetailModalOpenAtom,
   isSecondLevelAtom
 } from '../../atom/infoDetail';
+import useMarker from '../../hooks/useMarker';
 
 const MapComponent = styled.div`
   width: 100%;
@@ -50,6 +50,7 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
   const prevPlace = useRef<PrevPlaceTypes | null>(null);
   const setIsInfoDetailModalOpen = useUpdateAtom(isInfoDetailModalOpenAtom);
   const setIsSecondLevel = useUpdateAtom(isSecondLevelAtom);
+  const [makeMarker] = useMarker(naverMap, prevPlace);
 
   // MapComponent DOM에 네이버 지도 렌더링
   useEffect(() => {
@@ -100,36 +101,6 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
     getAllArea();
   }, [naverMap]);
 
-  // 이전 마커를 작은 크기로 만들고, 새로운 마커를 이전 마커로 등록
-  const onClickMarker = (
-    marker: MarkerObjectTypes,
-    populationLevel: string
-  ) => {
-    if (!prevPlace.current || !marker._nmarker_id) {
-      setMarkerIcon(marker, populationLevel);
-
-      prevPlace.current = {
-        marker,
-        populationLevel
-      };
-      return;
-    }
-
-    const { _nmarker_id: newMarkerId } = marker;
-    const { _nmarker_id: oldMarkerId } = prevPlace.current.marker;
-
-    if (newMarkerId === oldMarkerId) {
-      return;
-    }
-
-    setMarkerIcon(prevPlace.current.marker, prevPlace.current.populationLevel);
-
-    prevPlace.current = {
-      marker,
-      populationLevel
-    };
-  };
-
   // 마커 이외의 영역을 클릭하면 1단계, 2단계 모달창이 닫힘
   const onClickMap = () => {
     if (!prevPlace.current) {
@@ -146,14 +117,7 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
       <MapComponent ref={mapRef} onClick={onClickMap} />
       {areas &&
         naverMap &&
-        areas.map((area: SortAllAreasTypes, index: number) => (
-          <Marker
-            area={area}
-            naverMap={naverMap}
-            key={index}
-            onClickMarker={onClickMarker}
-          />
-        ))}
+        areas.map((area: SortAllAreasTypes) => makeMarker(area))}
     </>
   );
 };
