@@ -1,17 +1,14 @@
 import { useAtom } from 'jotai';
-import styled from 'styled-components';
+import { css } from 'styled-components';
 
 import { isMyInfoSideBarOpenAtom } from '../../atom/myInfoSideBar';
-import ModalFilter from '../ModalFilter/ModalFilter';
 import Modal from '../Modal/Modal';
 import { Z_INDEX } from '../../config/constants';
 
 const MyInfoSideBar = () => {
-  const [isMyInfoSideBarOpen, setIsMyInfoSideBarOpen] = useAtom(
-    isMyInfoSideBarOpenAtom
-  );
+  const [isMyInfoSideBarOpen] = useAtom(isMyInfoSideBarOpenAtom);
 
-  const SideBarLayout = styled.div`
+  const SideBarLayout = css`
     z-index: ${Z_INDEX.MODAL};
     background-color: white;
     display: block;
@@ -40,15 +37,15 @@ const MyInfoSideBar = () => {
   `;
 
   return (
-    <Modal isOpen={isMyInfoSideBarOpen}>
-      <ModalFilter isClickModalFilter={setIsMyInfoSideBarOpen} />
-      <SideBarLayout>
-        <h2>
-          안녕하세요
-          <br />
-          <span>상준</span>님 😌
-        </h2>
-      </SideBarLayout>
+    <Modal
+      isOpen={isMyInfoSideBarOpen}
+      background={true}
+      customModalStyle={SideBarLayout}>
+      <h2>
+        안녕하세요
+        <br />
+        <span>상준</span>님 😌
+      </h2>
     </Modal>
   );
 };

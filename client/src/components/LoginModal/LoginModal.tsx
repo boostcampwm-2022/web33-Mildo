@@ -1,14 +1,13 @@
 import { useAtom } from 'jotai';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { IoClose } from 'react-icons/io5';
 
 import Modal from '../Modal/Modal';
 import { isLoginModalOpenAtom } from '../../atom/loginModal';
-import ModalFilter from '../ModalFilter/ModalFilter';
 import { createNaverLoginSvg } from '../../utils/login.util';
 import { Z_INDEX } from '../../config/constants';
 
-const LoginModalLayout = styled.div`
+const LoginModalLayout = css`
   position: absolute;
   top: 35%;
   left: 50%;
@@ -80,30 +79,31 @@ const LoginModal = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useAtom(isLoginModalOpenAtom);
 
   return (
-    <Modal isOpen={isLoginModalOpen}>
-      <ModalFilter isClickModalFilter={setIsLoginModalOpen} />
-      <LoginModalLayout>
-        <TitleBar>
-          <button>
-            <IoClose
-              onClick={() => setIsLoginModalOpen(false)}
-              style={{
-                color: 'white',
-                width: '18px',
-                height: '18px'
-              }}
-            />
-          </button>
-          <h2>로그인</h2>
-        </TitleBar>
-        <a href={`${apiServerURL}/naver/auth/login`}>
-          <NaverLoginBtn
-            dangerouslySetInnerHTML={{
-              __html: createNaverLoginSvg()
+    <Modal
+      isOpen={isLoginModalOpen}
+      customModalStyle={LoginModalLayout}
+      background={true}
+      isClickModalFilter={setIsLoginModalOpen}>
+      <TitleBar>
+        <button>
+          <IoClose
+            onClick={() => setIsLoginModalOpen(false)}
+            style={{
+              color: 'white',
+              width: '18px',
+              height: '18px'
             }}
           />
-        </a>
-      </LoginModalLayout>
+        </button>
+        <h2>로그인</h2>
+      </TitleBar>
+      <a href={`${apiServerURL}/naver/auth/login`}>
+        <NaverLoginBtn
+          dangerouslySetInnerHTML={{
+            __html: createNaverLoginSvg()
+          }}
+        />
+      </a>
     </Modal>
   );
 };
