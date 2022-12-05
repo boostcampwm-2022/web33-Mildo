@@ -15,7 +15,6 @@ const RelatedAreaListStyle = styled.div`
   border-radius: 10px;
   border: none;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
-  padding-left: 10px;
 `;
 
 interface CoordinatesTypes {
@@ -46,6 +45,12 @@ const RelatedSearchList: React.FC<RelatedSearchListProps> = ({
 }) => {
   const [isEmptyRelatedList, setIsEmptyRelatedList] = useState(true);
 
+  const onClickRelatedAreaList: React.MouseEventHandler<
+    HTMLInputElement
+  > = e => {
+    console.log(e.target);
+  };
+
   useEffect(() => {
     setIsEmptyRelatedList(
       searchAreaName !== '' && Object.keys(relatedAreaInfo).length === 0
@@ -53,7 +58,7 @@ const RelatedSearchList: React.FC<RelatedSearchListProps> = ({
   }, [relatedAreaInfo]);
 
   return (
-    <RelatedAreaListStyle>
+    <RelatedAreaListStyle onClick={onClickRelatedAreaList}>
       {isEmptyRelatedList ? (
         <RelatedAreaItem
           searchAreaName={searchAreaName}

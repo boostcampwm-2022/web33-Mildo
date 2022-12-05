@@ -5,9 +5,16 @@ const RelatedAreaItemStyle = styled.div`
   height: 2.5rem;
   line-height: 2.5rem;
   font-size: 0.8rem;
+  padding-left: 10px;
 
   span {
     color: #6349ff;
+  }
+
+  :hover {
+    cursor: pointer;
+    background-color: #eeeeee;
+    border-radius: 10px;
   }
 `;
 
