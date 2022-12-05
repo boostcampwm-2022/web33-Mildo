@@ -1,15 +1,12 @@
 import { Request, Response } from 'express';
-import authService from '../services/auth.service';
 
 export default {
-  getUserAuth: async (_: Request, res: Response) => {
-    res.json({ ok: true });
+  getUserAuth: async (req: Request, res: Response) => {
+    res.json({ ok: true, data: req.user });
   },
-  getUserInfo: async (req: Request, res: Response) => {
-    const { userId } = req.params;
+  getUserInfo: (req: Request, res: Response) => {
     try {
-      const userInfo = await authService.getUserInfo(userId);
-      res.status(200).send({ data: userInfo });
+      res.status(200).send({ data: req.user });
     } catch (error) {
       console.log(error);
       res.status(500).send({

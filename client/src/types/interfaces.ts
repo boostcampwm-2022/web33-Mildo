@@ -31,3 +31,11 @@ export interface SecondLevelTimeInfoCacheTypes {
 export interface SecondLevelInfoCacheTypes {
   [areaName: string]: SecondLevelTimeInfoCacheTypes;
 }
+
+export interface UserInfoTypes {
+  _id: string;
+  snsId: string;
+  email: string;
+  provider: string;
+  bookMarks: [string];
+}

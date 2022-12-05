@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/', authMiddleware.authorizationUser, authController.getUserAuth);
 router.get(
-  '/userInfo/:userId',
+  '/userInfo/',
   authMiddleware.authorizationUser,
   authController.getUserInfo
 );

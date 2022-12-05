@@ -20,6 +20,7 @@ import { SecondLevelTimeInfoCacheTypes } from '../../types/interfaces';
 import { INFO_DETAIL_TITLE } from '../../config/constants';
 import apis from '../../apis/apis';
 import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';
+import { userInfoAtom } from '../../atom/userInfo';
 
 const InfoDetailModal = () => {
   const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
@@ -29,6 +30,8 @@ const InfoDetailModal = () => {
     secondLevelInfoCacheAtom
   );
   const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
+
+  const userInfo = useAtomValue(userInfoAtom);
 
   const toggleSecondLevelContents = () => {
     setIsSecondLevel(prev => !prev);
@@ -57,6 +60,7 @@ const InfoDetailModal = () => {
   };
 
   useEffect(() => {
+    console.log(userInfo);
     if (!isSecondLevel) {
       setGraphInfo({});
       return;
