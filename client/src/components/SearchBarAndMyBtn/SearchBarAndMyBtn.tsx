@@ -7,6 +7,7 @@ import { isMyInfoSideBarOpenAtom } from '../../atom/myInfoSideBar';
 import { createMyButtonSvg } from '../../utils/button.util';
 import RelatedAreaList from '../RelatedAreaList/RelatedAreaList';
 import apis from '../../apis/apis';
+import { isCompleteKorean } from '../../utils/search.util';
 
 const FlexBoxStyle = styled.div`
   z-index: 0;
@@ -94,6 +95,10 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
   };
 
   useEffect(() => {
+    if (!isCompleteKorean(deferredSearchAreaName)) {
+      return;
+    }
+
     const getRelatedAreaInfo = async () => {
       const { data: responseRelatedAreaInfo }: GetRelatedAreaResponseTypes =
         await apis.getRelatedAreaInfo(searchAreaName);
