@@ -1,4 +1,4 @@
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import styled, { css } from 'styled-components';
 import { useEffect, useState } from 'react';
 
@@ -8,6 +8,7 @@ import { Z_INDEX, POPULATION_LEVEL_COLOR } from '../../config/constants';
 import { userInfoAtom } from '../../atom/userInfo';
 import { allAreasInfoAtom } from '../../atom/areasInfo';
 import { SortAllAreasTypes } from '../../types/interfaces';
+import apis from '../../apis/apis';
 
 const SideBarLayout = css`
   z-index: ${Z_INDEX.MODAL};
@@ -58,10 +59,6 @@ const BookmarkListComponent = styled.div`
     width: 100%;
     border: 1px solid #6349ff;
   }
-
-  div {
-    margin-top: 20px;
-  }
 `;
 
 interface PopulationLevelProps {
@@ -74,19 +71,18 @@ const BookmarkItemComponent = styled.div<PopulationLevelProps>`
   justify-content: space-between;
   width: 100%;
   height: 100%;
+  margin-top: 15px;
 
   > div:first-child {
     width: 85%;
     display: flex;
     align-items: center;
-    margin-top: 0;
   }
 
   > div:last-child {
     width: 15%;
-    margin: 0;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     color: #979797;
     text-align: right;
   }
@@ -113,13 +109,30 @@ const BookmarkItemComponent = styled.div<PopulationLevelProps>`
 
 const MyInfoSideBar = () => {
   const [isMyInfoSideBarOpen] = useAtom(isMyInfoSideBarOpenAtom);
-  const [userInfo] = useAtom(userInfoAtom);
-  const [areas] = useAtom(allAreasInfoAtom);
-  const [bookmarks, setBookmarks] = useState<SortAllAreasTypes[] | null>(null);
+  const [userInfo, setUserInfo] = useAtom(userInfoAtom);
+  const areas = useAtomValue(allAreasInfoAtom);
+  const [myBookmarks, setMyBookmarks] = useState<SortAllAreasTypes[] | null>(
+    null
+  );
 
   // 전체 장소에서 북마크에 등록된 정보만 가져옴
   const makeBookmarks = () => {
-    setBookmarks(areas.filter(area => userInfo?.bookmarks.includes(area[0])));
+    setMyBookmarks(areas.filter(area => userInfo?.bookmarks.includes(area[0])));
+  };
+
+  // 사이드바에서 북마크 삭제
+  const onClickDelete = async (areaName: string) => {
+    if (!userInfo || !userInfo) {
+      return;
+    }
+
+    const { _id: userId, bookmarks } = userInfo;
+
+    await apis.deleteBookmark(areaName, userId);
+    setUserInfo({
+      ...userInfo,
+      bookmarks: bookmarks.filter(bookmark => bookmark !== areaName)
+    });
   };
 
   useEffect(() => {
@@ -144,8 +157,8 @@ const MyInfoSideBar = () => {
       <BookmarkListComponent>
         <h2>북마크</h2>
         <hr />
-        {bookmarks &&
-          bookmarks.map((bookmark, idx) => (
+        {myBookmarks &&
+          myBookmarks.map((bookmark, idx) => (
             <BookmarkItemComponent
               key={idx}
               populationLevel={bookmark[1].populationLevel}>
@@ -153,7 +166,7 @@ const MyInfoSideBar = () => {
                 <div className='population-level' />
                 <span className='area-name'>{bookmark[0]}</span>
               </div>
-              <div>삭제</div>
+              <div onClick={() => onClickDelete(bookmark[0])}>삭제</div>
             </BookmarkItemComponent>
           ))}
       </BookmarkListComponent>
