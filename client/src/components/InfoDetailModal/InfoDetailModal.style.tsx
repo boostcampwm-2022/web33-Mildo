@@ -35,14 +35,14 @@ export const BookmarkIcon = styled.img`
 `;
 
 const marquee = keyframes`
-0% {
-  transform: translate(10%, 0);
+0%, 50% {
+  transform: translate(0%, 0);
 }
-50%{
-  transform: translate(-50%, 0);
+25%{
+  transform: translate(-30%, 0);
 }
-100% {
-  transform: translate(10%, 0);
+75% {
+  transform: translate(30%, 0);
 }
 `;
 
@@ -52,7 +52,7 @@ export const Title = styled.h1`
   font-size: 1rem;
   white-space: nowrap;
   will-change: transform;
-  animation: ${marquee} 4s linear infinite;
+  animation: ${marquee} 10s linear infinite;
 `;
 
 interface TitleLocationProps {
