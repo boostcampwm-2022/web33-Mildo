@@ -4,10 +4,24 @@ import { QUERY_TIME } from '../config/constants';
 import { SortAllAreasTypes, graphInfoResponseTypes } from '../types/interfaces';
 
 const useGraphInfo = (
-  enabled: boolean,
+  isSecondLevel: boolean,
   firstLevelInfo: SortAllAreasTypes | null,
+  prevFirstLevelInfo: SortAllAreasTypes | null,
   success: (data: graphInfoResponseTypes | null) => void
 ) => {
+  const enabled = () => {
+    if (!isSecondLevel) {
+      return false;
+    }
+    if (!firstLevelInfo || !prevFirstLevelInfo) {
+      return true;
+    }
+    if (prevFirstLevelInfo[0] === firstLevelInfo[0]) {
+      return false;
+    }
+    return true;
+  };
+
   const { data: graphInfoResponse } = useQuery(
     ['getGraphInfo', firstLevelInfo ? firstLevelInfo[0] : ''],
     async () => {
@@ -19,7 +33,7 @@ const useGraphInfo = (
       return result;
     },
     {
-      enabled,
+      enabled: enabled(),
       staleTime: QUERY_TIME.STALE_TIME,
       cacheTime: QUERY_TIME.CACHE_TIME,
       onSuccess: data => {

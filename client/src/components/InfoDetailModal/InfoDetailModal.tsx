@@ -34,26 +34,18 @@ const InfoDetailModal = () => {
   const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
   const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
 
-  const enabled = () => {
-    if (!isSecondLevel) {
-      return false;
-    }
-    if (!firstLevelInfo || !prevFirstLevelInfo) {
-      return true;
-    }
-    if (prevFirstLevelInfo[0] === firstLevelInfo[0]) {
-      return false;
-    }
-    return true;
-  };
-
   const success = (data: graphInfoResponseTypes | null) => {
     if (data) {
       setGraphInfo(data.data);
       setPrevFirstLevelInfo(firstLevelInfo);
     }
   };
-  const [graphInfoResponse] = useGraphInfo(enabled(), firstLevelInfo, success);
+  const [graphInfoResponse] = useGraphInfo(
+    isSecondLevel,
+    firstLevelInfo,
+    prevFirstLevelInfo,
+    success
+  );
 
   const toggleSecondLevelContents = () => {
     setIsSecondLevel(prev => !prev);
