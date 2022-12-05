@@ -101,7 +101,7 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
 
     const getRelatedAreaInfo = async () => {
       const { data: responseRelatedAreaInfo }: GetRelatedAreaResponseTypes =
-        await apis.getRelatedAreaInfo(searchAreaName);
+        await apis.getRelatedAreaInfo(searchAreaName); // 이 부분도 캐싱하면 좋을듯?
 
       setRelatedAreaInfo(responseRelatedAreaInfo);
     };

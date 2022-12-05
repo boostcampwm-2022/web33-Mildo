@@ -6,6 +6,8 @@ const RelatedAreaListStyle = styled.div`
   z-index: 0;
   width: 100%;
   max-width: 439px;
+  max-height: 20rem;
+  overflow: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -15,6 +17,10 @@ const RelatedAreaListStyle = styled.div`
   border-radius: 10px;
   border: none;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+
+  // ::-webkit-scrollbar {
+  //   display:
+  // }
 `;
 
 interface CoordinatesTypes {
