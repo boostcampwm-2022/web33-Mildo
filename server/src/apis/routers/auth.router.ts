@@ -6,10 +6,10 @@ import authMiddleware from '../middlewares/auth.middleware';
 const router = express.Router();
 
 router.get('/', authMiddleware.authorizationUser, authController.getUserAuth);
-router.get(
-  '/userInfo/',
+router.post(
+  '/bookmark',
   authMiddleware.authorizationUser,
-  authController.getUserInfo
+  authController.addBookmark
 );
 
 export default router;

@@ -1,12 +1,15 @@
 import { Request, Response } from 'express';
+import authService from '../services/auth.service';
 
 export default {
   getUserAuth: async (req: Request, res: Response) => {
     res.json({ ok: true, data: req.user });
   },
-  getUserInfo: (req: Request, res: Response) => {
+  addBookmark: async (req: Request, res: Response) => {
+    const { areaName, userId } = req.body;
     try {
-      res.status(200).send({ data: req.user });
+      await authService.addBookmark(areaName, userId);
+      res.status(200).send({ ok: true });
     } catch (error) {
       console.log(error);
       res.status(500).send({

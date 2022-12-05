@@ -44,7 +44,7 @@ export interface UserSchemaTypes {
   snsId: string;
   provider: string;
   email: string;
-  bookMarks: Types.Array<string>;
+  bookmarks: Types.Array<string>;
 }
 
 export interface RedisAllAreasResponseTypes {

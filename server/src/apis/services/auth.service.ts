@@ -1,13 +1,11 @@
 import authRepository from '../repositories/auth.repository';
 
 export default {
-  getUserInfo: async (userId: string) => {
+  addBookmark: async (areaName: string, userId: string) => {
     try {
-      const userInfo = await authRepository.getUserInfo(userId);
-      return userInfo;
+      await authRepository.addBookmark(areaName, userId);
     } catch (error) {
       console.log(error);
     }
-    return null;
   }
 };
