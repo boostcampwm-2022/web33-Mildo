@@ -32,6 +32,10 @@ export default {
   },
   searchArea: async (req: Request, res: Response) => {
     const { areaName } = req.query;
+    if (areaName === '') {
+      res.status(200).json({ ok: true, data: {} });
+      return;
+    }
     try {
       const relatedAreaInfo = await areaService.getRelatedAreaInfo(
         areaName as string
