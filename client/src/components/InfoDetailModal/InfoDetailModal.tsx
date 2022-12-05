@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
+
 import {
   BookmarkIcon,
   PopulationBox,
@@ -60,7 +61,6 @@ const InfoDetailModal = () => {
   };
 
   useEffect(() => {
-    console.log(userInfo);
     if (!isSecondLevel) {
       setGraphInfo({});
       return;
@@ -68,6 +68,20 @@ const InfoDetailModal = () => {
 
     setPastInformation();
   }, [isSecondLevel]);
+
+  const onClickBookmark = async () => {
+    if (!firstLevelInfo || !userInfo) {
+      return;
+    }
+    const [areaName] = firstLevelInfo;
+    const { _id: userId, bookmarks } = userInfo;
+
+    if (bookmarks.includes(areaName)) {
+      await apis.deleteBookmark(areaName, userId);
+    } else {
+      await apis.addBookmark(areaName, userId);
+    }
+  };
 
   return (
     <Modal isOpen={isInfoDetailModalOpen}>
@@ -84,7 +98,11 @@ const InfoDetailModal = () => {
               onClick={toggleSecondLevelContents}
             />
           )}
-          <BookmarkIcon src='https://ifh.cc/g/7qPCCL.png' />
+
+          <BookmarkIcon
+            src='https://ifh.cc/g/7qPCCL.png'
+            onClick={onClickBookmark}
+          />
           <Title>
             현재&nbsp;
             <TitleLocation populationLevel={firstLevelInfo[1].populationLevel}>

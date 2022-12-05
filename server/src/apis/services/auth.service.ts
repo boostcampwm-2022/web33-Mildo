@@ -7,5 +7,12 @@ export default {
     } catch (error) {
       console.log(error);
     }
+  },
+  deleteBookmark: async (areaName: string, userId: string) => {
+    try {
+      await authRepository.deleteBookmark(areaName, userId);
+    } catch (error) {
+      console.log(error);
+    }
   }
 };

@@ -6,7 +6,7 @@ export default {
     res.json({ ok: true, data: req.user });
   },
   addBookmark: async (req: Request, res: Response) => {
-    const { areaName, userId } = req.body;
+    const { areaName, userId } = req.params;
     try {
       await authService.addBookmark(areaName, userId);
       res.status(200).send({ ok: true });
@@ -14,7 +14,20 @@ export default {
       console.log(error);
       res.status(500).send({
         ok: false,
-        message: '유저 정보 호출에 실패하였습니다! :('
+        message: '북마크 등록에 실패하였습니다! :('
+      });
+    }
+  },
+  deleteBookmark: async (req: Request, res: Response) => {
+    const { areaName, userId } = req.params;
+    try {
+      await authService.deleteBookmark(areaName, userId);
+      res.status(200).send({ ok: true });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        ok: false,
+        message: '북마크 삭제에 실패하였습니다! :('
       });
     }
   }
