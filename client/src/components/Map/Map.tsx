@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useUpdateAtom } from 'jotai/utils';
+import { useUpdateAtom, useAtomValue } from 'jotai/utils';
+import { useAtom } from 'jotai';
 
 import { MarkerObjectTypes } from '../../types/interfaces';
 import api from '../../apis/apis';
@@ -11,6 +12,8 @@ import {
   isSecondLevelAtom
 } from '../../atom/infoDetail';
 import useMarker from '../../hooks/useMarker';
+import { markerArray } from '../../atom/markerArray';
+import { enableStateAtom } from '../../atom/densityFilterBtn';
 
 const MapComponent = styled.div`
   width: 100%;
@@ -50,6 +53,9 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
   const prevPlace = useRef<PrevPlaceTypes | null>(null);
   const setIsInfoDetailModalOpen = useUpdateAtom(isInfoDetailModalOpenAtom);
   const setIsSecondLevel = useUpdateAtom(isSecondLevelAtom);
+  const [markerStorage, setMarkerStorage] = useAtom(markerArray);
+  const enableState = useAtomValue(enableStateAtom);
+
   const [makeMarker] = useMarker(naverMap, prevPlace);
 
   // MapComponent DOM에 네이버 지도 렌더링
@@ -106,8 +112,14 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
       return;
     }
 
-    areas.map((area: SortAllAreasTypes) => makeMarker(area));
-  }, [areas]);
+    markerStorage.forEach(el => el.setMap(null));
+    setMarkerStorage([]);
+    areas
+      .filter((area: SortAllAreasTypes) => {
+        return enableState[area[1].populationLevel];
+      })
+      .map((area: SortAllAreasTypes) => makeMarker(area));
+  }, [areas, enableState]);
 
   // 마커 이외의 영역을 클릭하면 1단계, 2단계 모달창이 닫힘
   const onClickMap = () => {

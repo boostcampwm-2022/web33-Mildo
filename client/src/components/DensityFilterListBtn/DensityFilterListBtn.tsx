@@ -1,14 +1,17 @@
 import styled from 'styled-components';
-import React, { useState } from 'react';
-import { BtnStyleProps, FilterListBtnProps } from '../../types/interfaces';
+import React from 'react';
+import { useAtom } from 'jotai';
 
-const BtnStyle = styled.li<BtnStyleProps>`
+import { BtnStyleTypes, FilterListBtnProps } from '../../types/interfaces';
+import { enableStateAtom } from '../../atom/densityFilterBtn';
+
+const BtnStyle = styled.li<BtnStyleTypes>`
   display: block;
   width: 4rem;
   height: 1.5rem;
   box-shadow: 3px 4px 4px rgba(0, 0, 0, 0.3);
-  background-color: ${props => (!props.disable ? props.bgColor : '#BFBFBF')};
-  border: 1px solid ${props => (!props.disable ? props.borderColor : '#999999')};
+  background-color: ${props => (props.enable ? props.bgColor : '#BFBFBF')};
+  border: 1px solid ${props => (props.enable ? props.borderColor : '#999999')};
   border-radius: 200px;
   font-size: 0.8rem;
   text-align: center;
@@ -16,14 +19,14 @@ const BtnStyle = styled.li<BtnStyleProps>`
 
   color: white;
   text-shadow: 1px 1px
-    ${props => (!props.disable ? props.borderColor : '#BFBFBF')};
+    ${props => (props.enable ? props.borderColor : '#BFBFBF')};
 
   cursor: pointer;
   user-select: none;
 
   &:active {
     background-color: ${props =>
-      !props.disable ? props.borderColor : '#999999'};
+      props.enable ? props.borderColor : '#999999'};
   }
 `;
 
@@ -32,10 +35,12 @@ const DensityFilterListBtn: React.FC<FilterListBtnProps> = ({
   borderColor,
   contents
 }: FilterListBtnProps) => {
-  const [isDeactivate, setIsDeactivate] = useState(false);
+  const [enableState, setEnableState] = useAtom(enableStateAtom);
 
   const toggleActivationHandler = () => {
-    setIsDeactivate(prev => !prev);
+    setEnableState(prev => {
+      return { ...prev, [`${contents}`]: !enableState[`${contents}`] };
+    });
   };
 
   return (
@@ -43,7 +48,7 @@ const DensityFilterListBtn: React.FC<FilterListBtnProps> = ({
       onClick={toggleActivationHandler}
       bgColor={bgColor}
       borderColor={borderColor}
-      disable={isDeactivate}>
+      enable={enableState[`${contents}`]}>
       {contents}
     </BtnStyle>
   );

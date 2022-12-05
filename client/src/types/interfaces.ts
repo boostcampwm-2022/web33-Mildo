@@ -32,12 +32,22 @@ export interface SecondLevelInfoCacheTypes {
   [areaName: string]: SecondLevelTimeInfoCacheTypes;
 }
 
-export interface BtnStyleProps {
+export interface BtnStyleTypes {
   bgColor: string;
   borderColor: string;
-  disable: boolean;
+  enable: boolean;
 }
 
-export interface FilterListBtnProps extends BtnStyleProps {
+export interface FilterListBtnProps {
+  bgColor: string;
+  borderColor: string;
   contents: string;
+}
+
+export interface FilterBtnStateTypes {
+  '매우 붐빔': boolean;
+  붐빔: boolean;
+  보통: boolean;
+  여유: boolean;
+  [prop: string]: boolean;
 }

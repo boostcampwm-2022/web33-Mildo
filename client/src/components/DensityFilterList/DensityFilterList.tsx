@@ -27,25 +27,21 @@ const DensityFilterList = () => {
         bgColor='#FF1E1E'
         borderColor='#970000'
         contents='매우 붐빔'
-        disable={false}
       />
       <DensityFilterListBtn
         bgColor='#FF9900'
         borderColor='#BB7000'
         contents='붐빔'
-        disable={false}
       />
       <DensityFilterListBtn
         bgColor='#FFDB1D'
         borderColor='#B1A000'
         contents='보통'
-        disable={false}
       />
       <DensityFilterListBtn
         bgColor='#43EB40'
         borderColor='#12A50F'
         contents='여유'
-        disable={false}
       />
     </DensityFilterLayout>
   );

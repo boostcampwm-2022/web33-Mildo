@@ -1,5 +1,6 @@
 import { useUpdateAtom } from 'jotai/utils';
 import { MarkerObjectTypes, SortAllAreasTypes } from '../types/interfaces';
+
 import {
   createPinSvg,
   setBigMarkerIcon,
@@ -10,6 +11,7 @@ import {
   firstLevelInfoAtom,
   isSecondLevelAtom
 } from '../atom/infoDetail';
+import { markerArray } from '../atom/markerArray';
 
 interface PrevPlaceTypes {
   marker: MarkerObjectTypes;
@@ -23,6 +25,7 @@ const useMarker = (
   const setIsInfoDetailModalOpen = useUpdateAtom(isInfoDetailModalOpenAtom);
   const setFirstLevelInfo = useUpdateAtom(firstLevelInfoAtom);
   const setIsSecondLevel = useUpdateAtom(isSecondLevelAtom);
+  const setMarkerStorage = useUpdateAtom(markerArray);
 
   // 이전 마커를 작은 크기로 만들고, 새로운 마커를 이전 마커로 등록
   const onClickMarker = (
@@ -72,6 +75,8 @@ const useMarker = (
         anchor: new naver.maps.Point(17.5, 50)
       }
     });
+
+    setMarkerStorage(prev => [...prev, marker]);
 
     naver.maps.Event.addListener(marker, 'click', () => {
       const location = new naver.maps.LatLng(
