@@ -33,6 +33,14 @@ export default {
   naverPassportLogin: passport.authenticate('naver', {
     authType: 'reprompt'
   }),
+  naverPassportLogout: (req: Request, res: Response) => {
+    req.logout(err => {
+      if (err) {
+        throw new Error();
+      }
+      res.redirect(`${clientURL}`);
+    });
+  },
   naverPassportAuthMiddleware: passport.authenticate('naver', {
     successRedirect: `${clientURL}`,
     failureRedirect: `${clientURL}`

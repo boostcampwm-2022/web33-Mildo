@@ -70,7 +70,7 @@ const MyInfoSideBar = () => {
         <span>상준</span>님 😌
       </h2>
       <LogoutLink
-        href={`${apiServerURL}/naver/auth/login`}
+        href={`${apiServerURL}/naver/auth/logout`}
         onClick={removeSessionStorage}>
         로그아웃
       </LogoutLink>
