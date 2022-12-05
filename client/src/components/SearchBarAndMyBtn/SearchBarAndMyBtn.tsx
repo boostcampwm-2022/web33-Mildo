@@ -101,8 +101,6 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
   const onChangeSearchBar: React.ChangeEventHandler<
     HTMLInputElement
   > = async e => {
-    console.log('onchange');
-
     setSearchAreaName(e.target.value);
   };
 

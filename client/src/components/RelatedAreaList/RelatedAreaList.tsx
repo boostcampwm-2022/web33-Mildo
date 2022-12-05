@@ -4,18 +4,13 @@ import RelatedAreaItem from '../RelatedAreaItem/RelatedAreaItem';
 
 const RelatedAreaListStyle = styled.div`
   z-index: 0;
-
   width: 100%;
-
   max-width: 439px;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
   position: absolute;
   top: 3.5rem;
-
   background-color: white;
   border-radius: 10px;
   border: none;
@@ -60,15 +55,24 @@ const RelatedSearchList: React.FC<RelatedSearchListProps> = ({
   return (
     <RelatedAreaListStyle>
       {isEmptyRelatedList ? (
-        <RelatedAreaItem areaInfo={emptyAreaInfo} />
+        <RelatedAreaItem
+          searchAreaName={searchAreaName}
+          areaInfo={emptyAreaInfo}
+        />
       ) : (
-        Object.keys(relatedAreaInfo).map(areaName => {
+        Object.keys(relatedAreaInfo).map((areaName, index) => {
           const areaInfo = {
             areaName,
             coordinates: relatedAreaInfo[areaName]
           };
 
-          return <RelatedAreaItem areaInfo={areaInfo} />;
+          return (
+            <RelatedAreaItem
+              key={index}
+              searchAreaName={searchAreaName}
+              areaInfo={areaInfo}
+            />
+          );
         })
       )}
     </RelatedAreaListStyle>

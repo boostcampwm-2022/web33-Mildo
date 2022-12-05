@@ -5,9 +5,13 @@ const RelatedAreaItemStyle = styled.div`
   height: 2.5rem;
   line-height: 2.5rem;
   font-size: 0.8rem;
+
+  span {
+    color: #6349ff;
+  }
 `;
 
-const EmptyItemStyle = styled.div`
+const EmptyAreaItemStyle = styled.div`
   width: 100%;
   height: 2.5rem;
   line-height: 2.5rem;
@@ -26,16 +30,28 @@ interface DataRelatedAreaInfoTypes {
 }
 
 interface RelatedSearchListProps {
+  searchAreaName: string;
   areaInfo: DataRelatedAreaInfoTypes;
 }
 
-const RelatedAreaItem: React.FC<RelatedSearchListProps> = ({ areaInfo }) => {
+const printSignatureColor = (searchAreaName: string, areaName: string) => {
+  return areaName.replace(searchAreaName, `<span>${searchAreaName}</span>`);
+};
+
+const RelatedAreaItem: React.FC<RelatedSearchListProps> = ({
+  searchAreaName,
+  areaInfo
+}) => {
   return (
     <>
       {areaInfo.coordinates.latitude === -1 ? (
-        <EmptyItemStyle>{areaInfo.areaName}</EmptyItemStyle>
+        <EmptyAreaItemStyle>{areaInfo.areaName}</EmptyAreaItemStyle>
       ) : (
-        <RelatedAreaItemStyle>{areaInfo.areaName}</RelatedAreaItemStyle>
+        <RelatedAreaItemStyle
+          dangerouslySetInnerHTML={{
+            __html: printSignatureColor(searchAreaName, areaInfo.areaName)
+          }}
+        />
       )}
     </>
   );
