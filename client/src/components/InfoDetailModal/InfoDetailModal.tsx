@@ -31,7 +31,6 @@ const InfoDetailModal = () => {
     secondLevelInfoCacheAtom
   );
   const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
-
   const [userInfo, setUserInfo] = useAtom(userInfoAtom);
 
   const toggleSecondLevelContents = () => {

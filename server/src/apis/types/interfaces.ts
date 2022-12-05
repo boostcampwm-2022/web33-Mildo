@@ -44,6 +44,7 @@ export interface UserSchemaTypes {
   snsId: string;
   provider: string;
   email: string;
+  nickname: string;
   bookmarks: Types.Array<string>;
 }
 
