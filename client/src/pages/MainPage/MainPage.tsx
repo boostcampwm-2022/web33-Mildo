@@ -124,7 +124,7 @@ const MainPage = () => {
           <SearchBarAndMyBtn isLoggedIn={isLoggedIn} />
           <InfoDetailModal />
           <LoginModal />
-          <MyInfoSideBar />
+          <MyInfoSideBar setCoordinates={setCoordinates} />
         </>
       )}
     </StyledMainPage>

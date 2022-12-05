@@ -1,13 +1,16 @@
 import { useAtom, useAtomValue } from 'jotai';
 import styled, { css } from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, SetStateAction, Dispatch } from 'react';
 
 import { isMyInfoSideBarOpenAtom } from '../../atom/myInfoSideBar';
 import Modal from '../Modal/Modal';
 import { Z_INDEX, POPULATION_LEVEL_COLOR } from '../../config/constants';
 import { userInfoAtom } from '../../atom/userInfo';
 import { allAreasInfoAtom } from '../../atom/areasInfo';
-import { SortAllAreasTypes } from '../../types/interfaces';
+import {
+  SortAllAreasTypes,
+  CoordinatesPopulationTypes
+} from '../../types/interfaces';
 import apis from '../../apis/apis';
 
 const SideBarLayout = css`
@@ -104,11 +107,23 @@ const BookmarkItemComponent = styled.div<PopulationLevelProps>`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    cursor: pointer;
   }
 `;
 
-const MyInfoSideBar = () => {
-  const [isMyInfoSideBarOpen] = useAtom(isMyInfoSideBarOpenAtom);
+interface CoordinatesTypes {
+  latitude: number;
+  longitude: number;
+}
+
+interface MyInfoSideBarProps {
+  setCoordinates: Dispatch<SetStateAction<CoordinatesTypes | null>>;
+}
+
+const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
+  const [isMyInfoSideBarOpen, setIsMyInfoSideBarOpen] = useAtom(
+    isMyInfoSideBarOpenAtom
+  );
   const [userInfo, setUserInfo] = useAtom(userInfoAtom);
   const areas = useAtomValue(allAreasInfoAtom);
   const [myBookmarks, setMyBookmarks] = useState<SortAllAreasTypes[] | null>(
@@ -117,7 +132,9 @@ const MyInfoSideBar = () => {
 
   // 전체 장소에서 북마크에 등록된 정보만 가져옴
   const makeBookmarks = () => {
-    setMyBookmarks(areas.filter(area => userInfo?.bookmarks.includes(area[0])));
+    setMyBookmarks(
+      areas.filter(area => userInfo?.bookmarks.includes(area[0])).reverse()
+    );
   };
 
   // 사이드바에서 북마크 삭제
@@ -135,6 +152,19 @@ const MyInfoSideBar = () => {
     });
   };
 
+  // MainPage에서 좌표 설정 setState 가져와서 클릭한 위치로 이동
+  const onClickAreaName = (areaInfo: CoordinatesPopulationTypes) => {
+    if (!setCoordinates) {
+      return;
+    }
+    const { latitude, longitude } = areaInfo;
+
+    console.log(latitude, longitude);
+
+    // setCoordinates({ latitude, longitude });
+    // setIsMyInfoSideBarOpen(false);
+  };
+
   useEffect(() => {
     if (!userInfo || !areas) {
       return;
@@ -147,7 +177,8 @@ const MyInfoSideBar = () => {
     <Modal
       isOpen={isMyInfoSideBarOpen}
       background={true}
-      customModalStyle={SideBarLayout}>
+      customModalStyle={SideBarLayout}
+      isClickModalFilter={setIsMyInfoSideBarOpen}>
       <HeaderComponent>
         <h2>안녕하세요</h2>
         <h2>
@@ -164,7 +195,11 @@ const MyInfoSideBar = () => {
               populationLevel={bookmark[1].populationLevel}>
               <div>
                 <div className='population-level' />
-                <span className='area-name'>{bookmark[0]}</span>
+                <span
+                  className='area-name'
+                  onClick={() => onClickAreaName(bookmark[1])}>
+                  {bookmark[0]}
+                </span>
               </div>
               <div onClick={() => onClickDelete(bookmark[0])}>삭제</div>
             </BookmarkItemComponent>

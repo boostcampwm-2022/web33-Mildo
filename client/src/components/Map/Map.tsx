@@ -76,6 +76,19 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
     setNaverMap(new naver.maps.Map(mapRef.current, mapOptions));
   }, []);
 
+  // // 좌표 정보 바뀌면 지도 중심 위치 변경
+  // useEffect(() => {
+  //   if (!mapRef.current || !naver) {
+  //     return;
+  //   }
+
+  //   const location = new naver.maps.LatLng(latitude, longitude);
+
+  //   setIsInfoDetailModalOpen(false);
+  //   prevPlace.current = null;
+  //   naverMap?.setCenter(location);
+  // }, [latitude, longitude]);
+
   // DB에서 최근 장소 정보 가져오기
   useEffect(() => {
     if (!naverMap) {
