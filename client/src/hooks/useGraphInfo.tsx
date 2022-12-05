@@ -1,10 +1,7 @@
-import axios from 'axios';
 import { useQuery } from 'react-query';
-import {
-  SecondLevelTimeInfoCacheTypes,
-  SortAllAreasTypes,
-  graphInfoResponseTypes
-} from '../types/interfaces';
+import apis from '../apis/apis';
+import { QUERY_TIME } from '../config/constants';
+import { SortAllAreasTypes, graphInfoResponseTypes } from '../types/interfaces';
 
 const useGraphInfo = (
   enabled: boolean,
@@ -17,17 +14,14 @@ const useGraphInfo = (
       if (!firstLevelInfo) {
         return null;
       }
-      const result = await axios.get<{
-        ok: boolean;
-        data: SecondLevelTimeInfoCacheTypes;
-      }>(`http://localhost:3001/api/seoul/${firstLevelInfo[0]}`);
+      const result = await apis.getPastInformation(firstLevelInfo[0]);
 
-      return result.data;
+      return result;
     },
     {
       enabled,
-      staleTime: 5 * 60 * 1000,
-      cacheTime: 30 * 60 * 1000,
+      staleTime: QUERY_TIME.STALE_TIME,
+      cacheTime: QUERY_TIME.CACHE_TIME,
       onSuccess: data => {
         success(data);
       },

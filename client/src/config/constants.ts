@@ -63,3 +63,8 @@ export const INFO_DETAIL_TITLE: InfoDetailTitle = {
   붐빔: '은(는) 붐비고 있어요 🤔',
   '매우 붐빔': '은(는) 사람이 매우 많아요 😡'
 };
+
+export const QUERY_TIME = {
+  STALE_TIME: 5 * 60 * 1000, // 5분
+  CACHE_TIME: 30 * 60 * 1000 // 30분
+};

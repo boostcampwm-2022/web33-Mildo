@@ -32,7 +32,6 @@ const InfoDetailModal = () => {
     prevFirstLevelInfoAtom
   );
   const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
-
   const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
 
   const enabled = () => {
@@ -65,10 +64,9 @@ const InfoDetailModal = () => {
       return;
     }
 
-    console.log('enabled:', enabled());
-
-    if (graphInfoResponse && !enabled()) {
+    if (graphInfoResponse) {
       setGraphInfo(graphInfoResponse.data);
+      setPrevFirstLevelInfo(firstLevelInfo);
     }
 
     // eslint-disable-next-line no-useless-return
