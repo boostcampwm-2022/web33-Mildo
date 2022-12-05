@@ -14,6 +14,11 @@ const userSchema = new Schema<UserSchemaTypes>({
   email: {
     type: String,
     required: true
+  },
+  bookMarks: {
+    type: [String],
+    require: true,
+    default: []
   }
 });
 
