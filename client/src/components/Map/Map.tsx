@@ -1,8 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useUpdateAtom } from 'jotai/utils';
+import { useAtom } from 'jotai';
 
-import { MarkerObjectTypes } from '../../types/interfaces';
+import {
+  MarkerObjectTypes,
+  CoordinatesPopulationTypes,
+  SortAllAreasTypes
+} from '../../types/interfaces';
 import api from '../../apis/apis';
 import { SEOUL_BOUNDS } from '../../config/constants';
 import { setMarkerIcon } from '../../utils/map.util';
@@ -11,27 +16,17 @@ import {
   isSecondLevelAtom
 } from '../../atom/infoDetail';
 import useMarker from '../../hooks/useMarker';
+import { allAreasInfoAtom } from '../../atom/areasInfo';
 
 const MapComponent = styled.div`
   width: 100%;
   height: 100%;
 `;
 
-interface CoordinatesPopulationTypes {
-  populationMax: number;
-  populationMin: number;
-  populationLevel: string;
-  populationTime: Date;
-  latitude: number;
-  longitude: number;
-}
-
 interface GetAllAreaResponseTypes {
   ok: boolean;
   data: CoordinatesPopulationTypes;
 }
-
-type SortAllAreasTypes = [string, CoordinatesPopulationTypes];
 
 interface MapComponentProps {
   latitude: number;
@@ -46,7 +41,7 @@ interface PrevPlaceTypes {
 const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
   const mapRef = useRef(null);
   const [naverMap, setNaverMap] = useState<naver.maps.Map | null>(null);
-  const [areas, setAreas] = useState<SortAllAreasTypes[]>([]);
+  const [areas, setAreas] = useAtom(allAreasInfoAtom);
   const prevPlace = useRef<PrevPlaceTypes | null>(null);
   const setIsInfoDetailModalOpen = useUpdateAtom(isInfoDetailModalOpenAtom);
   const setIsSecondLevel = useUpdateAtom(isSecondLevelAtom);

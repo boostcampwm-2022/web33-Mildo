@@ -36,6 +36,7 @@ export interface UserInfoTypes {
   _id: string;
   snsId: string;
   email: string;
+  nickname: string;
   provider: string;
   bookmarks: string[];
 }
