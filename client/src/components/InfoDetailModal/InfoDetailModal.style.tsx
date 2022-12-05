@@ -32,6 +32,7 @@ export const BookmarkIcon = styled.img`
   position: absolute;
   top: 0%;
   right: 7%;
+  cursor: pointer;
 `;
 
 const marquee = keyframes`

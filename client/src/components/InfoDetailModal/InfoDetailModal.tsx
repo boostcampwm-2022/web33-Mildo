@@ -32,12 +32,13 @@ const InfoDetailModal = () => {
   );
   const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
 
-  const userInfo = useAtomValue(userInfoAtom);
+  const [userInfo, setUserInfo] = useAtom(userInfoAtom);
 
   const toggleSecondLevelContents = () => {
     setIsSecondLevel(prev => !prev);
   };
 
+  // 그래프에 필요한 이전 시간 정보 호출
   const setPastInformation = async (): Promise<undefined> => {
     if (!firstLevelInfo) {
       return;
@@ -60,6 +61,34 @@ const InfoDetailModal = () => {
     return;
   };
 
+  // 북마크 등록 및 삭제
+  const onClickBookmark = async () => {
+    if (!firstLevelInfo || !userInfo) {
+      alert('북마크는 로그인 후 사용 가능합니다.');
+      return;
+    }
+    const [areaName] = firstLevelInfo;
+    const { _id: userId, bookmarks } = userInfo;
+
+    if (bookmarks.includes(areaName)) {
+      await apis.deleteBookmark(areaName, userId);
+      setUserInfo({
+        ...userInfo,
+        bookmarks: bookmarks.filter(bookmark => bookmark !== areaName)
+      });
+    } else {
+      if (bookmarks.length >= 5) {
+        alert('북마크는 최대 5개까지 등록 가능합니다.');
+        return;
+      }
+      await apis.addBookmark(areaName, userId);
+      setUserInfo({
+        ...userInfo,
+        bookmarks: bookmarks.concat(areaName)
+      });
+    }
+  };
+
   useEffect(() => {
     if (!isSecondLevel) {
       setGraphInfo({});
@@ -68,20 +97,6 @@ const InfoDetailModal = () => {
 
     setPastInformation();
   }, [isSecondLevel]);
-
-  const onClickBookmark = async () => {
-    if (!firstLevelInfo || !userInfo) {
-      return;
-    }
-    const [areaName] = firstLevelInfo;
-    const { _id: userId, bookmarks } = userInfo;
-
-    if (bookmarks.includes(areaName)) {
-      await apis.deleteBookmark(areaName, userId);
-    } else {
-      await apis.addBookmark(areaName, userId);
-    }
-  };
 
   return (
     <Modal isOpen={isInfoDetailModalOpen}>
@@ -98,11 +113,17 @@ const InfoDetailModal = () => {
               onClick={toggleSecondLevelContents}
             />
           )}
-
-          <BookmarkIcon
-            src='https://ifh.cc/g/7qPCCL.png'
-            onClick={onClickBookmark}
-          />
+          {userInfo && userInfo.bookmarks.includes(firstLevelInfo[0]) ? (
+            <BookmarkIcon
+              src='https://ifh.cc/g/SgQaZx.png'
+              onClick={onClickBookmark}
+            />
+          ) : (
+            <BookmarkIcon
+              src='https://ifh.cc/g/7qPCCL.png'
+              onClick={onClickBookmark}
+            />
+          )}
           <Title>
             현재&nbsp;
             <TitleLocation populationLevel={firstLevelInfo[1].populationLevel}>
