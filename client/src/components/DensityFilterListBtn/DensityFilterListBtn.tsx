@@ -17,12 +17,19 @@ const BtnStyle = styled.li<BtnStyleProps>`
   background-color: ${props => props.bgColor || 'blue'};
   border: 1px solid ${props => props.borderColor || 'white'};
   border-radius: 200px;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   text-align: center;
   padding-top: 0.2rem;
 
   color: white;
   text-shadow: 1px 1px ${props => props.borderColor || 'black'};
+
+  cursor: pointer;
+  user-select: none;
+
+  &:active {
+    background-color: ${props => props.borderColor || 'white'};
+  }
 `;
 
 const DensityFilterListBtn: React.FC<FilterListBtnProps> = ({
