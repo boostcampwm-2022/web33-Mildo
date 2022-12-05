@@ -1,18 +1,22 @@
 import { useAtom } from 'jotai';
-import { css } from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { isMyInfoSideBarOpenAtom } from '../../atom/myInfoSideBar';
 import Modal from '../Modal/Modal';
 import { Z_INDEX } from '../../config/constants';
 
 const MyInfoSideBar = () => {
-  const [isMyInfoSideBarOpen] = useAtom(isMyInfoSideBarOpenAtom);
+  const [isMyInfoSideBarOpen, setIsMyInfoSideBarOpen] = useAtom(
+    isMyInfoSideBarOpenAtom
+  );
 
   const SideBarLayout = css`
     z-index: ${Z_INDEX.MODAL};
     background-color: white;
     display: block;
     width: 60%;
+    max-width: 450px;
+
     height: 100vh;
     position: absolute;
     right: 0;
@@ -36,16 +40,40 @@ const MyInfoSideBar = () => {
     }
   `;
 
+  const LogoutLink = styled.a`
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    font-size: 1rem;
+  `;
+
+  const apiServerURL =
+    process.env.REACT_APP_CLIENT_ENV === 'development'
+      ? process.env.REACT_APP_API_SERVER_URL_DEVELOPMENT
+      : process.env.REACT_APP_API_SERVER_URL_PRODUCTION;
+
+  const removeSessionStorage = () => {
+    sessionStorage.clear();
+  };
+
   return (
     <Modal
       isOpen={isMyInfoSideBarOpen}
       background={true}
-      customModalStyle={SideBarLayout}>
+      customModalStyle={SideBarLayout}
+      isClickModalFilter={setIsMyInfoSideBarOpen}>
       <h2>
         안녕하세요
         <br />
         <span>상준</span>님 😌
       </h2>
+      <LogoutLink
+        href={`${apiServerURL}/naver/auth/login`}
+        onClick={removeSessionStorage}>
+        로그아웃
+      </LogoutLink>
     </Modal>
   );
 };

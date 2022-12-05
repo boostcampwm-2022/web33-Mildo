@@ -12,7 +12,7 @@ const DensityFilterLayout = styled.ul`
   max-width: 500px;
   height: 2rem;
   margin-left: 2px;
-  margin-top: 15px;
+  margin-top: 25px;
 
   position: absolute;
   top: 7%;
