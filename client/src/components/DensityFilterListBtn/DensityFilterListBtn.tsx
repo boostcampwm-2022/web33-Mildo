@@ -1,15 +1,6 @@
 import styled from 'styled-components';
 import React, { useState } from 'react';
-
-interface BtnStyleProps {
-  bgColor: string;
-  borderColor: string;
-  disable: boolean;
-}
-
-interface FilterListBtnProps extends BtnStyleProps {
-  contents: string;
-}
+import { BtnStyleProps, FilterListBtnProps } from '../../types/interfaces';
 
 const BtnStyle = styled.li<BtnStyleProps>`
   display: block;

@@ -31,3 +31,13 @@ export interface SecondLevelTimeInfoCacheTypes {
 export interface SecondLevelInfoCacheTypes {
   [areaName: string]: SecondLevelTimeInfoCacheTypes;
 }
+
+export interface BtnStyleProps {
+  bgColor: string;
+  borderColor: string;
+  disable: boolean;
+}
+
+export interface FilterListBtnProps extends BtnStyleProps {
+  contents: string;
+}
