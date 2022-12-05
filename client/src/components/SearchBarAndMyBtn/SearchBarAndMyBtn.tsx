@@ -73,6 +73,11 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
 }) => {
   const setIsLoginModalOpen = useUpdateAtom(isLoginModalOpenAtom);
   const setIsMyInfoSideBarOpen = useUpdateAtom(isMyInfoSideBarOpenAtom);
+  const [searchAreaName, setSearchAreaName] = useState('');
+  const [relatedAreaInfo, setRelatedAreaInfo] =
+    useState<DataRelatedAreaInfoTypes>({});
+
+  const deferredSearchAreaName = useDeferredValue(searchAreaName);
 
   const onClickMyButton = () => {
     if (isLoggedIn) {
@@ -82,10 +87,11 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
     setIsLoginModalOpen(true);
   };
 
-  const [searchAreaName, setSearchAreaName] = useState('');
-  const deferredSearchAreaName = useDeferredValue(searchAreaName);
-
-  const [relatedAreaInfo, setRelatedAreaInfo] = useState({});
+  const onChangeSearchBar: React.ChangeEventHandler<
+    HTMLInputElement
+  > = async e => {
+    setSearchAreaName(e.target.value);
+  };
 
   useEffect(() => {
     const getRelatedAreaInfo = async () => {
@@ -97,12 +103,6 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
 
     getRelatedAreaInfo();
   }, [deferredSearchAreaName]);
-
-  const onChangeSearchBar: React.ChangeEventHandler<
-    HTMLInputElement
-  > = async e => {
-    setSearchAreaName(e.target.value);
-  };
 
   return (
     <FlexBoxStyle>
