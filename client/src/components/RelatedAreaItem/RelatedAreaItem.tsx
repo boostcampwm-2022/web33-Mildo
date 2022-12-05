@@ -3,10 +3,16 @@ import styled from 'styled-components';
 const RelatedAreaItemStyle = styled.div`
   width: 100%;
   height: 2.5rem;
-
   line-height: 2.5rem;
-
   font-size: 0.8rem;
+`;
+
+const EmptyItemStyle = styled.div`
+  width: 100%;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  font-size: 0.8rem;
+  color: #979797;
 `;
 
 interface CoordinatesTypes {
@@ -24,7 +30,15 @@ interface RelatedSearchListProps {
 }
 
 const RelatedAreaItem: React.FC<RelatedSearchListProps> = ({ areaInfo }) => {
-  return <RelatedAreaItemStyle>{areaInfo.areaName}</RelatedAreaItemStyle>;
+  return (
+    <>
+      {areaInfo.coordinates.latitude === -1 ? (
+        <EmptyItemStyle>{areaInfo.areaName}</EmptyItemStyle>
+      ) : (
+        <RelatedAreaItemStyle>{areaInfo.areaName}</RelatedAreaItemStyle>
+      )}
+    </>
+  );
 };
 
 export default RelatedAreaItem;

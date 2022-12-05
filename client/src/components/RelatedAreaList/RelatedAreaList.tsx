@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import RelatedAreaItem from '../RelatedAreaItem/RelatedAreaItem';
 
@@ -37,25 +37,40 @@ interface RelatedSearchListProps {
   relatedAreaInfo: DataRelatedAreaInfoTypes;
 }
 
+const emptyAreaInfo = {
+  areaName: '검색 결과가 주요 50곳에 포함되지 않습니다.',
+  coordinates: {
+    latitude: -1,
+    longitude: -1
+  }
+};
+
 const RelatedSearchList: React.FC<RelatedSearchListProps> = ({
   searchAreaName,
   relatedAreaInfo
 }) => {
+  const [isEmptyRelatedList, setIsEmptyRelatedList] = useState(true);
+
   useEffect(() => {
-    console.log(searchAreaName);
-    console.log(relatedAreaInfo);
+    setIsEmptyRelatedList(
+      searchAreaName !== '' && Object.keys(relatedAreaInfo).length === 0
+    );
   }, [relatedAreaInfo]);
 
   return (
     <RelatedAreaListStyle>
-      {Object.keys(relatedAreaInfo).map(areaName => {
-        const areaInfo = {
-          areaName,
-          coordinates: relatedAreaInfo[areaName]
-        };
+      {isEmptyRelatedList ? (
+        <RelatedAreaItem areaInfo={emptyAreaInfo} />
+      ) : (
+        Object.keys(relatedAreaInfo).map(areaName => {
+          const areaInfo = {
+            areaName,
+            coordinates: relatedAreaInfo[areaName]
+          };
 
-        return <RelatedAreaItem areaInfo={areaInfo}></RelatedAreaItem>;
-      })}
+          return <RelatedAreaItem areaInfo={areaInfo} />;
+        })
+      )}
     </RelatedAreaListStyle>
   );
 };
