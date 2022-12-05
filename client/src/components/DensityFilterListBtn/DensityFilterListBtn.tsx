@@ -19,7 +19,7 @@ const BtnStyle = styled.li<BtnStyleProps>`
   border-radius: 200px;
   font-size: 0.75rem;
   text-align: center;
-  padding-top: 2px;
+  padding-top: 0.2rem;
 
   color: white;
   text-shadow: 1px 1px ${props => props.borderColor || 'black'};
