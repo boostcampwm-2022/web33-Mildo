@@ -7,6 +7,7 @@ import MapLoading from '../../components/MapLoading/MapLoading';
 import InfoDetailModal from '../../components/InfoDetailModal/InfoDetailModal';
 import LoginModal from '../../components/LoginModal/LoginModal';
 import SearchBarAndMyBtn from '../../components/SearchBarAndMyBtn/SearchBarAndMyBtn';
+import DensityFilterList from '../../components/DensityFilterList/DensityFilterList';
 import MyInfoSideBar from '../../components/MyInfoSideBar/MyInfoSideBar';
 
 import { DEFAULT_COORDINATES, USERS_LOCATION } from '../../config/constants';
@@ -119,6 +120,7 @@ const MainPage = () => {
             longitude={coordinates!.longitude}
           />
           <SearchBarAndMyBtn isLoggedIn={isLoggedIn} />
+          <DensityFilterList />
           <InfoDetailModal />
           <LoginModal />
           <MyInfoSideBar />
