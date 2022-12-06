@@ -32,6 +32,15 @@ export interface SecondLevelInfoCacheTypes {
   [areaName: string]: SecondLevelTimeInfoCacheTypes;
 }
 
+export interface UserInfoTypes {
+  _id: string;
+  snsId: string;
+  email: string;
+  nickname: string;
+  provider: string;
+  bookmarks: string[];
+}  
+ 
 export interface graphInfoResponseTypes {
   ok: boolean;
   data: SecondLevelTimeInfoCacheTypes;

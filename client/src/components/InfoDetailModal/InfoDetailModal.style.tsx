@@ -24,7 +24,7 @@ export const ModalLayout = styled.div`
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
   transition: 0.2s all;
   overflow-x: hidden;
-  z-index: ${Z_INDEX.MODAL};
+  z-index: ${Z_INDEX.FILTER};
 `;
 
 // 북마크 on https://ifh.cc/v-6kHtyx.png
@@ -32,6 +32,7 @@ export const BookmarkIcon = styled.img`
   position: absolute;
   top: 0%;
   right: 7%;
+  cursor: pointer;
 `;
 
 const marquee = keyframes`
