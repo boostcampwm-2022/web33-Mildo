@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { CAN_NOT_FIND_SEARCH_AREA } from '../../config/constants';
 import RelatedAreaItem from '../RelatedAreaItem/RelatedAreaItem';
 
-const RelatedAreaListStyle = styled.div`
+const RelatedAreaListStyle = styled.ul`
   z-index: 0;
   width: 100%;
   max-width: 439px;
@@ -17,6 +18,7 @@ const RelatedAreaListStyle = styled.div`
   border-radius: 10px;
   border: none;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+  list-style: none;
 `;
 
 interface CoordinatesTypes {
@@ -34,7 +36,7 @@ interface RelatedSearchListProps {
 }
 
 const emptyAreaInfo = {
-  areaName: '검색 결과가 주요 50곳에 포함되지 않습니다.',
+  areaName: CAN_NOT_FIND_SEARCH_AREA,
   coordinates: {
     latitude: -1,
     longitude: -1
@@ -48,7 +50,7 @@ const RelatedSearchList: React.FC<RelatedSearchListProps> = ({
   const [isEmptyRelatedList, setIsEmptyRelatedList] = useState(true);
 
   const onClickRelatedAreaList: React.MouseEventHandler<
-    HTMLInputElement
+    HTMLUListElement
   > = e => {
     console.log(e.target);
   };
@@ -67,7 +69,7 @@ const RelatedSearchList: React.FC<RelatedSearchListProps> = ({
           areaInfo={emptyAreaInfo}
         />
       ) : (
-        Object.keys(relatedAreaInfo).map((areaName, index) => {
+        Object.keys(relatedAreaInfo).map(areaName => {
           const areaInfo = {
             areaName,
             coordinates: relatedAreaInfo[areaName]
@@ -75,7 +77,7 @@ const RelatedSearchList: React.FC<RelatedSearchListProps> = ({
 
           return (
             <RelatedAreaItem
-              key={index}
+              key={areaName}
               searchAreaName={searchAreaName}
               areaInfo={areaInfo}
             />

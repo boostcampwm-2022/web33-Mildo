@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-const RelatedAreaItemStyle = styled.div`
+const RelatedAreaItemStyle = styled.li`
   width: 100%;
   height: 2.5rem;
   line-height: 2.5rem;
   font-size: 0.8rem;
   padding-left: 10px;
 
-  span {
+  strong {
     color: #6349ff;
   }
 
@@ -18,7 +18,7 @@ const RelatedAreaItemStyle = styled.div`
   }
 `;
 
-const EmptyAreaItemStyle = styled.div`
+const EmptyAreaItemStyle = styled.li`
   width: 100%;
   height: 2.5rem;
   line-height: 2.5rem;
@@ -43,7 +43,7 @@ interface RelatedSearchListProps {
 }
 
 const printSignatureColor = (searchAreaName: string, areaName: string) => {
-  return areaName.replace(searchAreaName, `<span>${searchAreaName}</span>`);
+  return areaName.replace(searchAreaName, `<strong>${searchAreaName}</strong>`);
 };
 
 const RelatedAreaItem: React.FC<RelatedSearchListProps> = ({

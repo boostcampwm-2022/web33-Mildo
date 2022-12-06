@@ -63,3 +63,6 @@ export const INFO_DETAIL_TITLE: InfoDetailTitle = {
   붐빔: '은(는) 붐비고 있어요 🤔',
   '매우 붐빔': '은(는) 사람이 매우 많아요 😡'
 };
+
+export const CAN_NOT_FIND_SEARCH_AREA =
+  '검색 결과가 주요 50곳에 포함되지 않습니다.';
