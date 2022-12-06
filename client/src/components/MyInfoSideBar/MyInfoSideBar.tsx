@@ -145,11 +145,15 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
 
     const { _id: userId, bookmarks } = userInfo;
 
-    await apis.deleteBookmark(areaName, userId);
-    setUserInfo({
-      ...userInfo,
-      bookmarks: bookmarks.filter(bookmark => bookmark !== areaName)
-    });
+    try {
+      await apis.deleteBookmark(areaName, userId);
+      setUserInfo({
+        ...userInfo,
+        bookmarks: bookmarks.filter(bookmark => bookmark !== areaName)
+      });
+    } catch (error) {
+      throw error;
+    }
   };
 
   // MainPage에서 좌표 설정 setState 가져와서 클릭한 위치로 이동

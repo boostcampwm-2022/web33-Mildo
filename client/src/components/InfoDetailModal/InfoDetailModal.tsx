@@ -70,21 +70,29 @@ const InfoDetailModal = () => {
     const { _id: userId, bookmarks } = userInfo;
 
     if (bookmarks.includes(areaName)) {
-      await apis.deleteBookmark(areaName, userId);
-      setUserInfo({
-        ...userInfo,
-        bookmarks: bookmarks.filter(bookmark => bookmark !== areaName)
-      });
+      try {
+        await apis.deleteBookmark(areaName, userId);
+        setUserInfo({
+          ...userInfo,
+          bookmarks: bookmarks.filter(bookmark => bookmark !== areaName)
+        });
+      } catch (error) {
+        throw error;
+      }
     } else {
       if (bookmarks.length >= 5) {
         alert('북마크는 최대 5개까지 등록 가능합니다.');
         return;
       }
-      await apis.addBookmark(areaName, userId);
-      setUserInfo({
-        ...userInfo,
-        bookmarks: bookmarks.concat(areaName)
-      });
+      try {
+        await apis.addBookmark(areaName, userId);
+        setUserInfo({
+          ...userInfo,
+          bookmarks: bookmarks.concat(areaName)
+        });
+      } catch (error) {
+        throw error;
+      }
     }
   };
 
