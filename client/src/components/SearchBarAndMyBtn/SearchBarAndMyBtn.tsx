@@ -107,14 +107,11 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
       return;
     }
 
-    // debounce 500ms마다 API 호출
     if (timer.current) {
       clearTimeout(timer.current);
     }
 
     timer.current = setTimeout(async () => {
-      console.log('debounce');
-
       setIsRelatedAreaListOpen(true);
 
       const { data: responseRelatedAreaInfo }: GetRelatedAreaResponseTypes =
