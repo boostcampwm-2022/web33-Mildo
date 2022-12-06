@@ -17,7 +17,10 @@ import {
   isSecondLevelAtom,
   prevFirstLevelInfoAtom
 } from '../../atom/infoDetail';
-import { graphInfoResponseTypes, SecondLevelTimeInfoCacheTypes } from '../../types/interfaces';
+import {
+  graphInfoResponseTypes,
+  SecondLevelTimeInfoCacheTypes
+} from '../../types/interfaces';
 import { INFO_DETAIL_TITLE, BOOKMARK_INFO } from '../../config/constants';
 import apis from '../../apis/apis';
 import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';

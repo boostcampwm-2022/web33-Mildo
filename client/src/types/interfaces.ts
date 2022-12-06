@@ -39,8 +39,8 @@ export interface UserInfoTypes {
   nickname: string;
   provider: string;
   bookmarks: string[];
-}  
- 
+}
+
 export interface graphInfoResponseTypes {
   ok: boolean;
   data: SecondLevelTimeInfoCacheTypes;

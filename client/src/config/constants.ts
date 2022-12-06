@@ -55,7 +55,7 @@ export const COLOR_PALETTE = {
 
 interface InfoDetailTitle {
   [key: string]: string;
-};
+}
 
 export const INFO_DETAIL_TITLE: InfoDetailTitle = {
   여유: '은(는) 놀기 좋아보여요 😊',
@@ -68,14 +68,14 @@ interface BookmarkInfoTypes {
   maxNumber: number;
   maxErrorMessage: string;
   failErrorMessage: string;
-};
+}
 
 export const BOOKMARK_INFO: BookmarkInfoTypes = {
   maxNumber: 5,
   maxErrorMessage: '북마크는 최대 5개까지 등록 가능합니다.',
   failErrorMessage: '북마크는 로그인 후 사용 가능합니다.'
 };
-  
+
 export const QUERY_TIME = {
   STALE_TIME: 5 * 60 * 1000, // 5분
   CACHE_TIME: 30 * 60 * 1000 // 30분
