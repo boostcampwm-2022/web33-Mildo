@@ -27,18 +27,18 @@ const SideBarLayout = css`
 `;
 
 const HeaderComponent = styled.div`
-  h2 {
+  h1 {
     font-family: 'Noto Sans';
     font-style: normal;
     font-weight: 800;
     line-height: 1.5;
   }
 
-  h2:first-child {
+  h1:first-child {
     font-size: 1rem;
   }
 
-  h2:last-child {
+  h1:last-child {
     font-size: 1.3rem;
     margin-top: 5px;
 
@@ -53,7 +53,7 @@ const BookmarkListComponent = styled.div`
   margin-top: 50px;
   width: 100%;
 
-  h2 {
+  h1 {
     color: #6349ff;
     font-size: 1rem;
   }
@@ -184,13 +184,13 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
       customModalStyle={SideBarLayout}
       isClickModalFilter={setIsMyInfoSideBarOpen}>
       <HeaderComponent>
-        <h2>안녕하세요</h2>
-        <h2>
+        <h1>안녕하세요</h1>
+        <h1>
           <span>{userInfo?.nickname}</span>님 😌
-        </h2>
+        </h1>
       </HeaderComponent>
       <BookmarkListComponent>
-        <h2>북마크</h2>
+        <h1>북마크</h1>
         <hr />
         {myBookmarks &&
           myBookmarks.map((bookmark, idx) => (

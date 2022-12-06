@@ -18,7 +18,7 @@ import {
   isSecondLevelAtom
 } from '../../atom/infoDetail';
 import { SecondLevelTimeInfoCacheTypes } from '../../types/interfaces';
-import { INFO_DETAIL_TITLE } from '../../config/constants';
+import { INFO_DETAIL_TITLE, BOOKMARK_INFO } from '../../config/constants';
 import apis from '../../apis/apis';
 import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';
 import { userInfoAtom } from '../../atom/userInfo';
@@ -63,7 +63,7 @@ const InfoDetailModal = () => {
   // 북마크 등록 및 삭제
   const onClickBookmark = async () => {
     if (!firstLevelInfo || !userInfo) {
-      alert('북마크는 로그인 후 사용 가능합니다.');
+      alert(BOOKMARK_INFO.failErrorMessage);
       return;
     }
     const [areaName] = firstLevelInfo;
@@ -80,8 +80,8 @@ const InfoDetailModal = () => {
         throw error;
       }
     } else {
-      if (bookmarks.length >= 5) {
-        alert('북마크는 최대 5개까지 등록 가능합니다.');
+      if (bookmarks.length >= BOOKMARK_INFO.maxNumber) {
+        alert(BOOKMARK_INFO.maxErrorMessage);
         return;
       }
       try {

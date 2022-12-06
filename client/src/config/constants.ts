@@ -63,3 +63,15 @@ export const INFO_DETAIL_TITLE: InfoDetailTitle = {
   붐빔: '은(는) 붐비고 있어요 🤔',
   '매우 붐빔': '은(는) 사람이 매우 많아요 😡'
 };
+
+interface BookmarkInfoTypes {
+  maxNumber: number;
+  maxErrorMessage: string;
+  failErrorMessage: string;
+}
+
+export const BOOKMARK_INFO: BookmarkInfoTypes = {
+  maxNumber: 5,
+  maxErrorMessage: '북마크는 최대 5개까지 등록 가능합니다.',
+  failErrorMessage: '북마크는 로그인 후 사용 가능합니다.'
+};
