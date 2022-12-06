@@ -133,7 +133,7 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
   // 전체 장소에서 북마크에 등록된 정보만 가져옴
   const makeBookmarks = () => {
     if (!userInfo) {
-      return;
+      return;    
     }
 
     setMyBookmarks(
@@ -181,6 +181,20 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
     makeBookmarks();
   }, [userInfo, areas]);
 
+  const LogoutLink = styled.a`
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    font-size: 1rem;
+  `;
+
+  const apiServerURL =
+    process.env.REACT_APP_CLIENT_ENV === 'development'
+      ? process.env.REACT_APP_API_SERVER_URL_DEVELOPMENT
+      : process.env.REACT_APP_API_SERVER_URL_PRODUCTION;
+
   return (
     <Modal
       isOpen={isMyInfoSideBarOpen}
@@ -213,6 +227,9 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
             </BookmarkItemComponent>
           ))}
       </BookmarkListComponent>
+      <LogoutLink href={`${apiServerURL}/naver/auth/logout`}>
+        로그아웃
+      </LogoutLink>
     </Modal>
   );
 };

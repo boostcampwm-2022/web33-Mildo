@@ -49,6 +49,7 @@ const MyButton = styled.button`
   margin-top: 9px;
   border: none;
   background: none;
+  cursor: pointer;
 `;
 
 interface CoordinatesTypes {

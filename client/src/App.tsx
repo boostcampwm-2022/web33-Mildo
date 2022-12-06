@@ -8,6 +8,10 @@ const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
         margin: 0px;
         padding: 0px;
+        
+        @media screen and (min-width: 500px) {
+          font-size: 20px;
+        }
     }
 
     body {
