@@ -27,6 +27,7 @@ import apis from '../../apis/apis';
 import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';
 import { userInfoAtom } from '../../atom/userInfo';
 import useGraphInfo from '../../hooks/useGraphInfo';
+import { makeTime } from '../../utils/time.util';
 
 const InfoDetailModal = () => {
   const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
@@ -109,24 +110,6 @@ const InfoDetailModal = () => {
     }
   };
 
-  const makeTime = (): string | null => {
-    if (!firstLevelInfo) {
-      return null;
-    }
-
-    const populationTime: Date = new Date(firstLevelInfo[1].populationTime);
-    const month: number = populationTime.getMonth() + 1;
-    const date: number = populationTime.getDate();
-    const hour: number = populationTime.getHours();
-    const minute: number = populationTime.getMinutes();
-
-    const time = `${month}월 ${date}일 ${hour}:${minute} 기준`;
-
-    return time;
-  };
-
-  makeTime();
-
   useEffect(() => {
     if (!isSecondLevel) {
       setGraphInfo({});
@@ -174,7 +157,9 @@ const InfoDetailModal = () => {
             <PopulationInfo>
               <div>
                 <p>현재 인구</p>
-                <TimeLabel>{makeTime()}</TimeLabel>
+                <TimeLabel>
+                  {makeTime(firstLevelInfo[1].populationTime, 0)}
+                </TimeLabel>
               </div>
               <p>
                 {firstLevelInfo[1].populationMin.toLocaleString()}명~
