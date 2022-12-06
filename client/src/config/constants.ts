@@ -56,7 +56,8 @@ export const COLOR_PALETTE = {
   PRIMARY50: '#9F8FFF',
   GREEN: '#43EB40',
   GREY20: '#EEEEEE',
-  WHITE: '#FFFFFF'
+  WHITE: '#FFFFFF',
+  LOGOUT_GREY: '#979797'
 };
 
 interface InfoDetailTitle {
