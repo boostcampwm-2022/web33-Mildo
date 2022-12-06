@@ -57,9 +57,9 @@ export default {
     return request(`/seoul/${areaName}`, 'get');
   },
   addBookmark: (areaName: string, userId: string) => {
-    return request(`/auth/bookmark/${areaName}/${userId}`, 'post');
+    return request(`/auth/${userId}/bookmark/${areaName}`, 'post');
   },
   deleteBookmark: (areaName: string, userId: string) => {
-    return request(`/auth/bookmark/${areaName}/${userId}`, 'delete');
+    return request(`/auth/${userId}/bookmark/${areaName}`, 'delete');
   }
 };

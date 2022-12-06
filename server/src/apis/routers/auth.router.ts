@@ -7,13 +7,13 @@ const router = express.Router();
 
 router.get('/', authMiddleware.authorizationUser, authController.getUserAuth);
 router.post(
-  '/bookmark/:areaName/:userId',
+  '/:userId/bookmark/:areaName',
   authMiddleware.authorizationUser,
   authController.addBookmark
 );
 
 router.delete(
-  '/bookmark/:areaName/:userId',
+  '/:userId/bookmark/:areaName/',
   authMiddleware.authorizationUser,
   authController.deleteBookmark
 );
