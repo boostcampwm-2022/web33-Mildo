@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import DensityFilterListBtn from '../DensityFilterListBtn/DensityFilterListBtn';
-import { POPULATION_LEVEL_COLOR } from '../../config/constants';
+import { POPULATION_LEVEL_COLOR, Z_INDEX } from '../../config/constants';
 
 const DensityFilterLayout = styled.ul`
   display: flex;
@@ -19,6 +19,8 @@ const DensityFilterLayout = styled.ul`
   top: 7%;
   left: 50%;
   transform: translate(-50%, 0%);
+
+  z-index: ${Z_INDEX.DENSITY_FILTER_BUTTON};
 `;
 
 const DensityFilterList = () => {

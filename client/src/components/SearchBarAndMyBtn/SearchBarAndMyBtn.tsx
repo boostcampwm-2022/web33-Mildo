@@ -8,9 +8,10 @@ import { createMyButtonSvg } from '../../utils/button.util';
 import RelatedAreaList from '../RelatedAreaList/RelatedAreaList';
 import apis from '../../apis/apis';
 import { isCompleteKorean } from '../../utils/search.util';
+import { Z_INDEX } from '../../config/constants';
 
 const FlexBoxStyle = styled.div`
-  z-index: 0;
+  z-index: ${Z_INDEX.FILTER};
   width: 92%;
   height: 3rem;
 

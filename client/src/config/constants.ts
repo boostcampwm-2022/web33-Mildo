@@ -47,7 +47,8 @@ export const MARKER_CLASS_NAME = 'marker';
 
 export const Z_INDEX = {
   MODAL: 110,
-  FILTER: 105
+  FILTER: 105,
+  DENSITY_FILTER_BUTTON: 103
 };
 
 export const COLOR_PALETTE = {

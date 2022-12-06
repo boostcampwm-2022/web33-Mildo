@@ -9,6 +9,7 @@ const RelatedAreaItemStyle = styled.li`
 
   strong {
     color: #6349ff;
+    font-size: 0.8rem;
   }
 
   :hover {

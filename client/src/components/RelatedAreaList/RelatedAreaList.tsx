@@ -4,7 +4,6 @@ import { CAN_NOT_FIND_SEARCH_AREA } from '../../config/constants';
 import RelatedAreaItem from '../RelatedAreaItem/RelatedAreaItem';
 
 const RelatedAreaListStyle = styled.ul`
-  z-index: 0;
   width: 100%;
   max-width: 439px;
   max-height: 20rem;
