@@ -14,6 +14,15 @@ const userSchema = new Schema<UserSchemaTypes>({
   email: {
     type: String,
     required: true
+  },
+  nickname: {
+    type: String,
+    required: true
+  },
+  bookmarks: {
+    type: [String],
+    required: true,
+    default: []
   }
 });
 
