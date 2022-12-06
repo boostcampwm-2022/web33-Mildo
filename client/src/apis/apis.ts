@@ -56,6 +56,9 @@ export default {
   getPastInformation: (areaName: string) => {
     return request(`/seoul/${areaName}`, 'get');
   },
+  getRelatedAreaInfo: (areaName: string) => {
+    return request(`/seoul/search?areaName=${areaName}`, 'get');
+  },
   addBookmark: (areaName: string, userId: string) => {
     return request(`/auth/${userId}/bookmark/${areaName}`, 'post');
   },
