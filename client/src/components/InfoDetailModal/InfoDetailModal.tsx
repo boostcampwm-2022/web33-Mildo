@@ -40,6 +40,7 @@ const InfoDetailModal = () => {
       setPrevFirstLevelInfo(firstLevelInfo);
     }
   };
+
   const [graphInfoResponse] = useGraphInfo(
     isSecondLevel,
     firstLevelInfo,
