@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
+
 import {
   BookmarkIcon,
   PopulationBox,
@@ -13,22 +14,39 @@ import Modal from '../Modal/Modal';
 import {
   isInfoDetailModalOpenAtom,
   firstLevelInfoAtom,
-  secondLevelInfoCacheAtom,
-  isSecondLevelAtom
+  isSecondLevelAtom,
+  prevFirstLevelInfoAtom
 } from '../../atom/infoDetail';
-import { SecondLevelTimeInfoCacheTypes } from '../../types/interfaces';
+import {
+  graphInfoResponseTypes,
+  SecondLevelTimeInfoCacheTypes
+} from '../../types/interfaces';
 import { INFO_DETAIL_TITLE } from '../../config/constants';
-import apis from '../../apis/apis';
 import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';
+import useGraphInfo from '../../hooks/useGraphInfo';
 
 const InfoDetailModal = () => {
   const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
   const firstLevelInfo = useAtomValue(firstLevelInfoAtom);
-  const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
-  const [secondLevelInfoCache, setSecondLevelInfoCache] = useAtom(
-    secondLevelInfoCacheAtom
+  const [prevFirstLevelInfo, setPrevFirstLevelInfo] = useAtom(
+    prevFirstLevelInfoAtom
   );
+  const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
   const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
+
+  const success = (data: graphInfoResponseTypes | null) => {
+    if (data) {
+      setGraphInfo(data.data);
+      setPrevFirstLevelInfo(firstLevelInfo);
+    }
+  };
+
+  const [graphInfoResponse] = useGraphInfo(
+    isSecondLevel,
+    firstLevelInfo,
+    prevFirstLevelInfo,
+    success
+  );
 
   const toggleSecondLevelContents = () => {
     setIsSecondLevel(prev => !prev);
@@ -38,19 +56,11 @@ const InfoDetailModal = () => {
     if (!firstLevelInfo) {
       return;
     }
-    const [areaName] = firstLevelInfo;
 
-    // 전역에 areaName을 키로 갖고 있는 속성이 있으면 hit
-    if (secondLevelInfoCache[areaName]) {
-      setGraphInfo(secondLevelInfoCache[areaName]);
-      return;
+    if (graphInfoResponse) {
+      setGraphInfo(graphInfoResponse.data);
+      setPrevFirstLevelInfo(firstLevelInfo);
     }
-
-    // 아니면 api 호출
-    const { data } = await apis.getPastInformation(areaName);
-
-    setSecondLevelInfoCache({ ...secondLevelInfoCache, [areaName]: data });
-    setGraphInfo(data);
 
     // eslint-disable-next-line no-useless-return
     return;

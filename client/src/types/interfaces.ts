@@ -31,3 +31,8 @@ export interface SecondLevelTimeInfoCacheTypes {
 export interface SecondLevelInfoCacheTypes {
   [areaName: string]: SecondLevelTimeInfoCacheTypes;
 }
+
+export interface graphInfoResponseTypes {
+  ok: boolean;
+  data: SecondLevelTimeInfoCacheTypes;
+}
