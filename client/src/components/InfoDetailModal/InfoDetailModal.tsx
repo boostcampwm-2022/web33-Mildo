@@ -76,23 +76,25 @@ const InfoDetailModal = () => {
           ...userInfo,
           bookmarks: bookmarks.filter(bookmark => bookmark !== areaName)
         });
-      } catch (error) {
-        throw error;
-      }
-    } else {
-      if (bookmarks.length >= BOOKMARK_INFO.maxNumber) {
-        alert(BOOKMARK_INFO.maxErrorMessage);
         return;
-      }
-      try {
-        await apis.addBookmark(areaName, userId);
-        setUserInfo({
-          ...userInfo,
-          bookmarks: bookmarks.concat(areaName)
-        });
       } catch (error) {
         throw error;
       }
+    }
+
+    if (bookmarks.length >= BOOKMARK_INFO.maxNumber) {
+      alert(BOOKMARK_INFO.maxErrorMessage);
+      return;
+    }
+
+    try {
+      await apis.addBookmark(areaName, userId);
+      setUserInfo({
+        ...userInfo,
+        bookmarks: bookmarks.concat(areaName)
+      });
+    } catch (error) {
+      throw error;
     }
   };
 

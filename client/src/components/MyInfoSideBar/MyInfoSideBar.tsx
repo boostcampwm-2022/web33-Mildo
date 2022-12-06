@@ -132,8 +132,12 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
 
   // 전체 장소에서 북마크에 등록된 정보만 가져옴
   const makeBookmarks = () => {
+    if (!userInfo) {
+      return;
+    }
+
     setMyBookmarks(
-      areas.filter(area => userInfo?.bookmarks.includes(area[0])).reverse()
+      areas.filter(area => userInfo.bookmarks.includes(area[0])).reverse()
     );
   };
 

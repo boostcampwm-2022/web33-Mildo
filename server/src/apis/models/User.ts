@@ -17,11 +17,11 @@ const userSchema = new Schema<UserSchemaTypes>({
   },
   nickname: {
     type: String,
-    requited: true
+    required: true
   },
   bookmarks: {
     type: [String],
-    require: true,
+    required: true,
     default: []
   }
 });
