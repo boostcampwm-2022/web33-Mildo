@@ -68,3 +68,23 @@ export const INFO_DETAIL_TITLE: InfoDetailTitle = {
   붐빔: '은(는) 붐비고 있어요 🤔',
   '매우 붐빔': '은(는) 사람이 매우 많아요 😡'
 };
+
+export const CAN_NOT_FIND_SEARCH_AREA =
+  '검색 결과가 주요 50곳에 포함되지 않습니다.';
+
+interface BookmarkInfoTypes {
+  maxNumber: number;
+  maxErrorMessage: string;
+  failErrorMessage: string;
+}
+
+export const BOOKMARK_INFO: BookmarkInfoTypes = {
+  maxNumber: 5,
+  maxErrorMessage: '북마크는 최대 5개까지 등록 가능합니다.',
+  failErrorMessage: '북마크는 로그인 후 사용 가능합니다.'
+};
+
+export const QUERY_TIME = {
+  STALE_TIME: 5 * 60 * 1000, // 5분
+  CACHE_TIME: 30 * 60 * 1000 // 30분
+};

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const request = async (
   path: string,
-  method: 'get' | 'post',
+  method: 'get' | 'post' | 'delete',
   data?: Record<string, unknown> | undefined
 ) => {
   const apiServerURL =
@@ -55,5 +55,14 @@ export default {
   },
   getPastInformation: (areaName: string) => {
     return request(`/seoul/${areaName}`, 'get');
+  },
+  getRelatedAreaInfo: (areaName: string) => {
+    return request(`/seoul/search?areaName=${areaName}`, 'get');
+  },
+  addBookmark: (areaName: string, userId: string) => {
+    return request(`/auth/${userId}/bookmark/${areaName}`, 'post');
+  },
+  deleteBookmark: (areaName: string, userId: string) => {
+    return request(`/auth/${userId}/bookmark/${areaName}`, 'delete');
   }
 };

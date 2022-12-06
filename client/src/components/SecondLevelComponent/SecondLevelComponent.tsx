@@ -149,7 +149,7 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
               options={options}
               series={series}
               width='100%'
-              height={700}
+              height={2000}
             />
           )}
         </TraceGraph>

@@ -13,6 +13,7 @@ import MyInfoSideBar from '../../components/MyInfoSideBar/MyInfoSideBar';
 import { DEFAULT_COORDINATES, USERS_LOCATION } from '../../config/constants';
 import apis from '../../apis/apis';
 import { isLoginModalOpenAtom } from '../../atom/loginModal';
+import { userInfoAtom } from '../../atom/userInfo';
 
 const StyledMainPage = styled.div`
   width: 100vw;
@@ -40,6 +41,7 @@ const MainPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const setIsLoginModalOpen = useUpdateAtom(isLoginModalOpenAtom);
+  const setUserInfo = useUpdateAtom(userInfoAtom);
 
   const isUserInSeoulOrGwaCheon = (usersLocation: string) => {
     return (
@@ -69,14 +71,16 @@ const MainPage = () => {
   useEffect(() => {
     // 로그인 여부 확인하기 -> '로그아웃' 기능 구현 시 재사용 여부를 판단하여 커스텀 훅으로 빼야함
     const checkLoggedInFunction = async () => {
-      const LogInStatus = await apis.getWhetherUserLoggedIn();
+      const logInStatus = await apis.getWhetherUserLoggedIn();
 
-      if (LogInStatus.ok === true) {
+      if (logInStatus.ok === true) {
         setIsLoggedIn(true);
+        setUserInfo(logInStatus.data);
         setIsLoginModalOpen(false);
         return;
       }
       setIsLoggedIn(false);
+      setUserInfo(null);
     };
 
     checkLoggedInFunction();
@@ -93,8 +97,7 @@ const MainPage = () => {
       );
     };
 
-    const error = (value: GeolocationPositionError) => {
-      console.log(value.code, value.message);
+    const error = () => {
       setCoordinates({ ...DEFAULT_COORDINATES });
     };
 
@@ -123,7 +126,7 @@ const MainPage = () => {
           <DensityFilterList />
           <InfoDetailModal />
           <LoginModal />
-          <MyInfoSideBar />
+          <MyInfoSideBar setCoordinates={setCoordinates} />
         </>
       )}
     </StyledMainPage>

@@ -50,4 +50,19 @@ export interface FilterBtnStateTypes {
   보통: boolean;
   여유: boolean;
   [prop: string]: boolean;
+}  
+ 
+export interface UserInfoTypes {
+  _id: string;
+  snsId: string;
+  email: string;
+  nickname: string;
+  provider: string;
+  bookmarks: string[];
 }
+
+export interface graphInfoResponseTypes {
+  ok: boolean;
+  data: SecondLevelTimeInfoCacheTypes;
+}
+

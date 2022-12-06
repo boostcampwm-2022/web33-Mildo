@@ -41,6 +41,7 @@ const Modal: React.FC<ModalProps> = ({
     if (!isClickModalFilter) {
       return;
     }
+
     isClickModalFilter(false);
   };
 

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import areaService from '../services/area.service';
 import redisService from '../services/redis.service';
 import seoulService from '../services/seoul.service';
 
@@ -28,5 +29,24 @@ export default {
     );
 
     return res.status(200).json({ ok: true, data: sortedInformation });
+  },
+  searchArea: async (req: Request, res: Response) => {
+    const { areaName } = req.query;
+    if (areaName === '') {
+      res.status(200).json({ ok: true, data: {} });
+      return;
+    }
+    try {
+      const relatedAreaInfo = await areaService.getRelatedAreaInfo(
+        areaName as string
+      );
+      if (relatedAreaInfo) {
+        res.status(200).json({ ok: true, data: relatedAreaInfo });
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    res.status(500).json({ ok: false });
   }
 };
