@@ -18,7 +18,10 @@ const request = async (
   axiosInstance.interceptors.request.use(
     config => {
       config.method = method;
-      config.data = data;
+      if (data) {
+        config.data = data;
+      }
+
       return config;
     },
     error => {
@@ -49,10 +52,6 @@ const request = async (
 
 export default {
   getAllArea: () => {
-    const seoul = request('/seoul', 'get');
-
-    console.log(seoul);
-
     return request('/seoul', 'get');
   },
   getUsersLocation: (latitude: number, longitude: number) => {
