@@ -1,6 +1,6 @@
 import { useUpdateAtom } from 'jotai/utils';
 import styled from 'styled-components';
-import { useDeferredValue, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { isLoginModalOpenAtom } from '../../atom/loginModal';
 import { isMyInfoSideBarOpenAtom } from '../../atom/myInfoSideBar';
@@ -82,7 +82,7 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
   const [relatedAreaInfo, setRelatedAreaInfo] =
     useState<DataRelatedAreaInfoTypes>({});
 
-  const deferredSearchAreaName = useDeferredValue(searchAreaName);
+  const timer = useRef<NodeJS.Timeout | null>(null);
 
   const onClickMyButton = () => {
     if (isLoggedIn) {
@@ -99,21 +99,30 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
   };
 
   useEffect(() => {
-    if (!isCompleteKorean(deferredSearchAreaName)) {
+    if (searchAreaName === '') {
       return;
     }
 
-    setIsRelatedAreaListOpen(true);
+    if (searchAreaName !== '' && !isCompleteKorean(searchAreaName)) {
+      return;
+    }
 
-    const getRelatedAreaInfo = async () => {
+    // debounce 500ms마다 API 호출
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+
+    timer.current = setTimeout(async () => {
+      console.log('debounce');
+
+      setIsRelatedAreaListOpen(true);
+
       const { data: responseRelatedAreaInfo }: GetRelatedAreaResponseTypes =
-        await apis.getRelatedAreaInfo(deferredSearchAreaName); // 이 부분도 캐싱하면 좋을듯?
+        await apis.getRelatedAreaInfo(searchAreaName);
 
       setRelatedAreaInfo(responseRelatedAreaInfo);
-    };
-
-    getRelatedAreaInfo();
-  }, [deferredSearchAreaName]);
+    }, 500);
+  }, [searchAreaName]);
 
   return (
     <FlexBoxStyle>
@@ -128,7 +137,7 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
           __html: createMyButtonSvg()
         }}></MyButton>
       <RelatedAreaList
-        searchAreaName={deferredSearchAreaName}
+        searchAreaName={searchAreaName}
         relatedAreaInfo={relatedAreaInfo}
       />
     </FlexBoxStyle>
