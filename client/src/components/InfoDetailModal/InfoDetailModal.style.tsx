@@ -76,11 +76,23 @@ export const PopulationBox = styled.div`
   border-radius: 10px;
 `;
 
+export const TimeLabel = styled.span`
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: ${COLOR_PALETTE.PRIMARY};
+  line-height: 1.5;
+`;
+
 export const PopulationInfo = styled.div`
   display: flex;
   flex-direction: column;
   line-height: 1.2;
   padding-top: 7px;
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+  }
 
   p:first-child {
     font-size: 1rem;

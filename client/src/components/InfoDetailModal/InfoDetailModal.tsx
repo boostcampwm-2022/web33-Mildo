@@ -8,7 +8,8 @@ import {
   Title,
   TitleLocation,
   TomorrowButton,
-  ModalLayout
+  ModalLayout,
+  TimeLabel
 } from '../InfoDetailModal/InfoDetailModal.style';
 import Modal from '../Modal/Modal';
 import {
@@ -108,6 +109,24 @@ const InfoDetailModal = () => {
     }
   };
 
+  const makeTime = (): string | null => {
+    if (!firstLevelInfo) {
+      return null;
+    }
+
+    const populationTime: Date = new Date(firstLevelInfo[1].populationTime);
+    const month: number = populationTime.getMonth() + 1;
+    const date: number = populationTime.getDate();
+    const hour: number = populationTime.getHours();
+    const minute: number = populationTime.getMinutes();
+
+    const time = `${month}월 ${date}일 ${hour}:${minute} 기준`;
+
+    return time;
+  };
+
+  makeTime();
+
   useEffect(() => {
     if (!isSecondLevel) {
       setGraphInfo({});
@@ -153,7 +172,10 @@ const InfoDetailModal = () => {
           <PopulationBox>
             <img src='https://ifh.cc/g/2GQfXw.png' />
             <PopulationInfo>
-              <p>현재 인구</p>
+              <div>
+                <p>현재 인구</p>
+                <TimeLabel>{makeTime()}</TimeLabel>
+              </div>
               <p>
                 {firstLevelInfo[1].populationMin.toLocaleString()}명~
                 {firstLevelInfo[1].populationMax.toLocaleString()}명
