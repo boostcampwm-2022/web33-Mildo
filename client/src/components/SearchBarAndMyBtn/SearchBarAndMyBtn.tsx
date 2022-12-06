@@ -9,6 +9,7 @@ import RelatedAreaList from '../RelatedAreaList/RelatedAreaList';
 import apis from '../../apis/apis';
 import { isCompleteKorean } from '../../utils/search.util';
 import { Z_INDEX } from '../../config/constants';
+import { isRelatedAreaListOpenAtom } from '../../atom/relatedAreaList';
 
 const FlexBoxStyle = styled.div`
   z-index: ${Z_INDEX.FILTER};
@@ -76,6 +77,7 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
 }) => {
   const setIsLoginModalOpen = useUpdateAtom(isLoginModalOpenAtom);
   const setIsMyInfoSideBarOpen = useUpdateAtom(isMyInfoSideBarOpenAtom);
+  const setIsRelatedAreaListOpen = useUpdateAtom(isRelatedAreaListOpenAtom);
   const [searchAreaName, setSearchAreaName] = useState('');
   const [relatedAreaInfo, setRelatedAreaInfo] =
     useState<DataRelatedAreaInfoTypes>({});
@@ -100,6 +102,8 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
     if (!isCompleteKorean(deferredSearchAreaName)) {
       return;
     }
+
+    setIsRelatedAreaListOpen(true);
 
     const getRelatedAreaInfo = async () => {
       const { data: responseRelatedAreaInfo }: GetRelatedAreaResponseTypes =

@@ -1,12 +1,14 @@
+import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { isRelatedAreaListOpenAtom } from '../../atom/relatedAreaList';
 import { CAN_NOT_FIND_SEARCH_AREA } from '../../config/constants';
 import RelatedAreaItem from '../RelatedAreaItem/RelatedAreaItem';
 
 const RelatedAreaListStyle = styled.ul`
   width: 100%;
   max-width: 439px;
-  max-height: 20rem;
+  max-height: 15rem;
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -46,6 +48,8 @@ const RelatedSearchList: React.FC<RelatedSearchListProps> = ({
   searchAreaName,
   relatedAreaInfo
 }) => {
+  const isRelatedAreaListOpen = useAtomValue(isRelatedAreaListOpenAtom);
+
   const [isEmptyRelatedList, setIsEmptyRelatedList] = useState(true);
 
   const onClickRelatedAreaList: React.MouseEventHandler<
@@ -61,29 +65,33 @@ const RelatedSearchList: React.FC<RelatedSearchListProps> = ({
   }, [relatedAreaInfo]);
 
   return (
-    <RelatedAreaListStyle onClick={onClickRelatedAreaList}>
-      {isEmptyRelatedList ? (
-        <RelatedAreaItem
-          searchAreaName={searchAreaName}
-          areaInfo={emptyAreaInfo}
-        />
-      ) : (
-        Object.keys(relatedAreaInfo).map(areaName => {
-          const areaInfo = {
-            areaName,
-            coordinates: relatedAreaInfo[areaName]
-          };
-
-          return (
+    <>
+      {isRelatedAreaListOpen && (
+        <RelatedAreaListStyle onClick={onClickRelatedAreaList}>
+          {isEmptyRelatedList ? (
             <RelatedAreaItem
-              key={areaName}
               searchAreaName={searchAreaName}
-              areaInfo={areaInfo}
+              areaInfo={emptyAreaInfo}
             />
-          );
-        })
+          ) : (
+            Object.keys(relatedAreaInfo).map(areaName => {
+              const areaInfo = {
+                areaName,
+                coordinates: relatedAreaInfo[areaName]
+              };
+
+              return (
+                <RelatedAreaItem
+                  key={areaName}
+                  searchAreaName={searchAreaName}
+                  areaInfo={areaInfo}
+                />
+              );
+            })
+          )}
+        </RelatedAreaListStyle>
       )}
-    </RelatedAreaListStyle>
+    </>
   );
 };
 

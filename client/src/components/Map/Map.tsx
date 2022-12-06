@@ -19,6 +19,7 @@ import useMarker from '../../hooks/useMarker';
 import { markerArray } from '../../atom/markerArray';
 import { enableStateAtom } from '../../atom/densityFilterBtn';
 import { allAreasInfoAtom } from '../../atom/areasInfo';
+import { isRelatedAreaListOpenAtom } from '../../atom/relatedAreaList';
 
 const MapComponent = styled.div`
   width: 100%;
@@ -46,6 +47,7 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
   const [areas, setAreas] = useAtom(allAreasInfoAtom);
   const prevPlace = useRef<PrevPlaceTypes | null>(null);
   const setIsInfoDetailModalOpen = useUpdateAtom(isInfoDetailModalOpenAtom);
+  const setIsRelatedAreaListOpen = useUpdateAtom(isRelatedAreaListOpenAtom);
   const setIsSecondLevel = useUpdateAtom(isSecondLevelAtom);
   const [markerStorage, setMarkerStorage] = useAtom(markerArray);
   const enableState = useAtomValue(enableStateAtom);
@@ -128,6 +130,7 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
 
   // 마커 이외의 영역을 클릭하면 1단계, 2단계 모달창이 닫힘
   const onClickMap = () => {
+    setIsRelatedAreaListOpen(false);
     if (!prevPlace.current) {
       return;
     }
