@@ -16,6 +16,7 @@ import {
   CoordinatesPopulationTypes
 } from '../../types/interfaces';
 import apis from '../../apis/apis';
+import { markerArray } from '../../atom/markerArray';
 
 const SideBarLayout = css`
   z-index: ${Z_INDEX.MODAL};
@@ -146,6 +147,7 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
   const [myBookmarks, setMyBookmarks] = useState<SortAllAreasTypes[] | null>(
     null
   );
+  const [markers] = useAtom(markerArray);
 
   // 전체 장소에서 북마크에 등록된 정보만 가져옴
   const makeBookmarks = () => {
@@ -184,10 +186,18 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
     }
     const { latitude, longitude } = areaInfo;
 
-    console.log(latitude, longitude);
+    const marker = markers.find(
+      item =>
+        item.getPosition().x === longitude && item.getPosition().y === latitude
+    );
 
-    // setCoordinates({ latitude, longitude });
-    // setIsMyInfoSideBarOpen(false);
+    if (!marker) {
+      alert('혼잡도 필터를 확인해주세요!');
+      return;
+    }
+
+    marker?.trigger('click');
+    setIsMyInfoSideBarOpen(false);
   };
 
   useEffect(() => {
