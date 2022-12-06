@@ -57,6 +57,7 @@ const RelatedAreaItem: React.FC<RelatedSearchListProps> = ({
         <EmptyAreaItemStyle>{areaInfo.areaName}</EmptyAreaItemStyle>
       ) : (
         <RelatedAreaItemStyle
+          id={areaInfo.areaName}
           dangerouslySetInnerHTML={{
             __html: printSignatureColor(searchAreaName, areaInfo.areaName)
           }}

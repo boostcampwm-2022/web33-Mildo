@@ -147,7 +147,7 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
   const [myBookmarks, setMyBookmarks] = useState<SortAllAreasTypes[] | null>(
     null
   );
-  const [markers] = useAtom(markerArray);
+  const markers = useAtomValue(markerArray);
 
   // 전체 장소에서 북마크에 등록된 정보만 가져옴
   const makeBookmarks = () => {
@@ -196,7 +196,7 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
       return;
     }
 
-    marker?.trigger('click');
+    marker.trigger('click');
     setIsMyInfoSideBarOpen(false);
   };
 
