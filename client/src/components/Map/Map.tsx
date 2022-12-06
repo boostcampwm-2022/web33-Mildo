@@ -115,9 +115,7 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
     markerStorage.forEach(el => el.setMap(null));
     setMarkerStorage([]);
     areas
-      .filter((area: SortAllAreasTypes) => {
-        return enableState[area[1].populationLevel];
-      })
+      .filter((area: SortAllAreasTypes) => enableState[area[1].populationLevel])
       .map((area: SortAllAreasTypes) => makeMarker(area));
   }, [areas, enableState]);
 
