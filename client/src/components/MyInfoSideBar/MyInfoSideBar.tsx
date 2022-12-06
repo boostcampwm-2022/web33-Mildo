@@ -54,10 +54,6 @@ const MyInfoSideBar = () => {
       ? process.env.REACT_APP_API_SERVER_URL_DEVELOPMENT
       : process.env.REACT_APP_API_SERVER_URL_PRODUCTION;
 
-  const removeSessionStorage = () => {
-    sessionStorage.clear();
-  };
-
   return (
     <Modal
       isOpen={isMyInfoSideBarOpen}
@@ -69,9 +65,7 @@ const MyInfoSideBar = () => {
         <br />
         <span>상준</span>님 😌
       </h2>
-      <LogoutLink
-        href={`${apiServerURL}/naver/auth/logout`}
-        onClick={removeSessionStorage}>
+      <LogoutLink href={`${apiServerURL}/naver/auth/logout`}>
         로그아웃
       </LogoutLink>
     </Modal>
