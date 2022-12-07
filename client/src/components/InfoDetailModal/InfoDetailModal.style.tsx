@@ -24,7 +24,7 @@ export const ModalLayout = styled.div`
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
   transition: 0.2s all;
   overflow-x: hidden;
-  z-index: ${Z_INDEX.MODAL};
+  z-index: ${Z_INDEX.FILTER};
 `;
 
 // 북마크 on https://ifh.cc/v-6kHtyx.png
@@ -32,17 +32,18 @@ export const BookmarkIcon = styled.img`
   position: absolute;
   top: 0%;
   right: 7%;
+  cursor: pointer;
 `;
 
 const marquee = keyframes`
-0% {
-  transform: translate(10%, 0);
+0%, 50% {
+  transform: translate(0%, 0);
 }
-50%{
-  transform: translate(-50%, 0);
+25%{
+  transform: translate(-30%, 0);
 }
-100% {
-  transform: translate(10%, 0);
+75% {
+  transform: translate(30%, 0);
 }
 `;
 
@@ -52,7 +53,7 @@ export const Title = styled.h1`
   font-size: 1rem;
   white-space: nowrap;
   will-change: transform;
-  animation: ${marquee} 4s linear infinite;
+  animation: ${marquee} 10s linear infinite;
 `;
 
 interface TitleLocationProps {
@@ -75,11 +76,23 @@ export const PopulationBox = styled.div`
   border-radius: 10px;
 `;
 
+export const TimeLabel = styled.span`
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: ${COLOR_PALETTE.PRIMARY};
+  line-height: 1.5;
+`;
+
 export const PopulationInfo = styled.div`
   display: flex;
   flex-direction: column;
   line-height: 1.2;
   padding-top: 7px;
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+  }
 
   p:first-child {
     font-size: 1rem;

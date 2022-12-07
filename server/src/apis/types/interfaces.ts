@@ -1,3 +1,5 @@
+import { Types } from 'mongoose';
+
 export interface CityDataTypes {
   areaName: string;
   populationMax: string;
@@ -42,6 +44,8 @@ export interface UserSchemaTypes {
   snsId: string;
   provider: string;
   email: string;
+  nickname: string;
+  bookmarks: Types.Array<string>;
 }
 
 export interface RedisAllAreasResponseTypes {

@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.get('/', naverController.getGeoCodingFromCoords);
 router.get('/auth/login', naverController.naverPassportLogin);
-// router.get('/auth/logout');
+router.get('/auth/logout', naverController.naverPassportLogout);
 router.get('/auth/callback', naverController.naverPassportAuthMiddleware);
 
 export default router;

@@ -1,37 +1,35 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useUpdateAtom } from 'jotai/utils';
+import { useUpdateAtom, useAtomValue } from 'jotai/utils';
+import { useAtom } from 'jotai';
 
-import { MarkerObjectTypes } from '../../types/interfaces';
+import {
+  MarkerObjectTypes,
+  CoordinatesPopulationTypes,
+  SortAllAreasTypes
+} from '../../types/interfaces';
 import api from '../../apis/apis';
 import { SEOUL_BOUNDS } from '../../config/constants';
-import Marker from '../Marker/Marker';
 import { setMarkerIcon } from '../../utils/map.util';
 import {
   isInfoDetailModalOpenAtom,
   isSecondLevelAtom
 } from '../../atom/infoDetail';
+import useMarker from '../../hooks/useMarker';
+import { markerArray } from '../../atom/markerArray';
+import { enableStateAtom } from '../../atom/densityFilterBtn';
+import { allAreasInfoAtom } from '../../atom/areasInfo';
+import { isRelatedAreaListOpenAtom } from '../../atom/relatedAreaList';
 
 const MapComponent = styled.div`
   width: 100%;
   height: 100%;
 `;
 
-interface CoordinatesPopulationTypes {
-  populationMax: number;
-  populationMin: number;
-  populationLevel: string;
-  populationTime: Date;
-  latitude: number;
-  longitude: number;
-}
-
 interface GetAllAreaResponseTypes {
   ok: boolean;
   data: CoordinatesPopulationTypes;
 }
-
-type SortAllAreasTypes = [string, CoordinatesPopulationTypes];
 
 interface MapComponentProps {
   latitude: number;
@@ -46,10 +44,15 @@ interface PrevPlaceTypes {
 const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
   const mapRef = useRef(null);
   const [naverMap, setNaverMap] = useState<naver.maps.Map | null>(null);
-  const [areas, setAreas] = useState<SortAllAreasTypes[]>([]);
+  const [areas, setAreas] = useAtom(allAreasInfoAtom);
   const prevPlace = useRef<PrevPlaceTypes | null>(null);
   const setIsInfoDetailModalOpen = useUpdateAtom(isInfoDetailModalOpenAtom);
+  const setIsRelatedAreaListOpen = useUpdateAtom(isRelatedAreaListOpenAtom);
   const setIsSecondLevel = useUpdateAtom(isSecondLevelAtom);
+  const [markerStorage, setMarkerStorage] = useAtom(markerArray);
+  const enableState = useAtomValue(enableStateAtom);
+
+  const [makeMarker] = useMarker(naverMap, prevPlace);
 
   // MapComponent DOM에 네이버 지도 렌더링
   useEffect(() => {
@@ -64,7 +67,7 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
     const mapOptions: naver.maps.MapOptions = {
       center: location,
       zoom: 14,
-      minZoom: 12,
+      minZoom: SEOUL_BOUNDS.MIN_ZOOM,
       maxBounds: new naver.maps.LatLngBounds(
         new naver.maps.LatLng(
           SEOUL_BOUNDS.SW.LATITUDE,
@@ -100,38 +103,21 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
     getAllArea();
   }, [naverMap]);
 
-  // 이전 마커를 작은 크기로 만들고, 새로운 마커를 이전 마커로 등록
-  const onClickMarker = (
-    marker: MarkerObjectTypes,
-    populationLevel: string
-  ) => {
-    if (!prevPlace.current || !marker._nmarker_id) {
-      setMarkerIcon(marker, populationLevel);
-
-      prevPlace.current = {
-        marker,
-        populationLevel
-      };
+  useEffect(() => {
+    if (!areas || !naverMap) {
       return;
     }
 
-    const { _nmarker_id: newMarkerId } = marker;
-    const { _nmarker_id: oldMarkerId } = prevPlace.current.marker;
-
-    if (newMarkerId === oldMarkerId) {
-      return;
-    }
-
-    setMarkerIcon(prevPlace.current.marker, prevPlace.current.populationLevel);
-
-    prevPlace.current = {
-      marker,
-      populationLevel
-    };
-  };
+    markerStorage.forEach(el => el.setMap(null));
+    setMarkerStorage([]);
+    areas
+      .filter((area: SortAllAreasTypes) => enableState[area[1].populationLevel])
+      .map((area: SortAllAreasTypes) => makeMarker(area));
+  }, [areas, enableState]);
 
   // 마커 이외의 영역을 클릭하면 1단계, 2단계 모달창이 닫힘
   const onClickMap = () => {
+    setIsRelatedAreaListOpen(false);
     if (!prevPlace.current) {
       return;
     }
@@ -144,16 +130,6 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
   return (
     <>
       <MapComponent ref={mapRef} onClick={onClickMap} />
-      {areas &&
-        naverMap &&
-        areas.map((area: SortAllAreasTypes, index: number) => (
-          <Marker
-            area={area}
-            naverMap={naverMap}
-            key={index}
-            onClickMarker={onClickMarker}
-          />
-        ))}
     </>
   );
 };

@@ -1,3 +1,5 @@
+import { QueryClient, QueryClientProvider } from 'react-query';
+
 import { createGlobalStyle } from 'styled-components';
 import MainPage from './pages/MainPage/MainPage';
 
@@ -6,6 +8,10 @@ const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
         margin: 0px;
         padding: 0px;
+        
+        @media screen and (min-width: 500px) {
+          font-size: 20px;
+        }
     }
 
     body {
@@ -14,11 +20,15 @@ const GlobalStyle = createGlobalStyle`
     }
 `;
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
     <>
-      <GlobalStyle />
-      <MainPage />
+      <QueryClientProvider client={queryClient}>
+        <GlobalStyle />
+        <MainPage />
+      </QueryClientProvider>
     </>
   );
 }

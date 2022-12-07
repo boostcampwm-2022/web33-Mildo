@@ -35,7 +35,8 @@ export default () => {
             const newUser = await User.create({
               snsId: profile.id,
               provider: 'naver',
-              email: profile.email
+              email: profile.email,
+              nickname: profile.nickname
             });
 
             return done(null, newUser);

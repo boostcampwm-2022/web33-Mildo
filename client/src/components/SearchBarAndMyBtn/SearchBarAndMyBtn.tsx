@@ -1,12 +1,18 @@
 import { useUpdateAtom } from 'jotai/utils';
 import styled from 'styled-components';
+import { useEffect, useRef, useState } from 'react';
 
 import { isLoginModalOpenAtom } from '../../atom/loginModal';
 import { isMyInfoSideBarOpenAtom } from '../../atom/myInfoSideBar';
 import { createMyButtonSvg } from '../../utils/button.util';
+import RelatedAreaList from '../RelatedAreaList/RelatedAreaList';
+import apis from '../../apis/apis';
+import { isCompleteKorean } from '../../utils/search.util';
+import { Z_INDEX } from '../../config/constants';
+import { isRelatedAreaListOpenAtom } from '../../atom/relatedAreaList';
 
 const FlexBoxStyle = styled.div`
-  z-index: 0;
+  z-index: ${Z_INDEX.FILTER};
   width: 92%;
   height: 3rem;
 
@@ -33,18 +39,34 @@ const SearchBar = styled.input`
   border-radius: 10px;
   border: none;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
-  padding-left: 8px;
+  padding-left: 10px;
 
   &::placeholder {
     font-size: 0.8rem;
     color: rgba(0, 0, 0, 0.3);
   }
 `;
+
 const MyButton = styled.button`
   margin-top: 9px;
   border: none;
   background: none;
+  cursor: pointer;
 `;
+
+interface CoordinatesTypes {
+  latitude: number;
+  longitude: number;
+}
+
+interface DataRelatedAreaInfoTypes {
+  [areaName: string]: CoordinatesTypes;
+}
+
+interface GetRelatedAreaResponseTypes {
+  ok: boolean;
+  data: DataRelatedAreaInfoTypes;
+}
 
 interface SearchBarAndMyBtnComponentProps {
   isLoggedIn: boolean;
@@ -55,6 +77,12 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
 }) => {
   const setIsLoginModalOpen = useUpdateAtom(isLoginModalOpenAtom);
   const setIsMyInfoSideBarOpen = useUpdateAtom(isMyInfoSideBarOpenAtom);
+  const setIsRelatedAreaListOpen = useUpdateAtom(isRelatedAreaListOpenAtom);
+  const [searchAreaName, setSearchAreaName] = useState('');
+  const [relatedAreaInfo, setRelatedAreaInfo] =
+    useState<DataRelatedAreaInfoTypes>({});
+
+  const timer = useRef<NodeJS.Timeout | null>(null);
 
   const onClickMyButton = () => {
     if (isLoggedIn) {
@@ -64,14 +92,51 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
     setIsLoginModalOpen(true);
   };
 
+  const onChangeSearchBar: React.ChangeEventHandler<
+    HTMLInputElement
+  > = async e => {
+    setSearchAreaName(e.target.value);
+  };
+
+  useEffect(() => {
+    if (searchAreaName === '') {
+      return;
+    }
+
+    if (searchAreaName !== '' && !isCompleteKorean(searchAreaName)) {
+      return;
+    }
+
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+
+    timer.current = setTimeout(async () => {
+      setIsRelatedAreaListOpen(true);
+
+      const { data: responseRelatedAreaInfo }: GetRelatedAreaResponseTypes =
+        await apis.getRelatedAreaInfo(searchAreaName);
+
+      setRelatedAreaInfo(responseRelatedAreaInfo);
+    }, 500);
+  }, [searchAreaName]);
+
   return (
     <FlexBoxStyle>
-      <SearchBar placeholder='검색' />
+      <SearchBar
+        placeholder='검색'
+        onChange={onChangeSearchBar}
+        value={searchAreaName}
+      />
       <MyButton
         onClick={onClickMyButton}
         dangerouslySetInnerHTML={{
           __html: createMyButtonSvg()
         }}></MyButton>
+      <RelatedAreaList
+        searchAreaName={searchAreaName}
+        relatedAreaInfo={relatedAreaInfo}
+      />
     </FlexBoxStyle>
   );
 };

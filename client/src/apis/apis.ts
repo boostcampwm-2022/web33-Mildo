@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const request = async (
   path: string,
-  method: 'get' | 'post',
+  method: 'get' | 'post' | 'delete',
   data?: Record<string, unknown> | undefined
 ) => {
   const apiServerURL =
@@ -23,21 +23,18 @@ const request = async (
     }
 
     if (response.status < 400) {
-      console.warn(`Redirection Error Code ${response.status}`);
       return response.data;
     }
 
     if (response.status < 500) {
-      console.warn(`Client Error Code ${response.status}`);
       return response.data;
     }
 
     if (response.status < 600) {
-      console.warn(`Server Error Code ${response.status}`);
       return response.data;
     }
   } catch (error) {
-    console.warn(error);
+    return null;
   }
 
   return { ok: false };
@@ -55,5 +52,14 @@ export default {
   },
   getPastInformation: (areaName: string) => {
     return request(`/seoul/${areaName}`, 'get');
+  },
+  getRelatedAreaInfo: (areaName: string) => {
+    return request(`/seoul/search?areaName=${areaName}`, 'get');
+  },
+  addBookmark: (areaName: string, userId: string) => {
+    return request(`/auth/${userId}/bookmark/${areaName}`, 'post');
+  },
+  deleteBookmark: (areaName: string, userId: string) => {
+    return request(`/auth/${userId}/bookmark/${areaName}`, 'delete');
   }
 };

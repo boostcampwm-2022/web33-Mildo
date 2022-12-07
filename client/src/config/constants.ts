@@ -12,6 +12,11 @@ export const POPULATION_LEVEL_COLOR: PopulationLevelColorTypes = {
   '매우 붐빔': { fill: '#FF1E1E', stroke: '#970000' }
 };
 
+export const DISABLE_BUTTON_COLOR = {
+  fill: '#BFBFBF',
+  stroke: '#999999'
+};
+
 export const USERS_LOCATION = {
   SEOUL: '서울특별시',
   GWACHEON: '과천시'
@@ -30,25 +35,28 @@ export const GEOLOCATION_CONSTANTS = {
 export const SEOUL_BOUNDS = {
   SW: {
     LATITUDE: 37.41,
-    LONGITUDE: 126.84
+    LONGITUDE: 126.8
   },
   NE: {
     LATITUDE: 37.68,
     LONGITUDE: 127.2
-  }
+  },
+  MIN_ZOOM: 11
 };
 
 export const MARKER_CLASS_NAME = 'marker';
 
 export const Z_INDEX = {
   MODAL: 110,
-  FILTER: 105
+  FILTER: 105,
+  DENSITY_FILTER_BUTTON: 103
 };
 
 export const COLOR_PALETTE = {
   PRIMARY: '#6349FF',
   PRIMARY50: '#9F8FFF',
   GREEN: '#43EB40',
+  GREY: '#979797',
   GREY20: '#EEEEEE',
   WHITE: '#FFFFFF'
 };
@@ -62,4 +70,24 @@ export const INFO_DETAIL_TITLE: InfoDetailTitle = {
   보통: '은(는) 보통이에요 🙂',
   붐빔: '은(는) 붐비고 있어요 🤔',
   '매우 붐빔': '은(는) 사람이 매우 많아요 😡'
+};
+
+export const CAN_NOT_FIND_SEARCH_AREA =
+  '검색 결과가 주요 50곳에 포함되지 않습니다.';
+
+interface BookmarkInfoTypes {
+  maxNumber: number;
+  maxErrorMessage: string;
+  failErrorMessage: string;
+}
+
+export const BOOKMARK_INFO: BookmarkInfoTypes = {
+  maxNumber: 5,
+  maxErrorMessage: '북마크는 최대 5개까지 등록 가능합니다.',
+  failErrorMessage: '북마크는 로그인 후 사용 가능합니다.'
+};
+
+export const QUERY_TIME = {
+  STALE_TIME: 5 * 60 * 1000, // 5분
+  CACHE_TIME: 30 * 60 * 1000 // 30분
 };
