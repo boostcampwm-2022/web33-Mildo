@@ -35,7 +35,7 @@ const request = async (
 
     return response.data;
   } catch (error) {
-    console.warn(error);
+    console.log(error);
   }
 
   axiosInstance.interceptors.response.use(

@@ -12,6 +12,7 @@ import {
   isSecondLevelAtom
 } from '../atom/infoDetail';
 import { markerArray } from '../atom/markerArray';
+import { isRelatedAreaListOpenAtom } from '../atom/relatedAreaList';
 
 interface PrevPlaceTypes {
   marker: MarkerObjectTypes;
@@ -26,6 +27,7 @@ const useMarker = (
   const setFirstLevelInfo = useUpdateAtom(firstLevelInfoAtom);
   const setIsSecondLevel = useUpdateAtom(isSecondLevelAtom);
   const setMarkerStorage = useUpdateAtom(markerArray);
+  const setIsRelatedAreaListOpenAtom = useUpdateAtom(isRelatedAreaListOpenAtom);
 
   // 이전 마커를 작은 크기로 만들고, 새로운 마커를 이전 마커로 등록
   const onClickMarker = (
@@ -98,6 +100,9 @@ const useMarker = (
 
       // 2단계 상세정보 모달 닫기
       setIsSecondLevel(false);
+
+      // 연관검색어 리스트 닫기
+      setIsRelatedAreaListOpenAtom(false);
     });
   };
 

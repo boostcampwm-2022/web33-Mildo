@@ -8,7 +8,8 @@ import {
   Title,
   TitleLocation,
   TomorrowButton,
-  ModalLayout
+  ModalLayout,
+  TimeLabel
 } from '../InfoDetailModal/InfoDetailModal.style';
 import Modal from '../Modal/Modal';
 import {
@@ -26,6 +27,7 @@ import apis from '../../apis/apis';
 import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';
 import { userInfoAtom, userBookmarkAtom } from '../../atom/userInfo';
 import useGraphInfo from '../../hooks/useGraphInfo';
+import { makeTime } from '../../utils/time.util';
 
 const InfoDetailModal = () => {
   const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
@@ -152,7 +154,12 @@ const InfoDetailModal = () => {
           <PopulationBox>
             <img src='https://ifh.cc/g/2GQfXw.png' />
             <PopulationInfo>
-              <p>현재 인구</p>
+              <div>
+                <p>현재 인구</p>
+                <TimeLabel>
+                  {makeTime(firstLevelInfo[1].populationTime, 0)}
+                </TimeLabel>
+              </div>
               <p>
                 {firstLevelInfo[1].populationMin.toLocaleString()}명~
                 {firstLevelInfo[1].populationMax.toLocaleString()}명

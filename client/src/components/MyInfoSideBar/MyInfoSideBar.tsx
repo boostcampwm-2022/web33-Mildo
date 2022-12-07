@@ -4,14 +4,19 @@ import { useEffect, useState, SetStateAction, Dispatch } from 'react';
 
 import { isMyInfoSideBarOpenAtom } from '../../atom/myInfoSideBar';
 import Modal from '../Modal/Modal';
-import { Z_INDEX, POPULATION_LEVEL_COLOR } from '../../config/constants';
 import { userBookmarkAtom, userInfoAtom } from '../../atom/userInfo';
+import {
+  Z_INDEX,
+  POPULATION_LEVEL_COLOR,
+  COLOR_PALETTE
+} from '../../config/constants';
 import { allAreasInfoAtom } from '../../atom/areasInfo';
 import {
   SortAllAreasTypes,
   CoordinatesPopulationTypes
 } from '../../types/interfaces';
 import apis from '../../apis/apis';
+import { markerArray } from '../../atom/markerArray';
 
 const SideBarLayout = css`
   z-index: ${Z_INDEX.MODAL};
@@ -43,7 +48,7 @@ const HeaderComponent = styled.div`
     margin-top: 5px;
 
     span {
-      color: #6349ff;
+      color: ${COLOR_PALETTE.PRIMARY};
       font-size: 1.7rem;
     }
   }
@@ -54,13 +59,13 @@ const BookmarkListComponent = styled.div`
   width: 100%;
 
   h1 {
-    color: #6349ff;
+    color: ${COLOR_PALETTE.PRIMARY};
     font-size: 1rem;
   }
 
   hr {
     width: 100%;
-    border: 1px solid #6349ff;
+    border: 1px solid ${COLOR_PALETTE.PRIMARY};
   }
 `;
 
@@ -86,7 +91,7 @@ const BookmarkItemComponent = styled.div<PopulationLevelProps>`
     width: 15%;
     cursor: pointer;
     font-size: 0.7rem;
-    color: #979797;
+    color: ${COLOR_PALETTE.GREY};
     text-align: right;
   }
 
@@ -111,6 +116,19 @@ const BookmarkItemComponent = styled.div<PopulationLevelProps>`
   }
 `;
 
+const LogoutLink = styled.a`
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  text-decoration: none;
+  border-bottom: 1px solid ${COLOR_PALETTE.GREY};
+
+  font-size: 0.8rem;
+  color: ${COLOR_PALETTE.GREY};
+`;
+
 interface CoordinatesTypes {
   latitude: number;
   longitude: number;
@@ -128,6 +146,7 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
   const [myBookmarks, setMyBookmarks] = useState<SortAllAreasTypes[] | null>(
     null
   );
+  const markers = useAtomValue(markerArray);
 
   const [, setUserBookmark] = useAtom(userBookmarkAtom);
   const [userInfo] = useAtom(userInfoAtom);
@@ -169,10 +188,18 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
     }
     const { latitude, longitude } = areaInfo;
 
-    console.log(latitude, longitude);
+    const marker = markers.find(
+      item =>
+        item.getPosition().x === longitude && item.getPosition().y === latitude
+    );
 
-    // setCoordinates({ latitude, longitude });
-    // setIsMyInfoSideBarOpen(false);
+    if (!marker) {
+      alert('혼잡도 필터를 확인해주세요!');
+      return;
+    }
+
+    marker.trigger('click');
+    setIsMyInfoSideBarOpen(false);
   };
 
   useEffect(() => {
@@ -182,15 +209,6 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
 
     makeBookmarks();
   }, [userInfo, areas]);
-
-  const LogoutLink = styled.a`
-    position: absolute;
-    bottom: 5%;
-    left: 50%;
-    transform: translate(-50%, 0);
-
-    font-size: 1rem;
-  `;
 
   const apiServerURL =
     process.env.REACT_APP_CLIENT_ENV === 'development'
