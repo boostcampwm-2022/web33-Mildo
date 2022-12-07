@@ -45,6 +45,10 @@ const SearchBar = styled.input`
     font-size: 0.8rem;
     color: rgba(0, 0, 0, 0.3);
   }
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 const MyButton = styled.button`
