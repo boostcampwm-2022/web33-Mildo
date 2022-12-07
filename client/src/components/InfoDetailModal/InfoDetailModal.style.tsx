@@ -1,4 +1,5 @@
 import styled, { css, keyframes } from 'styled-components';
+import { TitleTypes } from '../../types/interfaces';
 import {
   COLOR_PALETTE,
   POPULATION_LEVEL_COLOR,
@@ -43,11 +44,6 @@ const marquee = (width: number) => keyframes`
   transform: translate(-${width}px, 0);
 }
 `;
-
-interface TitleTypes {
-  slide: boolean;
-  textWidth: number;
-}
 
 export const Title = styled.h1<TitleTypes>`
   display: inline-block;
