@@ -50,9 +50,10 @@ export interface FilterBtnStateTypes {
   보통: boolean;
   여유: boolean;
   [prop: string]: boolean;
-}  
- 
+}
+
 export interface UserInfoTypes {
+  isLoggedIn: boolean;
   _id: string;
   snsId: string;
   email: string;
@@ -65,4 +66,3 @@ export interface graphInfoResponseTypes {
   ok: boolean;
   data: SecondLevelTimeInfoCacheTypes;
 }
-

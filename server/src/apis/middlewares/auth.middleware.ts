@@ -6,7 +6,11 @@ export default {
       return next();
     }
     return res.json({
-      message: '세션이 만료되었습니다.'
+      ok: true,
+      data: {
+        isLoggedIn: false,
+        message: '세션이 만료되었습니다.'
+      }
     });
   }
 };

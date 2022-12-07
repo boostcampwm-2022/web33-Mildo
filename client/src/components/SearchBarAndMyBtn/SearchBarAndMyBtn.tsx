@@ -1,4 +1,4 @@
-import { useUpdateAtom } from 'jotai/utils';
+import { useAtomValue, useUpdateAtom } from 'jotai/utils';
 import styled from 'styled-components';
 import { useDeferredValue, useEffect, useState } from 'react';
 
@@ -9,6 +9,7 @@ import RelatedAreaList from '../RelatedAreaList/RelatedAreaList';
 import apis from '../../apis/apis';
 import { isCompleteKorean } from '../../utils/search.util';
 import { Z_INDEX } from '../../config/constants';
+import { userInfoAtom } from '../../atom/userInfo';
 
 const FlexBoxStyle = styled.div`
   z-index: ${Z_INDEX.FILTER};
@@ -67,23 +68,18 @@ interface GetRelatedAreaResponseTypes {
   data: DataRelatedAreaInfoTypes;
 }
 
-interface SearchBarAndMyBtnComponentProps {
-  isLoggedIn: boolean;
-}
-
-const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
-  isLoggedIn
-}) => {
+const SearchBarAndMyBtn: React.FC = () => {
   const setIsLoginModalOpen = useUpdateAtom(isLoginModalOpenAtom);
   const setIsMyInfoSideBarOpen = useUpdateAtom(isMyInfoSideBarOpenAtom);
   const [searchAreaName, setSearchAreaName] = useState('');
   const [relatedAreaInfo, setRelatedAreaInfo] =
     useState<DataRelatedAreaInfoTypes>({});
+  const userInfo = useAtomValue(userInfoAtom);
 
   const deferredSearchAreaName = useDeferredValue(searchAreaName);
 
   const onClickMyButton = () => {
-    if (isLoggedIn) {
+    if (userInfo.data.isLoggedIn) {
       setIsMyInfoSideBarOpen(true);
       return;
     }

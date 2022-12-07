@@ -21,10 +21,10 @@ import {
   graphInfoResponseTypes,
   SecondLevelTimeInfoCacheTypes
 } from '../../types/interfaces';
-import { INFO_DETAIL_TITLE, BOOKMARK_INFO } from '../../config/constants';
+import { BOOKMARK_INFO, INFO_DETAIL_TITLE } from '../../config/constants';
 import apis from '../../apis/apis';
 import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';
-import { userInfoAtom } from '../../atom/userInfo';
+import { userInfoAtom, userBookmarkAtom } from '../../atom/userInfo';
 import useGraphInfo from '../../hooks/useGraphInfo';
 
 const InfoDetailModal = () => {
@@ -35,7 +35,8 @@ const InfoDetailModal = () => {
   );
   const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
   const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
-  const [userInfo, setUserInfo] = useAtom(userInfoAtom);
+  const [, setUserBookmark] = useAtom(userBookmarkAtom);
+  const [userInfo] = useAtom(userInfoAtom);
 
   const success = (data: graphInfoResponseTypes | null) => {
     if (data) {
@@ -72,20 +73,19 @@ const InfoDetailModal = () => {
 
   // 북마크 등록 및 삭제
   const onClickBookmark = async () => {
-    if (!firstLevelInfo || !userInfo) {
+    if (!firstLevelInfo || !userInfo.data.isLoggedIn) {
       alert(BOOKMARK_INFO.failErrorMessage);
       return;
     }
     const [areaName] = firstLevelInfo;
-    const { _id: userId, bookmarks } = userInfo;
+    const { _id: userId, bookmarks } = userInfo.data;
 
     if (bookmarks.includes(areaName)) {
       try {
         await apis.deleteBookmark(areaName, userId);
-        setUserInfo({
-          ...userInfo,
-          bookmarks: bookmarks.filter(bookmark => bookmark !== areaName)
-        });
+        setUserBookmark(
+          bookmarks.filter((bookmark: string) => bookmark !== areaName)
+        );
         return;
       } catch (error) {
         throw error;
@@ -99,10 +99,7 @@ const InfoDetailModal = () => {
 
     try {
       await apis.addBookmark(areaName, userId);
-      setUserInfo({
-        ...userInfo,
-        bookmarks: bookmarks.concat(areaName)
-      });
+      setUserBookmark(bookmarks.concat(areaName));
     } catch (error) {
       throw error;
     }
@@ -132,7 +129,9 @@ const InfoDetailModal = () => {
               onClick={toggleSecondLevelContents}
             />
           )}
-          {userInfo && userInfo.bookmarks.includes(firstLevelInfo[0]) ? (
+
+          {userInfo.data.isLoggedIn &&
+          userInfo.data.bookmarks.includes(firstLevelInfo[0]) ? (
             <BookmarkIcon
               src='https://ifh.cc/g/SgQaZx.png'
               onClick={onClickBookmark}
