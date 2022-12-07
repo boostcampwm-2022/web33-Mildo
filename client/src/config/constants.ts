@@ -58,8 +58,7 @@ export const COLOR_PALETTE = {
   GREEN: '#43EB40',
   GREY: '#979797',
   GREY20: '#EEEEEE',
-  WHITE: '#FFFFFF',
-  LOGOUT_GREY: '#979797'
+  WHITE: '#FFFFFF'
 };
 
 interface InfoDetailTitle {

@@ -91,7 +91,7 @@ const BookmarkItemComponent = styled.div<PopulationLevelProps>`
     width: 15%;
     cursor: pointer;
     font-size: 0.7rem;
-    color: ${COLOR_PALETTE.LOGOUT_GREY};
+    color: ${COLOR_PALETTE.GREY};
     text-align: right;
   }
 
@@ -123,10 +123,10 @@ const LogoutLink = styled.a`
   transform: translate(-50%, 0);
 
   text-decoration: none;
-  border-bottom: 1px solid ${COLOR_PALETTE.LOGOUT_GREY};
+  border-bottom: 1px solid ${COLOR_PALETTE.GREY};
 
   font-size: 0.8rem;
-  color: ${COLOR_PALETTE.LOGOUT_GREY};
+  color: ${COLOR_PALETTE.GREY};
 `;
 
 interface CoordinatesTypes {
