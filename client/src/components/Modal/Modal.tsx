@@ -30,7 +30,6 @@ const fadeOut = keyframes`
 const ModalContainer = styled.div<ModalContainerProps>`
   z-index: ${Z_INDEX.MODAL};
   ${props => props.customModalStyle && props.customModalStyle}
-  /* display: ${props => !props.open && 'none'}; */
   visibility: ${props => (props.open ? 'visible' : 'hidden')};
   ${props => !props.open && `z-index: -100`};
   animation: ${props =>
@@ -51,8 +50,8 @@ const Filter = styled.div<{ open: boolean }>`
   height: 100vh;
   z-index: ${Z_INDEX.FILTER};
   background-color: rgba(0, 0, 0, 0.5);
-  /* display: ${props => (props.open ? 'block' : 'none')}; */
   visibility: ${props => (props.open ? 'visible' : 'hidden')};
+  ${props => !props.open && `z-index: -100`};
   animation: ${props =>
     props.open
       ? css`
@@ -88,14 +87,6 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <>
-      {/* {isOpen && (
-        <>
-          {background && <Filter onClick={clickModalHandler} />}
-          <ModalContainer customModalStyle={customModalStyle}>
-            {children}
-          </ModalContainer>
-        </>
-      )} */}
       <Filter onClick={clickModalHandler} open={isOpen && background} />
       <ModalContainer customModalStyle={customModalStyle} open={isOpen}>
         {children}

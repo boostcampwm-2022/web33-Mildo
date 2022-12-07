@@ -6,8 +6,8 @@ import { CAN_NOT_FIND_SEARCH_AREA } from '../../config/constants';
 import RelatedAreaItem from '../RelatedAreaItem/RelatedAreaItem';
 import { markerArray } from '../../atom/markerArray';
 
-const RelatedAreaListStyle = styled.ul`
-  width: 100%;
+const RelatedAreaListStyle = styled.ul<{ width: number }>`
+  width: ${props => props.width}px;
   max-width: 439px;
   max-height: 15rem;
   overflow: auto;
@@ -35,6 +35,7 @@ interface DataRelatedAreaInfoTypes {
 interface RelatedAreaListProps {
   searchAreaName: string;
   relatedAreaInfo: DataRelatedAreaInfoTypes;
+  widthValue: number;
 }
 
 const emptyAreaInfo = {
@@ -47,7 +48,8 @@ const emptyAreaInfo = {
 
 const RelatedAreaList: React.FC<RelatedAreaListProps> = ({
   searchAreaName,
-  relatedAreaInfo
+  relatedAreaInfo,
+  widthValue
 }) => {
   const isRelatedAreaListOpen = useAtomValue(isRelatedAreaListOpenAtom);
 
@@ -88,7 +90,9 @@ const RelatedAreaList: React.FC<RelatedAreaListProps> = ({
   return (
     <>
       {isRelatedAreaListOpen && (
-        <RelatedAreaListStyle onClick={onClickRelatedAreaList}>
+        <RelatedAreaListStyle
+          onClick={onClickRelatedAreaList}
+          width={widthValue}>
           {isEmptyRelatedList ? (
             <RelatedAreaItem
               searchAreaName={searchAreaName}

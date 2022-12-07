@@ -32,8 +32,8 @@ const FlexBoxStyle = styled.div`
 `;
 
 const SearchBar = styled.input`
-  width: 100%;
   height: 90%;
+  width: 100%;
 
   background-color: white;
   border-radius: 10px;
@@ -85,8 +85,10 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
   const [searchAreaName, setSearchAreaName] = useState('');
   const [relatedAreaInfo, setRelatedAreaInfo] =
     useState<DataRelatedAreaInfoTypes>({});
+  const [searchBarWidth, setSearchBarWidth] = useState(0);
 
   const timer = useRef<NodeJS.Timeout | null>(null);
+  const searchBarWidthRef = useRef<HTMLInputElement>(null);
 
   const onClickMyButton = () => {
     if (isLoggedIn) {
@@ -125,12 +127,28 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
     }, 500);
   }, [searchAreaName]);
 
+  // 검색바의 크기가 바뀌면 ref의 크기도 바꾸어야 한다.
+  useEffect(() => {
+    const checkSearchBarWidth = () => {
+      if (searchBarWidthRef && searchBarWidthRef.current!.clientWidth <= 439) {
+        setSearchBarWidth(searchBarWidthRef.current!.clientWidth);
+      }
+    };
+
+    window.addEventListener('resize', checkSearchBarWidth);
+
+    return () => {
+      window.removeEventListener('resize', checkSearchBarWidth);
+    };
+  }, []);
+
   return (
     <FlexBoxStyle>
       <SearchBar
         placeholder='검색'
         onChange={onChangeSearchBar}
         value={searchAreaName}
+        ref={searchBarWidthRef}
       />
       <MyButton
         onClick={onClickMyButton}
@@ -140,6 +158,7 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
       <RelatedAreaList
         searchAreaName={searchAreaName}
         relatedAreaInfo={relatedAreaInfo}
+        widthValue={searchBarWidth}
       />
     </FlexBoxStyle>
   );
