@@ -55,6 +55,7 @@ export const COLOR_PALETTE = {
   PRIMARY: '#6349FF',
   PRIMARY50: '#9F8FFF',
   GREEN: '#43EB40',
+  GREY: '#979797',
   GREY20: '#EEEEEE',
   WHITE: '#FFFFFF'
 };
