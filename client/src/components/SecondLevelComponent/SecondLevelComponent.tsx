@@ -37,16 +37,6 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
     }
   }, [isDisplay]);
 
-  // const getHourDiff = (date: string) => {
-  //   const msDiff =
-  //     new Date(Object.keys(graphInfo)[0]).getTime() - new Date(date).getTime();
-  //   const hourDiff = msDiff / (1000 * 60 * 60);
-
-  //   return hourDiff.toFixed(0);
-  // };
-
-  // console.log(Object.keys(graphInfo));
-
   const options: ApexOptions = {
     chart: {
       zoom: {
