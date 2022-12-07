@@ -55,21 +55,26 @@ const RelatedSearchList: React.FC<RelatedSearchListProps> = ({
   const onClickRelatedAreaList: React.MouseEventHandler<
     HTMLUListElement
   > = e => {
-    if (e.target instanceof Element) {
-      const { latitude, longitude } = relatedAreaInfo[e.target.id];
-
-      const marker = markers.find(
-        item =>
-          item.getPosition().x === longitude &&
-          item.getPosition().y === latitude
-      );
-
-      if (!marker) {
-        return;
-      }
-
-      marker.trigger('click');
+    if (!(e.target instanceof HTMLLIElement)) {
+      return;
     }
+
+    if (!e.target.dataset.name) {
+      return;
+    }
+
+    const { latitude, longitude } = relatedAreaInfo[e.target.dataset.name];
+
+    const marker = markers.find(
+      item =>
+        item.getPosition().x === longitude && item.getPosition().y === latitude
+    );
+
+    if (!marker) {
+      return;
+    }
+
+    marker.trigger('click');
   };
 
   useEffect(() => {

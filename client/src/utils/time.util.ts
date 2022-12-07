@@ -16,7 +16,7 @@ export const makeTime = (
   const time =
     type === 0
       ? `${month}월 ${date}일 ${hour}:${minute} 기준`
-      : `${month}.${date}. ${String(hour).padStart(2, '0')}:${String(
+      : `${month}/${date} ${String(hour).padStart(2, '0')}:${String(
           minute
         ).padStart(2, '0')}`;
 
