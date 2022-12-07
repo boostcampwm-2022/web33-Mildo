@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { COLOR_PALETTE } from '../../config/constants';
 
 const RelatedAreaItemStyle = styled.li`
   width: 100%;
@@ -8,13 +9,13 @@ const RelatedAreaItemStyle = styled.li`
   padding-left: 10px;
 
   strong {
-    color: #6349ff;
+    color: ${COLOR_PALETTE.PRIMARY};
     font-size: 0.8rem;
   }
 
   :hover {
     cursor: pointer;
-    background-color: #eeeeee;
+    background-color: ${COLOR_PALETTE.GREY20};
     border-radius: 10px;
   }
 `;
@@ -25,7 +26,7 @@ const EmptyAreaItemStyle = styled.li`
   line-height: 2.5rem;
   padding-left: 10px;
   font-size: 0.8rem;
-  color: #979797;
+  color: ${COLOR_PALETTE.GREY};
 `;
 
 interface CoordinatesTypes {

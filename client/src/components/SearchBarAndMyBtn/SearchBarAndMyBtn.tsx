@@ -1,6 +1,6 @@
 import { useUpdateAtom } from 'jotai/utils';
 import styled from 'styled-components';
-import { useDeferredValue, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { isLoginModalOpenAtom } from '../../atom/loginModal';
 import { isMyInfoSideBarOpenAtom } from '../../atom/myInfoSideBar';
@@ -9,6 +9,7 @@ import RelatedAreaList from '../RelatedAreaList/RelatedAreaList';
 import apis from '../../apis/apis';
 import { isCompleteKorean } from '../../utils/search.util';
 import { Z_INDEX } from '../../config/constants';
+import { isRelatedAreaListOpenAtom } from '../../atom/relatedAreaList';
 
 const FlexBoxStyle = styled.div`
   z-index: ${Z_INDEX.FILTER};
@@ -76,11 +77,12 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
 }) => {
   const setIsLoginModalOpen = useUpdateAtom(isLoginModalOpenAtom);
   const setIsMyInfoSideBarOpen = useUpdateAtom(isMyInfoSideBarOpenAtom);
+  const setIsRelatedAreaListOpen = useUpdateAtom(isRelatedAreaListOpenAtom);
   const [searchAreaName, setSearchAreaName] = useState('');
   const [relatedAreaInfo, setRelatedAreaInfo] =
     useState<DataRelatedAreaInfoTypes>({});
 
-  const deferredSearchAreaName = useDeferredValue(searchAreaName);
+  const timer = useRef<NodeJS.Timeout | null>(null);
 
   const onClickMyButton = () => {
     if (isLoggedIn) {
@@ -97,19 +99,27 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
   };
 
   useEffect(() => {
-    if (!isCompleteKorean(deferredSearchAreaName)) {
+    if (searchAreaName === '') {
       return;
     }
 
-    const getRelatedAreaInfo = async () => {
+    if (searchAreaName !== '' && !isCompleteKorean(searchAreaName)) {
+      return;
+    }
+
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+
+    timer.current = setTimeout(async () => {
+      setIsRelatedAreaListOpen(true);
+
       const { data: responseRelatedAreaInfo }: GetRelatedAreaResponseTypes =
-        await apis.getRelatedAreaInfo(deferredSearchAreaName); // 이 부분도 캐싱하면 좋을듯?
+        await apis.getRelatedAreaInfo(searchAreaName);
 
       setRelatedAreaInfo(responseRelatedAreaInfo);
-    };
-
-    getRelatedAreaInfo();
-  }, [deferredSearchAreaName]);
+    }, 500);
+  }, [searchAreaName]);
 
   return (
     <FlexBoxStyle>
@@ -124,7 +134,7 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
           __html: createMyButtonSvg()
         }}></MyButton>
       <RelatedAreaList
-        searchAreaName={deferredSearchAreaName}
+        searchAreaName={searchAreaName}
         relatedAreaInfo={relatedAreaInfo}
       />
     </FlexBoxStyle>
