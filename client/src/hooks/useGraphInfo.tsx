@@ -38,9 +38,6 @@ const useGraphInfo = (
       cacheTime: QUERY_TIME.CACHE_TIME,
       onSuccess: data => {
         success(data);
-      },
-      onError: e => {
-        console.log('error', e);
       }
     }
   );
