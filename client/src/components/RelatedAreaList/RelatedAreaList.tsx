@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { isRelatedAreaListOpenAtom } from '../../atom/relatedAreaList';
 import { CAN_NOT_FIND_SEARCH_AREA } from '../../config/constants';
 import RelatedAreaItem from '../RelatedAreaItem/RelatedAreaItem';
+import { markerArray } from '../../atom/markerArray';
 
 const RelatedAreaListStyle = styled.ul`
   width: 100%;
@@ -51,11 +52,31 @@ const RelatedAreaList: React.FC<RelatedAreaListProps> = ({
   const isRelatedAreaListOpen = useAtomValue(isRelatedAreaListOpenAtom);
 
   const [isEmptyRelatedList, setIsEmptyRelatedList] = useState(true);
+  const markers = useAtomValue(markerArray);
 
   const onClickRelatedAreaList: React.MouseEventHandler<
     HTMLUListElement
   > = e => {
-    console.log(e.target);
+    if (!(e.target instanceof HTMLLIElement)) {
+      return;
+    }
+
+    if (!e.target.dataset.name) {
+      return;
+    }
+
+    const { latitude, longitude } = relatedAreaInfo[e.target.dataset.name];
+
+    const marker = markers.find(
+      item =>
+        item.getPosition().x === longitude && item.getPosition().y === latitude
+    );
+
+    if (!marker) {
+      return;
+    }
+
+    marker.trigger('click');
   };
 
   useEffect(() => {

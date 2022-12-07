@@ -23,21 +23,18 @@ const request = async (
     }
 
     if (response.status < 400) {
-      console.warn(`Redirection Error Code ${response.status}`);
       return response.data;
     }
 
     if (response.status < 500) {
-      console.warn(`Client Error Code ${response.status}`);
       return response.data;
     }
 
     if (response.status < 600) {
-      console.warn(`Server Error Code ${response.status}`);
       return response.data;
     }
   } catch (error) {
-    console.warn(error);
+    return null;
   }
 
   return { ok: false };

@@ -35,12 +35,13 @@ export const GEOLOCATION_CONSTANTS = {
 export const SEOUL_BOUNDS = {
   SW: {
     LATITUDE: 37.41,
-    LONGITUDE: 126.84
+    LONGITUDE: 126.8
   },
   NE: {
     LATITUDE: 37.68,
     LONGITUDE: 127.2
-  }
+  },
+  MIN_ZOOM: 11
 };
 
 export const MARKER_CLASS_NAME = 'marker';
@@ -57,7 +58,8 @@ export const COLOR_PALETTE = {
   GREEN: '#43EB40',
   GREY: '#979797',
   GREY20: '#EEEEEE',
-  WHITE: '#FFFFFF'
+  WHITE: '#FFFFFF',
+  LOGOUT_GREY: '#979797'
 };
 
 interface InfoDetailTitle {
