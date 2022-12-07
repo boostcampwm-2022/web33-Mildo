@@ -7,6 +7,7 @@ import {
   PopulationInfo,
   Title,
   TitleLocation,
+  TitleBox,
   TomorrowButton,
   ModalLayout,
   TimeLabel
@@ -177,13 +178,31 @@ const InfoDetailModal = () => {
               onClick={onClickBookmark}
             />
           )}
-          <Title ref={titleWidthRef} slide={slidable}>
-            현재&nbsp;
-            <TitleLocation populationLevel={firstLevelInfo[1].populationLevel}>
-              {firstLevelInfo[0]}
-            </TitleLocation>
-            {INFO_DETAIL_TITLE[firstLevelInfo[1].populationLevel]}
-          </Title>
+          <TitleBox>
+            <Title ref={titleWidthRef} slide={slidable} textWidth={titleWidth}>
+              현재&nbsp;
+              <TitleLocation
+                populationLevel={firstLevelInfo[1].populationLevel}>
+                {firstLevelInfo[0]}
+              </TitleLocation>
+              {INFO_DETAIL_TITLE[firstLevelInfo[1].populationLevel]}
+            </Title>
+            {slidable ? (
+              <Title
+                ref={titleWidthRef}
+                slide={slidable}
+                textWidth={titleWidth}>
+                현재&nbsp;
+                <TitleLocation
+                  populationLevel={firstLevelInfo[1].populationLevel}>
+                  {firstLevelInfo[0]}
+                </TitleLocation>
+                {INFO_DETAIL_TITLE[firstLevelInfo[1].populationLevel]}
+              </Title>
+            ) : (
+              <></>
+            )}
+          </TitleBox>
           <PopulationBox>
             <img src='https://ifh.cc/g/2GQfXw.png' />
             <PopulationInfo>

@@ -35,21 +35,22 @@ export const BookmarkIcon = styled.img`
   cursor: pointer;
 `;
 
-const marquee = keyframes`
+const marquee = (width: number) => keyframes`
 0%, 100% {
-  transform: translate(100%, 0);
+  transform: translate(${width}px, 0);
 }
 100% {
-  transform: translate(-200%, 0);
+  transform: translate(-${width}px, 0);
 }
 `;
 
 interface TitleTypes {
   slide: boolean;
+  textWidth: number;
 }
 
 export const Title = styled.h1<TitleTypes>`
-  display: block;
+  display: inline-block;
   text-align: center;
   font-size: 1rem;
   white-space: nowrap;
@@ -57,9 +58,15 @@ export const Title = styled.h1<TitleTypes>`
   animation: ${props =>
     props.slide
       ? css`
-          ${marquee} 10s linear infinite
+          ${marquee(props.textWidth)} 10s linear infinite
         `
       : ''};
+`;
+
+export const TitleBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 50%;
 `;
 
 interface TitleLocationProps {
