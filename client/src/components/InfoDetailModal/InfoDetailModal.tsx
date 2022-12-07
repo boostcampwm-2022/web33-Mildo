@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 
 import {
@@ -35,9 +35,15 @@ const InfoDetailModal = () => {
   const [prevFirstLevelInfo, setPrevFirstLevelInfo] = useAtom(
     prevFirstLevelInfoAtom
   );
-  const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
-  const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
   const [userInfo, setUserInfo] = useAtom(userInfoAtom);
+  const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
+
+  const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
+  const [titleWidth, setTitleWidth] = useState<number>(0);
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+  const [slidable, setSlidable] = useState<boolean>(true);
+
+  const titleWidthRef = useRef<HTMLHeadingElement>(null);
 
   const success = (data: graphInfoResponseTypes | null) => {
     if (data) {
@@ -119,6 +125,32 @@ const InfoDetailModal = () => {
     setPastInformation();
   }, [isSecondLevel]);
 
+  useEffect(() => {
+    if (titleWidthRef && titleWidthRef.current) {
+      setTitleWidth(titleWidthRef.current.clientWidth);
+    }
+  }, [firstLevelInfo]);
+
+  useEffect(() => {
+    const checkViewportWidth = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', checkViewportWidth);
+
+    return () => {
+      window.removeEventListener('resize', checkViewportWidth);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (titleWidth + 50 > windowWidth) {
+      setSlidable(true);
+      return;
+    }
+    setSlidable(false);
+  }, [titleWidth, windowWidth]);
+
   return (
     <Modal isOpen={isInfoDetailModalOpen}>
       {firstLevelInfo && (
@@ -145,7 +177,7 @@ const InfoDetailModal = () => {
               onClick={onClickBookmark}
             />
           )}
-          <Title>
+          <Title ref={titleWidthRef} slide={slidable}>
             현재&nbsp;
             <TitleLocation populationLevel={firstLevelInfo[1].populationLevel}>
               {firstLevelInfo[0]}

@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import {
   COLOR_PALETTE,
   POPULATION_LEVEL_COLOR,
@@ -36,24 +36,30 @@ export const BookmarkIcon = styled.img`
 `;
 
 const marquee = keyframes`
-0%, 50% {
-  transform: translate(0%, 0);
+0%, 100% {
+  transform: translate(100%, 0);
 }
-25%{
-  transform: translate(-30%, 0);
-}
-75% {
-  transform: translate(30%, 0);
+100% {
+  transform: translate(-200%, 0);
 }
 `;
 
-export const Title = styled.h1`
-  width: 100%;
+interface TitleTypes {
+  slide: boolean;
+}
+
+export const Title = styled.h1<TitleTypes>`
+  display: block;
   text-align: center;
   font-size: 1rem;
   white-space: nowrap;
   will-change: transform;
-  animation: ${marquee} 10s linear infinite;
+  animation: ${props =>
+    props.slide
+      ? css`
+          ${marquee} 10s linear infinite
+        `
+      : ''};
 `;
 
 interface TitleLocationProps {
