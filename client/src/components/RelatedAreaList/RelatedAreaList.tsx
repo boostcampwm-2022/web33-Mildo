@@ -31,7 +31,7 @@ interface DataRelatedAreaInfoTypes {
   [areaName: string]: CoordinatesTypes;
 }
 
-interface RelatedSearchListProps {
+interface RelatedAreaListProps {
   searchAreaName: string;
   relatedAreaInfo: DataRelatedAreaInfoTypes;
 }
@@ -44,7 +44,7 @@ const emptyAreaInfo = {
   }
 };
 
-const RelatedSearchList: React.FC<RelatedSearchListProps> = ({
+const RelatedAreaList: React.FC<RelatedAreaListProps> = ({
   searchAreaName,
   relatedAreaInfo
 }) => {
@@ -95,4 +95,4 @@ const RelatedSearchList: React.FC<RelatedSearchListProps> = ({
   );
 };
 
-export default RelatedSearchList;
+export default RelatedAreaList;
