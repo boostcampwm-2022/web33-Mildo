@@ -2,13 +2,16 @@ import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { isRelatedAreaListOpenAtom } from '../../atom/relatedAreaList';
-import { CAN_NOT_FIND_SEARCH_AREA } from '../../config/constants';
+import {
+  CAN_NOT_FIND_SEARCH_AREA,
+  SEARCH_BAR_WIDTH_MAX
+} from '../../config/constants';
 import RelatedAreaItem from '../RelatedAreaItem/RelatedAreaItem';
 import { markerArray } from '../../atom/markerArray';
 
 const RelatedAreaListStyle = styled.ul<{ width: number }>`
   width: ${props => props.width}px;
-  max-width: 439px;
+  max-width: ${SEARCH_BAR_WIDTH_MAX}px;
   max-height: 15rem;
   overflow: auto;
   display: flex;
