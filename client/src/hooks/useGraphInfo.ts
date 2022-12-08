@@ -1,7 +1,16 @@
 import { useQuery } from 'react-query';
 import apis from '../apis/apis';
 import { QUERY_TIME } from '../config/constants';
-import { SortAllAreasTypes, graphInfoResponseTypes } from '../types/interfaces';
+import {
+  SortAllAreasTypes,
+  graphInfoResponseTypes,
+  SecondLevelTimeInfoCacheTypes
+} from '../types/interfaces';
+
+interface SecondLevelTimeInfoResponseTypes {
+  ok: boolean;
+  data: SecondLevelTimeInfoCacheTypes;
+}
 
 const useGraphInfo = (
   isSecondLevel: boolean,
@@ -24,7 +33,7 @@ const useGraphInfo = (
 
   const { data: graphInfoResponse } = useQuery(
     ['getGraphInfo', firstLevelInfo ? firstLevelInfo[0] : ''],
-    async () => {
+    async (): Promise<SecondLevelTimeInfoResponseTypes | null> => {
       if (!firstLevelInfo) {
         return null;
       }
@@ -39,6 +48,7 @@ const useGraphInfo = (
       onSuccess: data => {
         success(data);
       }
+      // suspense: true
     }
   );
 

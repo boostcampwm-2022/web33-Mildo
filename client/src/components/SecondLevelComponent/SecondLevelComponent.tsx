@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
+import { useAtom } from 'jotai';
 
-import { SecondLevelTimeInfoCacheTypes } from '../../types/interfaces';
+import {
+  graphInfoResponseTypes,
+  // SecondLevelTimeInfoCacheTypes,
+  SortAllAreasTypes
+} from '../../types/interfaces';
 import {
   SecondLevelBox,
   TraceGraph,
@@ -11,24 +16,71 @@ import {
 import { COLOR_PALETTE } from '../../config/constants';
 import MapLoading from '../MapLoading/MapLoading';
 import { makeTime } from '../../utils/time.util';
+import useGraphInfo from '../../hooks/useGraphInfo';
+import { prevFirstLevelInfoAtom } from '../../atom/infoDetail';
 
 interface SecondLevelComponentProps {
   isDisplay: boolean;
-  graphInfo: SecondLevelTimeInfoCacheTypes;
+  firstLevelInfo: SortAllAreasTypes;
+  isSecondLevel: boolean;
 }
 
 const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
   isDisplay,
-  graphInfo
+  firstLevelInfo,
+  isSecondLevel
 }) => {
   const [isGraphLoading, setIsGraphLoading] = useState<boolean>(true);
+  const [prevFirstLevelInfo, setPrevFirstLevelInfo] = useAtom(
+    prevFirstLevelInfoAtom
+  );
+
+  const success = (data: graphInfoResponseTypes | null) => {
+    if (data) {
+      setPrevFirstLevelInfo(firstLevelInfo);
+    }
+  };
+
+  const [graphInfoResponse] = useGraphInfo(
+    isSecondLevel,
+    firstLevelInfo,
+    prevFirstLevelInfo,
+    success
+  );
+
+  // 그래프에 필요한 이전 시간 정보 호출
+  const setPastInformation = async (): Promise<undefined> => {
+    if (!firstLevelInfo) {
+      return;
+    }
+
+    if (graphInfoResponse) {
+      setPrevFirstLevelInfo(firstLevelInfo);
+    }
+
+    // eslint-disable-next-line no-useless-return
+    return;
+  };
+
+  useEffect(() => {
+    console.log(isSecondLevel);
+
+    if (!isSecondLevel) {
+      return;
+    }
+
+    setPastInformation();
+  }, [isSecondLevel]);
 
   // graphInfo가 들어오면 loading을 false로 만들어줌
   useEffect(() => {
-    if (Object.keys(graphInfo).length !== 0) {
+    if (!graphInfoResponse) {
+      return;
+    }
+    if (Object.keys(graphInfoResponse.data).length !== 0) {
       setIsGraphLoading(false);
     }
-  }, [graphInfo]);
+  }, [graphInfoResponse]);
 
   // isSecondLevel이 false가 되면 setIsGraphLoading를 true로 바꿈
   useEffect(() => {
@@ -60,9 +112,11 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
       show: false
     },
     xaxis: {
-      categories: Object.keys(graphInfo)
-        .slice(1)
-        .map(item => `${makeTime(item, 1)}`.split(' ')),
+      categories: graphInfoResponse
+        ? Object.keys(graphInfoResponse.data)
+            .slice(1)
+            .map(item => `${makeTime(item, 1)}`.split(' '))
+        : [],
       labels: {
         show: false
       }
@@ -117,15 +171,19 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
   const series = [
     {
       name: '최솟값',
-      data: Object.values(graphInfo)
-        .slice(1)
-        .map(item => item.populationMin)
+      data: graphInfoResponse
+        ? Object.values(graphInfoResponse.data)
+            .slice(1)
+            .map(item => item.populationMin)
+        : []
     },
     {
       name: '최댓값',
-      data: Object.values(graphInfo)
-        .slice(1)
-        .map(item => item.populationMax)
+      data: graphInfoResponse
+        ? Object.values(graphInfoResponse.data)
+            .slice(1)
+            .map(item => item.populationMax)
+        : []
     }
   ];
 
