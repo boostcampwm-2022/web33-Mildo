@@ -8,7 +8,11 @@ import { createMyButtonSvg } from '../../utils/button.util';
 import RelatedAreaList from '../RelatedAreaList/RelatedAreaList';
 import apis from '../../apis/apis';
 import { isCompleteKorean } from '../../utils/search.util';
-import { Z_INDEX } from '../../config/constants';
+import {
+  Z_INDEX,
+  DEBOUNCE_TIME,
+  SEARCH_BAR_WIDTH_MAX
+} from '../../config/constants';
 import { isRelatedAreaListOpenAtom } from '../../atom/relatedAreaList';
 
 const FlexBoxStyle = styled.div`
@@ -124,13 +128,16 @@ const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
         await apis.getRelatedAreaInfo(searchAreaName);
 
       setRelatedAreaInfo(responseRelatedAreaInfo);
-    }, 500);
+    }, DEBOUNCE_TIME);
   }, [searchAreaName]);
 
   // 검색바의 크기가 바뀌면 ref의 크기도 바꾸어야 한다.
   useEffect(() => {
     const checkSearchBarWidth = () => {
-      if (searchBarWidthRef && searchBarWidthRef.current!.clientWidth <= 439) {
+      if (
+        searchBarWidthRef &&
+        searchBarWidthRef.current!.clientWidth <= SEARCH_BAR_WIDTH_MAX
+      ) {
         setSearchBarWidth(searchBarWidthRef.current!.clientWidth);
       }
     };
