@@ -117,6 +117,10 @@ const InfoDetailModal = () => {
     }
   };
 
+  const onClickTomorrow = () => {
+    alert('추후 업데이트 예정입니다.');
+  };
+
   useEffect(() => {
     if (!isSecondLevel) {
       setGraphInfo({});
@@ -222,7 +226,9 @@ const InfoDetailModal = () => {
             isDisplay={isSecondLevel}
             graphInfo={graphInfo}
           />
-          <TomorrowButton>내일 갈 거야! :&#41;</TomorrowButton>
+          <TomorrowButton onClick={onClickTomorrow}>
+            내일 갈 거야! :&#41;
+          </TomorrowButton>
         </ModalLayout>
       )}
     </Modal>

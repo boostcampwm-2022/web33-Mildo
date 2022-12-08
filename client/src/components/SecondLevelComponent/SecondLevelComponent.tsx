@@ -3,11 +3,7 @@ import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 
 import { SecondLevelTimeInfoCacheTypes } from '../../types/interfaces';
-import {
-  SecondLevelBox,
-  TraceGraph,
-  TomorrowRanking
-} from './SecondLevelComponent.style';
+import { SecondLevelBox, TraceGraph } from './SecondLevelComponent.style';
 import { COLOR_PALETTE } from '../../config/constants';
 import MapLoading from '../MapLoading/MapLoading';
 import { makeTime } from '../../utils/time.util';
@@ -146,7 +142,6 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
           )}
         </TraceGraph>
       )}
-      <TomorrowRanking></TomorrowRanking>
     </SecondLevelBox>
   );
 };
