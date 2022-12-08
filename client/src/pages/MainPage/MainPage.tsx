@@ -15,9 +15,9 @@ import LoginModal from '../../components/LoginModal/LoginModal';
 import MyInfoSideBar from '../../components/MyInfoSideBar/MyInfoSideBar';
 
 const StyledMainPage = styled.div`
+  position: absolute;
   width: 100vw;
-  height: 100vh;
-  position: relative;
+  height: 100%;
 `;
 
 interface CoordinatesTypes {
