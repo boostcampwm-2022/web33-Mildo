@@ -4,13 +4,12 @@ import { UserSchemaTypes } from '../types/interfaces';
 
 export default {
   getUserAuth: async (req: Request, res: Response) => {
-    if (!req.user) {
-      return;
-    }
+    const { _id, nickname, bookmarks }: UserSchemaTypes = req.user!;
 
-    const { _id, nickname, bookmarks }: UserSchemaTypes = req.user;
-
-    res.json({ ok: true, data: { _id, nickname, bookmarks } });
+    res.json({
+      ok: true,
+      data: { isLoggedIn: true, _id, nickname, bookmarks }
+    });
   },
   addBookmark: async (req: Request, res: Response) => {
     const { areaName, userId } = req.params;

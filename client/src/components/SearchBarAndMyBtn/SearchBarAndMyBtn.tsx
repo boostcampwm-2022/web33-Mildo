@@ -1,4 +1,5 @@
-import { useUpdateAtom } from 'jotai/utils';
+import { useSetAtom } from 'jotai';
+import { useAtomValue } from 'jotai/utils';
 import styled from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 
@@ -9,6 +10,7 @@ import RelatedAreaList from '../RelatedAreaList/RelatedAreaList';
 import apis from '../../apis/apis';
 import { isCompleteKorean } from '../../utils/search.util';
 import { Z_INDEX } from '../../config/constants';
+import { userInfoAtom } from '../../atom/userInfo';
 import { isRelatedAreaListOpenAtom } from '../../atom/relatedAreaList';
 
 const FlexBoxStyle = styled.div`
@@ -68,24 +70,19 @@ interface GetRelatedAreaResponseTypes {
   data: DataRelatedAreaInfoTypes;
 }
 
-interface SearchBarAndMyBtnComponentProps {
-  isLoggedIn: boolean;
-}
-
-const SearchBarAndMyBtn: React.FC<SearchBarAndMyBtnComponentProps> = ({
-  isLoggedIn
-}) => {
-  const setIsLoginModalOpen = useUpdateAtom(isLoginModalOpenAtom);
-  const setIsMyInfoSideBarOpen = useUpdateAtom(isMyInfoSideBarOpenAtom);
-  const setIsRelatedAreaListOpen = useUpdateAtom(isRelatedAreaListOpenAtom);
+const SearchBarAndMyBtn: React.FC = () => {
+  const setIsLoginModalOpen = useSetAtom(isLoginModalOpenAtom);
+  const setIsMyInfoSideBarOpen = useSetAtom(isMyInfoSideBarOpenAtom);
+  const setIsRelatedAreaListOpen = useSetAtom(isRelatedAreaListOpenAtom);
   const [searchAreaName, setSearchAreaName] = useState('');
   const [relatedAreaInfo, setRelatedAreaInfo] =
     useState<DataRelatedAreaInfoTypes>({});
+  const userInfo = useAtomValue(userInfoAtom);
 
   const timer = useRef<NodeJS.Timeout | null>(null);
 
   const onClickMyButton = () => {
-    if (isLoggedIn) {
+    if (userInfo.data.isLoggedIn) {
       setIsMyInfoSideBarOpen(true);
       return;
     }

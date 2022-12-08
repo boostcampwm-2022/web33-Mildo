@@ -1,14 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useUpdateAtom, useAtomValue } from 'jotai/utils';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
-import {
-  MarkerObjectTypes,
-  CoordinatesPopulationTypes,
-  SortAllAreasTypes
-} from '../../types/interfaces';
-import api from '../../apis/apis';
+import { MarkerObjectTypes, SortAllAreasTypes } from '../../types/interfaces';
 import { SEOUL_BOUNDS } from '../../config/constants';
 import { setMarkerIcon } from '../../utils/map.util';
 import {
@@ -26,11 +20,6 @@ const MapComponent = styled.div`
   height: 100%;
 `;
 
-interface GetAllAreaResponseTypes {
-  ok: boolean;
-  data: CoordinatesPopulationTypes;
-}
-
 interface MapComponentProps {
   latitude: number;
   longitude: number;
@@ -44,11 +33,11 @@ interface PrevPlaceTypes {
 const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
   const mapRef = useRef(null);
   const [naverMap, setNaverMap] = useState<naver.maps.Map | null>(null);
-  const [areas, setAreas] = useAtom(allAreasInfoAtom);
+  const [areas] = useAtom(allAreasInfoAtom);
   const prevPlace = useRef<PrevPlaceTypes | null>(null);
-  const setIsInfoDetailModalOpen = useUpdateAtom(isInfoDetailModalOpenAtom);
-  const setIsRelatedAreaListOpen = useUpdateAtom(isRelatedAreaListOpenAtom);
-  const setIsSecondLevel = useUpdateAtom(isSecondLevelAtom);
+  const setIsInfoDetailModalOpen = useSetAtom(isInfoDetailModalOpenAtom);
+  const setIsRelatedAreaListOpen = useSetAtom(isRelatedAreaListOpenAtom);
+  const setIsSecondLevel = useSetAtom(isSecondLevelAtom);
   const [markerStorage, setMarkerStorage] = useAtom(markerArray);
   const enableState = useAtomValue(enableStateAtom);
 
@@ -85,23 +74,16 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
 
   // DB에서 최근 장소 정보 가져오기
   useEffect(() => {
-    if (!naverMap) {
+    if (!mapRef.current || !naver) {
       return;
     }
 
-    const getAllArea = async () => {
-      const { data: allAreas }: GetAllAreaResponseTypes =
-        await api.getAllArea();
+    const location = new naver.maps.LatLng(latitude, longitude);
 
-      const sortAllAreas = Object.entries(allAreas).sort(
-        (prev, next) => next[1].latitude - prev[1].latitude
-      );
-
-      setAreas(sortAllAreas);
-    };
-
-    getAllArea();
-  }, [naverMap]);
+    setIsInfoDetailModalOpen(false);
+    prevPlace.current = null;
+    naverMap?.setCenter(location);
+  }, [latitude, longitude]);
 
   useEffect(() => {
     if (!areas || !naverMap) {
@@ -113,7 +95,7 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
     areas
       .filter((area: SortAllAreasTypes) => enableState[area[1].populationLevel])
       .map((area: SortAllAreasTypes) => makeMarker(area));
-  }, [areas, enableState]);
+  }, [areas, enableState, naverMap]);
 
   // 마커 이외의 영역을 클릭하면 1단계, 2단계 모달창이 닫힘
   const onClickMap = () => {

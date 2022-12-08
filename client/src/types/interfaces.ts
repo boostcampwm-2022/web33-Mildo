@@ -53,6 +53,7 @@ export interface FilterBtnStateTypes {
 }
 
 export interface UserInfoTypes {
+  isLoggedIn: boolean;
   _id: string;
   snsId: string;
   email: string;

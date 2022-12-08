@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useAtom, useAtomValue } from 'jotai';
+import { Suspense } from 'react';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import styled, { css } from 'styled-components';
 
 import {
   BookmarkIcon,
@@ -15,79 +16,55 @@ import Modal from '../Modal/Modal';
 import {
   isInfoDetailModalOpenAtom,
   firstLevelInfoAtom,
-  isSecondLevelAtom,
-  prevFirstLevelInfoAtom
+  isSecondLevelAtom
 } from '../../atom/infoDetail';
 import {
-  graphInfoResponseTypes,
-  SecondLevelTimeInfoCacheTypes
-} from '../../types/interfaces';
-import { INFO_DETAIL_TITLE, BOOKMARK_INFO } from '../../config/constants';
+  BOOKMARK_INFO,
+  COLOR_PALETTE,
+  INFO_DETAIL_TITLE
+} from '../../config/constants';
 import apis from '../../apis/apis';
 import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';
-import { userInfoAtom } from '../../atom/userInfo';
-import useGraphInfo from '../../hooks/useGraphInfo';
+import { userInfoAtom, userBookmarkAtom } from '../../atom/userInfo';
 import { makeTime } from '../../utils/time.util';
+import MapLoading from '../MapLoading/MapLoading';
+
+const GraphLoadingPageStyle = styled.div<{ isDisplay: boolean }>`
+  width: 100%;
+  height: ${props => (props.isDisplay ? '10rem' : '0px')};
+  transition: 1s all;
+  background-color: ${COLOR_PALETTE.GREY20};
+  border-radius: 10px;
+  overflow: hidden;
+`;
 
 const InfoDetailModal = () => {
   const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
   const firstLevelInfo = useAtomValue(firstLevelInfoAtom);
-  const [prevFirstLevelInfo, setPrevFirstLevelInfo] = useAtom(
-    prevFirstLevelInfoAtom
-  );
+
   const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
-  const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
-  const [userInfo, setUserInfo] = useAtom(userInfoAtom);
-
-  const success = (data: graphInfoResponseTypes | null) => {
-    if (data) {
-      setGraphInfo(data.data);
-      setPrevFirstLevelInfo(firstLevelInfo);
-    }
-  };
-
-  const [graphInfoResponse] = useGraphInfo(
-    isSecondLevel,
-    firstLevelInfo,
-    prevFirstLevelInfo,
-    success
-  );
+  const setUserBookmark = useSetAtom(userBookmarkAtom);
+  const [userInfo] = useAtom(userInfoAtom);
 
   const toggleSecondLevelContents = () => {
     setIsSecondLevel(prev => !prev);
   };
 
-  // 그래프에 필요한 이전 시간 정보 호출
-  const setPastInformation = async (): Promise<undefined> => {
-    if (!firstLevelInfo) {
-      return;
-    }
-
-    if (graphInfoResponse) {
-      setGraphInfo(graphInfoResponse.data);
-      setPrevFirstLevelInfo(firstLevelInfo);
-    }
-
-    // eslint-disable-next-line no-useless-return
-    return;
-  };
-
   // 북마크 등록 및 삭제
   const onClickBookmark = async () => {
-    if (!firstLevelInfo || !userInfo) {
+    if (!firstLevelInfo || !userInfo.data.isLoggedIn) {
       alert(BOOKMARK_INFO.failErrorMessage);
       return;
     }
     const [areaName] = firstLevelInfo;
-    const { _id: userId, bookmarks } = userInfo;
+    const { _id: userId, bookmarks } = userInfo.data;
 
     if (bookmarks.includes(areaName)) {
       try {
         await apis.deleteBookmark(areaName, userId);
-        setUserInfo({
-          ...userInfo,
-          bookmarks: bookmarks.filter(bookmark => bookmark !== areaName)
-        });
+        setUserBookmark(
+          bookmarks.filter((bookmark: string) => bookmark !== areaName)
+        );
         return;
       } catch (error) {
         throw error;
@@ -101,23 +78,11 @@ const InfoDetailModal = () => {
 
     try {
       await apis.addBookmark(areaName, userId);
-      setUserInfo({
-        ...userInfo,
-        bookmarks: bookmarks.concat(areaName)
-      });
+      setUserBookmark(bookmarks.concat(areaName));
     } catch (error) {
       throw error;
     }
   };
-
-  useEffect(() => {
-    if (!isSecondLevel) {
-      setGraphInfo({});
-      return;
-    }
-
-    setPastInformation();
-  }, [isSecondLevel]);
 
   return (
     <Modal isOpen={isInfoDetailModalOpen}>
@@ -134,7 +99,9 @@ const InfoDetailModal = () => {
               onClick={toggleSecondLevelContents}
             />
           )}
-          {userInfo && userInfo.bookmarks.includes(firstLevelInfo[0]) ? (
+
+          {userInfo.data.isLoggedIn &&
+          userInfo.data.bookmarks.includes(firstLevelInfo[0]) ? (
             <BookmarkIcon
               src='https://ifh.cc/g/SgQaZx.png'
               onClick={onClickBookmark}
@@ -167,10 +134,29 @@ const InfoDetailModal = () => {
               </p>
             </PopulationInfo>
           </PopulationBox>
-          <SecondLevelComponent
-            isDisplay={isSecondLevel}
-            graphInfo={graphInfo}
-          />
+          <GraphLoadingPageStyle isDisplay={isSecondLevel}>
+            {isSecondLevel && (
+              <Suspense
+                fallback={
+                  <>
+                    <MapLoading
+                      message={null}
+                      width='50px'
+                      height='50px'
+                      customLoadingPageStyle={css`
+                        width: 100%;
+                        height: 100%;
+                      `}
+                    />
+                  </>
+                }>
+                <SecondLevelComponent
+                  firstLevelInfo={firstLevelInfo}
+                  isSecondLevel={isSecondLevel}
+                />
+              </Suspense>
+            )}
+          </GraphLoadingPageStyle>
           <TomorrowButton>내일 갈 거야! :&#41;</TomorrowButton>
         </ModalLayout>
       )}

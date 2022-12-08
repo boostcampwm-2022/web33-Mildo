@@ -1,6 +1,8 @@
+import { Suspense } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { createGlobalStyle } from 'styled-components';
+import MapLoading from './components/MapLoading/MapLoading';
 import MainPage from './pages/MainPage/MainPage';
 
 const GlobalStyle = createGlobalStyle`
@@ -9,9 +11,7 @@ const GlobalStyle = createGlobalStyle`
         margin: 0px;
         padding: 0px;
         
-        @media screen and (min-width: 500px) {
-          font-size: 20px;
-        }
+
     }
 
     body {
@@ -27,7 +27,9 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <GlobalStyle />
-        <MainPage />
+        <Suspense fallback={<MapLoading />}>
+          <MainPage />
+        </Suspense>
       </QueryClientProvider>
     </>
   );
