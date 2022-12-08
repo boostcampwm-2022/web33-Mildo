@@ -8,8 +8,10 @@ interface MapLoadingProps {
 }
 
 const LoadingPageStyle = styled.div<MapLoadingProps>`
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
   display: flex;
   flex-direction: column;
   justify-content: center;

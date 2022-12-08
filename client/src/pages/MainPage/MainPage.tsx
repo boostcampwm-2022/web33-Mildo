@@ -13,6 +13,7 @@ import SearchBarAndMyBtn from '../../components/SearchBarAndMyBtn/SearchBarAndMy
 import DensityFilterList from '../../components/DensityFilterList/DensityFilterList';
 import InfoDetailModal from '../../components/InfoDetailModal/InfoDetailModal';
 import LoginModal from '../../components/LoginModal/LoginModal';
+import MyInfoSideBar from '../../components/MyInfoSideBar/MyInfoSideBar';
 
 const StyledMainPage = styled.div`
   width: 100vw;
@@ -95,7 +96,7 @@ const MainPage = () => {
       <DensityFilterList />
       <InfoDetailModal />
       <LoginModal />
-      {/* <MyInfoSideBar setCoordinates={setCoordinates} /> */}
+      <MyInfoSideBar />
     </StyledMainPage>
   );
 };

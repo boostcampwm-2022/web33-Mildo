@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue } from 'jotai';
 import styled, { css } from 'styled-components';
-import { useEffect, useState, SetStateAction, Dispatch } from 'react';
+import { useEffect, useState } from 'react';
 
 import { isMyInfoSideBarOpenAtom } from '../../atom/myInfoSideBar';
 import Modal from '../Modal/Modal';
@@ -129,16 +129,7 @@ const LogoutLink = styled.a`
   color: ${COLOR_PALETTE.GREY};
 `;
 
-interface CoordinatesTypes {
-  latitude: number;
-  longitude: number;
-}
-
-interface MyInfoSideBarProps {
-  setCoordinates: Dispatch<SetStateAction<CoordinatesTypes | null>>;
-}
-
-const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
+const MyInfoSideBar: React.FC = () => {
   const [isMyInfoSideBarOpen, setIsMyInfoSideBarOpen] = useAtom(
     isMyInfoSideBarOpenAtom
   );
@@ -183,9 +174,6 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
 
   // MainPage에서 좌표 설정 setState 가져와서 클릭한 위치로 이동
   const onClickAreaName = (areaInfo: CoordinatesPopulationTypes) => {
-    if (!setCoordinates) {
-      return;
-    }
     const { latitude, longitude } = areaInfo;
 
     const marker = markers.find(

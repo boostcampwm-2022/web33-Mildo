@@ -51,7 +51,6 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
     if (!mapRef.current || !naver) {
       return;
     }
-    console.log('????');
 
     const location = new naver.maps.LatLng(latitude, longitude);
 
