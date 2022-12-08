@@ -198,7 +198,7 @@ const MyInfoSideBar: React.FC = () => {
     }
 
     makeBookmarks();
-  }, [userInfo, areas]);
+  }, [userInfo, areas, bookmarkAtom]);
 
   const apiServerURL =
     process.env.REACT_APP_CLIENT_ENV === 'development'
