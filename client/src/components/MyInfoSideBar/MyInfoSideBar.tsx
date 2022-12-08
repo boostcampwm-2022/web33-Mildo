@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import styled, { css } from 'styled-components';
 import { useEffect, useState } from 'react';
 
@@ -87,12 +87,14 @@ const BookmarkItemComponent = styled.div<PopulationLevelProps>`
     align-items: center;
   }
 
-  > div:last-child {
+  > button:last-child {
     width: 15%;
     cursor: pointer;
     font-size: 0.7rem;
     color: ${COLOR_PALETTE.GREY};
     text-align: right;
+    border: none;
+    background: none;
   }
 
   .population-level {
@@ -137,8 +139,9 @@ const MyInfoSideBar: React.FC = () => {
   const [myBookmarks, setMyBookmarks] = useState<SortAllAreasTypes[] | null>(
     null
   );
+  const [bookmarkAtom, setBookmarkAtom] = useAtom(userBookmarkAtom);
   const markers = useAtomValue(markerArray);
-  const setUserBookmark = useSetAtom(userBookmarkAtom);
+
   const [userInfo] = useAtom(userInfoAtom);
 
   // 전체 장소에서 북마크에 등록된 정보만 가져옴
@@ -158,13 +161,13 @@ const MyInfoSideBar: React.FC = () => {
       return;
     }
 
-    const { _id: userId, bookmarks } = userInfo.data;
+    const { _id: userId } = userInfo.data;
 
     try {
       await apis.deleteBookmark(areaName, userId);
 
-      setUserBookmark(
-        bookmarks.filter((bookmark: string) => bookmark !== areaName)
+      setBookmarkAtom(
+        bookmarkAtom.filter((bookmark: string) => bookmark !== areaName)
       );
     } catch (error) {
       throw error;

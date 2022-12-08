@@ -26,7 +26,7 @@ import {
 } from '../../config/constants';
 import apis from '../../apis/apis';
 import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';
-import { userInfoAtom, userBookmarkAtom } from '../../atom/userInfo';
+import { userBookmarkAtom, userInfoAtom } from '../../atom/userInfo';
 import { makeTime } from '../../utils/time.util';
 import MapLoading from '../MapLoading/MapLoading';
 
@@ -43,7 +43,7 @@ const InfoDetailModal = () => {
   const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
   const firstLevelInfo = useAtomValue(firstLevelInfoAtom);
   const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
-  const setUserBookmark = useSetAtom(userBookmarkAtom);
+  const setBookmarkAtom = useSetAtom(userBookmarkAtom);
   const [userInfo] = useAtom(userInfoAtom);
 
   const [titleWidth, setTitleWidth] = useState<number>(0);
@@ -68,7 +68,7 @@ const InfoDetailModal = () => {
     if (bookmarks.includes(areaName)) {
       try {
         await apis.deleteBookmark(areaName, userId);
-        setUserBookmark(
+        setBookmarkAtom(
           bookmarks.filter((bookmark: string) => bookmark !== areaName)
         );
         return;
@@ -84,7 +84,8 @@ const InfoDetailModal = () => {
 
     try {
       await apis.addBookmark(areaName, userId);
-      setUserBookmark(bookmarks.concat(areaName));
+
+      setBookmarkAtom(bookmarks.concat(areaName));
     } catch (error) {
       throw error;
     }

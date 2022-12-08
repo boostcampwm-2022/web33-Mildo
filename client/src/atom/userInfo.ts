@@ -9,7 +9,7 @@ interface GetUserResponseTypes {
   data: UserInfoTypes;
 }
 
-export const userBookmarkAtom = atom({});
+export const userBookmarkAtom = atom<string[]>([]);
 
 export const [userInfoAtom] = atomsWithQuery(get => ({
   queryKey: ['users', get(userBookmarkAtom)],

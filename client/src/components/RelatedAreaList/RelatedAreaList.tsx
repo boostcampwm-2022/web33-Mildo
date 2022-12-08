@@ -85,8 +85,6 @@ const RelatedAreaList: React.FC<RelatedAreaListProps> = ({
   };
 
   useEffect(() => {
-    console.log(isRelatedAreaListOpen);
-
     setIsEmptyRelatedList(
       searchAreaName !== '' && Object.keys(relatedAreaInfo).length === 0
     );
