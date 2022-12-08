@@ -1,4 +1,5 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
+import { TitleTypes } from '../../types/interfaces';
 import {
   COLOR_PALETTE,
   POPULATION_LEVEL_COLOR,
@@ -35,25 +36,33 @@ export const BookmarkIcon = styled.img`
   cursor: pointer;
 `;
 
-const marquee = keyframes`
-0%, 50% {
-  transform: translate(0%, 0);
+const marquee = (width: number) => keyframes`
+0% {
+  transform: translate(${width}px, 0);
 }
-25%{
-  transform: translate(-30%, 0);
-}
-75% {
-  transform: translate(30%, 0);
+100% {
+  transform: translate(-${width}px, 0);
 }
 `;
 
-export const Title = styled.h1`
-  width: 100%;
+export const Title = styled.h1<TitleTypes>`
+  display: inline-block;
   text-align: center;
   font-size: 1rem;
   white-space: nowrap;
   will-change: transform;
-  animation: ${marquee} 10s linear infinite;
+  animation: ${props =>
+    props.slide
+      ? css`
+          ${marquee(props.textWidth)} 10s linear infinite
+        `
+      : ''};
+`;
+
+export const TitleBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 50%;
 `;
 
 interface TitleLocationProps {

@@ -1,4 +1,4 @@
-import { useUpdateAtom } from 'jotai/utils';
+import { useSetAtom } from 'jotai';
 import { MarkerObjectTypes, SortAllAreasTypes } from '../types/interfaces';
 
 import {
@@ -23,11 +23,11 @@ const useMarker = (
   naverMap: naver.maps.Map | null,
   prevPlace: React.MutableRefObject<PrevPlaceTypes | null>
 ) => {
-  const setIsInfoDetailModalOpen = useUpdateAtom(isInfoDetailModalOpenAtom);
-  const setFirstLevelInfo = useUpdateAtom(firstLevelInfoAtom);
-  const setIsSecondLevel = useUpdateAtom(isSecondLevelAtom);
-  const setMarkerStorage = useUpdateAtom(markerArray);
-  const setIsRelatedAreaListOpenAtom = useUpdateAtom(isRelatedAreaListOpenAtom);
+  const setIsInfoDetailModalOpen = useSetAtom(isInfoDetailModalOpenAtom);
+  const setFirstLevelInfo = useSetAtom(firstLevelInfoAtom);
+  const setIsSecondLevel = useSetAtom(isSecondLevelAtom);
+  const setMarkerStorage = useSetAtom(markerArray);
+  const setIsRelatedAreaListOpenAtom = useSetAtom(isRelatedAreaListOpenAtom);
 
   // 이전 마커를 작은 크기로 만들고, 새로운 마커를 이전 마커로 등록
   const onClickMarker = (

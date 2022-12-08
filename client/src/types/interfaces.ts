@@ -53,6 +53,7 @@ export interface FilterBtnStateTypes {
 }
 
 export interface UserInfoTypes {
+  isLoggedIn: boolean;
   _id: string;
   snsId: string;
   email: string;
@@ -64,4 +65,9 @@ export interface UserInfoTypes {
 export interface graphInfoResponseTypes {
   ok: boolean;
   data: SecondLevelTimeInfoCacheTypes;
+}
+
+export interface TitleTypes {
+  slide: boolean;
+  textWidth: number;
 }

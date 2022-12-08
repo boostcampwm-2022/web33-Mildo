@@ -1,15 +1,15 @@
 import { useAtom, useAtomValue } from 'jotai';
 import styled, { css } from 'styled-components';
-import { useEffect, useState, SetStateAction, Dispatch } from 'react';
+import { useEffect, useState } from 'react';
 
 import { isMyInfoSideBarOpenAtom } from '../../atom/myInfoSideBar';
 import Modal from '../Modal/Modal';
+import { userBookmarkAtom, userInfoAtom } from '../../atom/userInfo';
 import {
   Z_INDEX,
   POPULATION_LEVEL_COLOR,
   COLOR_PALETTE
 } from '../../config/constants';
-import { userInfoAtom } from '../../atom/userInfo';
 import { allAreasInfoAtom } from '../../atom/areasInfo';
 import {
   SortAllAreasTypes,
@@ -87,12 +87,14 @@ const BookmarkItemComponent = styled.div<PopulationLevelProps>`
     align-items: center;
   }
 
-  > div:last-child {
+  > button:last-child {
     width: 15%;
     cursor: pointer;
     font-size: 0.7rem;
     color: ${COLOR_PALETTE.GREY};
     text-align: right;
+    border: none;
+    background: none;
   }
 
   .population-level {
@@ -129,51 +131,44 @@ const LogoutLink = styled.a`
   color: ${COLOR_PALETTE.GREY};
 `;
 
-interface CoordinatesTypes {
-  latitude: number;
-  longitude: number;
-}
-
-interface MyInfoSideBarProps {
-  setCoordinates: Dispatch<SetStateAction<CoordinatesTypes | null>>;
-}
-
-const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
+const MyInfoSideBar: React.FC = () => {
   const [isMyInfoSideBarOpen, setIsMyInfoSideBarOpen] = useAtom(
     isMyInfoSideBarOpenAtom
   );
-  const [userInfo, setUserInfo] = useAtom(userInfoAtom);
   const areas = useAtomValue(allAreasInfoAtom);
   const [myBookmarks, setMyBookmarks] = useState<SortAllAreasTypes[] | null>(
     null
   );
+  const [bookmarkAtom, setBookmarkAtom] = useAtom(userBookmarkAtom);
   const markers = useAtomValue(markerArray);
+
+  const [userInfo] = useAtom(userInfoAtom);
 
   // 전체 장소에서 북마크에 등록된 정보만 가져옴
   const makeBookmarks = () => {
-    if (!userInfo) {
+    if (!userInfo.data.isLoggedIn) {
       return;
     }
 
     setMyBookmarks(
-      areas.filter(area => userInfo.bookmarks.includes(area[0])).reverse()
+      areas.filter(area => userInfo.data.bookmarks.includes(area[0])).reverse()
     );
   };
 
   // 사이드바에서 북마크 삭제
   const onClickDelete = async (areaName: string) => {
-    if (!userInfo || !userInfo) {
+    if (!userInfo.data || !areas) {
       return;
     }
 
-    const { _id: userId, bookmarks } = userInfo;
+    const { _id: userId } = userInfo.data;
 
     try {
       await apis.deleteBookmark(areaName, userId);
-      setUserInfo({
-        ...userInfo,
-        bookmarks: bookmarks.filter(bookmark => bookmark !== areaName)
-      });
+
+      setBookmarkAtom(
+        bookmarkAtom.filter((bookmark: string) => bookmark !== areaName)
+      );
     } catch (error) {
       throw error;
     }
@@ -181,9 +176,6 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
 
   // MainPage에서 좌표 설정 setState 가져와서 클릭한 위치로 이동
   const onClickAreaName = (areaInfo: CoordinatesPopulationTypes) => {
-    if (!setCoordinates) {
-      return;
-    }
     const { latitude, longitude } = areaInfo;
 
     const marker = markers.find(
@@ -201,7 +193,7 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
   };
 
   useEffect(() => {
-    if (!userInfo || !areas) {
+    if (!userInfo.data || !areas) {
       return;
     }
 
@@ -222,7 +214,7 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
       <HeaderComponent>
         <h1>안녕하세요</h1>
         <h1>
-          <span>{userInfo?.nickname}</span>님 😌
+          <span>{userInfo.data.nickname}</span>님 😌
         </h1>
       </HeaderComponent>
       <BookmarkListComponent>
@@ -241,7 +233,7 @@ const MyInfoSideBar: React.FC<MyInfoSideBarProps> = ({ setCoordinates }) => {
                   {bookmark[0]}
                 </span>
               </div>
-              <div onClick={() => onClickDelete(bookmark[0])}>삭제</div>
+              <button onClick={() => onClickDelete(bookmark[0])}>삭제</button>
             </BookmarkItemComponent>
           ))}
       </BookmarkListComponent>
