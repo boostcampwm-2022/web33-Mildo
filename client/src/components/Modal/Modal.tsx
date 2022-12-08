@@ -47,7 +47,7 @@ const Filter = styled.div<{ open: boolean }>`
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   z-index: ${Z_INDEX.FILTER};
   background-color: rgba(0, 0, 0, 0.5);
   visibility: ${props => (props.open ? 'visible' : 'hidden')};
