@@ -49,7 +49,7 @@ const MainPage = () => {
   const { data: coordinates } = useQuery<CoordinatesTypes>(
     'key',
     (): Promise<CoordinatesTypes> => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         const success = async (geolocationPosition: GeolocationPosition) => {
           const latitude = geolocationPosition.coords.latitude;
           const longitude = geolocationPosition.coords.longitude;
@@ -69,7 +69,7 @@ const MainPage = () => {
         };
 
         const error = () => {
-          reject(DEFAULT_COORDINATES);
+          resolve(DEFAULT_COORDINATES);
         };
 
         navigator.geolocation.getCurrentPosition(success, error);
