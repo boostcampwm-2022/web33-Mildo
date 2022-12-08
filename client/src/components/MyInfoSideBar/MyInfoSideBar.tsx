@@ -24,7 +24,7 @@ const SideBarLayout = css`
   display: block;
   width: 60%;
   max-width: 500px;
-  height: 100vh;
+  height: 100%;
   position: absolute;
   right: 0;
   top: 0;
