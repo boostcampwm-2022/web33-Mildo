@@ -14,7 +14,7 @@ interface LoadingProps {
 
 const defaultLoadingPageStyle = css`
   width: 100vw;
-  height: 100%;
+  height: 100vh;
 `;
 
 const LoadingPageStyle = styled.div<LoadingProps>`
