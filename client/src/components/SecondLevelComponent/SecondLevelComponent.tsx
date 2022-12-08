@@ -7,23 +7,17 @@ import {
   graphInfoResponseTypes,
   SortAllAreasTypes
 } from '../../types/interfaces';
-import {
-  SecondLevelBox,
-  TraceGraph,
-  TomorrowRanking
-} from './SecondLevelComponent.style';
+import { SecondLevelBox } from './SecondLevelComponent.style';
 import useGraphInfo from '../../hooks/useGraphInfo';
 import { getGraphOptions, getSeries } from '../../utils/graph.util';
 import { prevFirstLevelInfoAtom } from '../../atom/infoDetail';
 
 interface SecondLevelComponentProps {
-  isDisplay: boolean;
   firstLevelInfo: SortAllAreasTypes;
   isSecondLevel: boolean;
 }
 
 const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
-  isDisplay,
   firstLevelInfo,
   isSecondLevel
 }) => {
@@ -61,8 +55,6 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
   };
 
   useEffect(() => {
-    console.log(isSecondLevel);
-
     if (!isSecondLevel) {
       return;
     }
@@ -81,19 +73,16 @@ const SecondLevelComponent: React.FC<SecondLevelComponentProps> = ({
   }, [graphInfoResponse]);
 
   return (
-    <SecondLevelBox isDisplay={isDisplay}>
-      <TraceGraph>
-        {options && series && (
-          <Chart
-            type='bar'
-            options={options}
-            series={series}
-            width='100%'
-            height={2000}
-          />
-        )}
-      </TraceGraph>
-      <TomorrowRanking></TomorrowRanking>
+    <SecondLevelBox>
+      {options && series && (
+        <Chart
+          type='bar'
+          options={options}
+          series={series}
+          width='100%'
+          height={2500}
+        />
+      )}
     </SecondLevelBox>
   );
 };

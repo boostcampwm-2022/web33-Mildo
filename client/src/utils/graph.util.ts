@@ -38,7 +38,7 @@ export const getGraphOptions = (
       categories: graphInfoResponse
         ? Object.keys(graphInfoResponse.data)
             .slice(1)
-            .map(item => `${makeTime(item, 1)}`.split(' '))
+            .map(item => `${makeTime(item, 1)}`.split('/'))
         : [],
       labels: {
         show: false
@@ -48,14 +48,14 @@ export const getGraphOptions = (
       labels: {
         show: true,
         style: {
-          fontSize: '14px',
+          fontSize: '12px',
           fontWeight: 600
         },
         offsetX: 4,
         offsetY: 8
       }
     },
-    colors: [`#9F8FFF`, `${COLOR_PALETTE.PRIMARY}`],
+    colors: [`#C0B6FF`, `#A192FF`],
     stroke: {
       show: true,
       width: 0.5,
@@ -66,7 +66,7 @@ export const getGraphOptions = (
       offsetX: 6,
       style: {
         fontSize: '12px',
-        colors: [`${COLOR_PALETTE.WHITE}`]
+        colors: [`${COLOR_PALETTE.BLACK}`]
       },
       formatter: value => value.toLocaleString()
     },

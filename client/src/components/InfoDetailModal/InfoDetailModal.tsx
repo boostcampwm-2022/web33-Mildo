@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import styled, { css } from 'styled-components';
 
 import {
   BookmarkIcon,
@@ -16,19 +17,26 @@ import {
   isInfoDetailModalOpenAtom,
   firstLevelInfoAtom,
   isSecondLevelAtom
-  // prevFirstLevelInfoAtom
 } from '../../atom/infoDetail';
-// import {
-//   graphInfoResponseTypes,
-//   SecondLevelTimeInfoCacheTypes
-// } from '../../types/interfaces';
-import { BOOKMARK_INFO, INFO_DETAIL_TITLE } from '../../config/constants';
+import {
+  BOOKMARK_INFO,
+  COLOR_PALETTE,
+  INFO_DETAIL_TITLE
+} from '../../config/constants';
 import apis from '../../apis/apis';
 import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';
 import { userInfoAtom, userBookmarkAtom } from '../../atom/userInfo';
-// import useGraphInfo from '../../hooks/useGraphInfo';
 import { makeTime } from '../../utils/time.util';
 import MapLoading from '../MapLoading/MapLoading';
+
+const GraphLoadingPageStyle = styled.div<{ isDisplay: boolean }>`
+  width: 100%;
+  height: ${props => (props.isDisplay ? '10rem' : '0px')};
+  transition: 1s all;
+  background-color: ${COLOR_PALETTE.GREY20};
+  border-radius: 10px;
+  overflow: hidden;
+`;
 
 const InfoDetailModal = () => {
   const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
@@ -126,19 +134,29 @@ const InfoDetailModal = () => {
               </p>
             </PopulationInfo>
           </PopulationBox>
-          {isSecondLevel && (
-            <Suspense
-              fallback={
-                <MapLoading message={null} width='50px' height='50px' />
-              }>
-              <SecondLevelComponent
-                isDisplay={isSecondLevel}
-                firstLevelInfo={firstLevelInfo}
-                isSecondLevel={isSecondLevel}
-                // graphInfo={graphInfo}
-              />
-            </Suspense>
-          )}
+          <GraphLoadingPageStyle isDisplay={isSecondLevel}>
+            {isSecondLevel && (
+              <Suspense
+                fallback={
+                  <>
+                    <MapLoading
+                      message={null}
+                      width='50px'
+                      height='50px'
+                      customLoadingPageStyle={css`
+                        width: 100%;
+                        height: 100%;
+                      `}
+                    />
+                  </>
+                }>
+                <SecondLevelComponent
+                  firstLevelInfo={firstLevelInfo}
+                  isSecondLevel={isSecondLevel}
+                />
+              </Suspense>
+            )}
+          </GraphLoadingPageStyle>
           <TomorrowButton>내일 갈 거야! :&#41;</TomorrowButton>
         </ModalLayout>
       )}

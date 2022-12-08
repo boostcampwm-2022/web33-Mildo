@@ -11,9 +11,7 @@ const GlobalStyle = createGlobalStyle`
         margin: 0px;
         padding: 0px;
         
-        @media screen and (min-width: 500px) {
-          font-size: 20px;
-        }
+
     }
 
     body {
