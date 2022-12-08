@@ -1,5 +1,4 @@
-import { useAtomValue } from 'jotai';
-import { useUpdateAtom } from 'jotai/utils';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { useEffect } from 'react';
@@ -44,7 +43,7 @@ const isUserInSeoulOrGwaCheon = (usersLocation: string) => {
 
 const MainPage = () => {
   const userInfo = useAtomValue(userInfoAtom);
-  const setIsLoginModalOpen = useUpdateAtom(isLoginModalOpenAtom);
+  const setIsLoginModalOpen = useSetAtom(isLoginModalOpenAtom);
 
   const { data: coordinates } = useQuery<CoordinatesTypes>(
     ['userCoodinates'],

@@ -1,7 +1,6 @@
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import styled, { css } from 'styled-components';
 import { useEffect, useState } from 'react';
-import { useUpdateAtom } from 'jotai/utils';
 
 import { isMyInfoSideBarOpenAtom } from '../../atom/myInfoSideBar';
 import Modal from '../Modal/Modal';
@@ -139,7 +138,7 @@ const MyInfoSideBar: React.FC = () => {
     null
   );
   const markers = useAtomValue(markerArray);
-  const setUserBookmark = useUpdateAtom(userBookmarkAtom);
+  const setUserBookmark = useSetAtom(userBookmarkAtom);
   const [userInfo] = useAtom(userInfoAtom);
 
   // 전체 장소에서 북마크에 등록된 정보만 가져옴

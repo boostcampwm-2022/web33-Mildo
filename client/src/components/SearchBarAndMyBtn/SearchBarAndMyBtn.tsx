@@ -1,4 +1,5 @@
-import { useAtomValue, useUpdateAtom } from 'jotai/utils';
+import { useSetAtom } from 'jotai';
+import { useAtomValue } from 'jotai/utils';
 import styled from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 
@@ -70,9 +71,9 @@ interface GetRelatedAreaResponseTypes {
 }
 
 const SearchBarAndMyBtn: React.FC = () => {
-  const setIsLoginModalOpen = useUpdateAtom(isLoginModalOpenAtom);
-  const setIsMyInfoSideBarOpen = useUpdateAtom(isMyInfoSideBarOpenAtom);
-  const setIsRelatedAreaListOpen = useUpdateAtom(isRelatedAreaListOpenAtom);
+  const setIsLoginModalOpen = useSetAtom(isLoginModalOpenAtom);
+  const setIsMyInfoSideBarOpen = useSetAtom(isMyInfoSideBarOpenAtom);
+  const setIsRelatedAreaListOpen = useSetAtom(isRelatedAreaListOpenAtom);
   const [searchAreaName, setSearchAreaName] = useState('');
   const [relatedAreaInfo, setRelatedAreaInfo] =
     useState<DataRelatedAreaInfoTypes>({});

@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useUpdateAtom } from 'jotai/utils';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import { MarkerObjectTypes, SortAllAreasTypes } from '../../types/interfaces';
 import { SEOUL_BOUNDS } from '../../config/constants';
@@ -36,9 +35,9 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
   const [naverMap, setNaverMap] = useState<naver.maps.Map | null>(null);
   const [areas] = useAtom(allAreasInfoAtom);
   const prevPlace = useRef<PrevPlaceTypes | null>(null);
-  const setIsInfoDetailModalOpen = useUpdateAtom(isInfoDetailModalOpenAtom);
-  const setIsRelatedAreaListOpen = useUpdateAtom(isRelatedAreaListOpenAtom);
-  const setIsSecondLevel = useUpdateAtom(isSecondLevelAtom);
+  const setIsInfoDetailModalOpen = useSetAtom(isInfoDetailModalOpenAtom);
+  const setIsRelatedAreaListOpen = useSetAtom(isRelatedAreaListOpenAtom);
+  const setIsSecondLevel = useSetAtom(isSecondLevelAtom);
   const [markerStorage, setMarkerStorage] = useAtom(markerArray);
   const enableState = useAtomValue(enableStateAtom);
 

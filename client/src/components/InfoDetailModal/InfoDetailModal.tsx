@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAtom, useAtomValue } from 'jotai';
-import { useUpdateAtom } from 'jotai/utils';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import {
   BookmarkIcon,
@@ -38,7 +37,7 @@ const InfoDetailModal = () => {
   );
   const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
   const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
-  const setUserBookmark = useUpdateAtom(userBookmarkAtom);
+  const setUserBookmark = useSetAtom(userBookmarkAtom);
   const [userInfo] = useAtom(userInfoAtom);
 
   const success = (data: graphInfoResponseTypes | null) => {
