@@ -1,15 +1,26 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { CSSProp, css } from 'styled-components';
 
 interface MapLoadingProps {
   message?: string | null;
   width?: string;
   height?: string;
+  customLoadingPageStyle?: CSSProp | CSSProp<{ isDisplay: boolean }>;
 }
 
-const LoadingPageStyle = styled.div<MapLoadingProps>`
-  width: 100%;
-  height: 100%;
+interface LoadingProps {
+  customLoadingPageStyle?: CSSProp;
+}
+
+const defaultLoadingPageStyle = css`
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+`;
+
+const LoadingPageStyle = styled.div<LoadingProps>`
+  ${props => props.customLoadingPageStyle && props.customLoadingPageStyle}
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -19,10 +30,11 @@ const LoadingPageStyle = styled.div<MapLoadingProps>`
 const MapLoading: React.FC<MapLoadingProps> = ({
   message = '로딩중입니다...',
   width = '200px',
-  height = '200px'
+  height = '200px',
+  customLoadingPageStyle = defaultLoadingPageStyle
 }) => {
   return (
-    <LoadingPageStyle>
+    <LoadingPageStyle customLoadingPageStyle={customLoadingPageStyle}>
       {message && <h1>{message}</h1>}
       <img src='https://ifh.cc/g/RQcSZX.gif' width={width} height={height} />
     </LoadingPageStyle>

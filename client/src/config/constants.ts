@@ -58,7 +58,8 @@ export const COLOR_PALETTE = {
   GREEN: '#43EB40',
   GREY: '#979797',
   GREY20: '#EEEEEE',
-  WHITE: '#FFFFFF'
+  WHITE: '#FFFFFF',
+  BLACK: '#000000'
 };
 
 interface InfoDetailTitle {
