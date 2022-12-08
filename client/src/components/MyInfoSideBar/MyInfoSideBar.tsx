@@ -169,6 +169,8 @@ const MyInfoSideBar: React.FC = () => {
       setBookmarkAtom(
         bookmarkAtom.filter((bookmark: string) => bookmark !== areaName)
       );
+
+      makeBookmarks();
     } catch (error) {
       throw error;
     }
@@ -198,7 +200,7 @@ const MyInfoSideBar: React.FC = () => {
     }
 
     makeBookmarks();
-  }, [userInfo, areas, bookmarkAtom]);
+  }, [userInfo, areas]);
 
   const apiServerURL =
     process.env.REACT_APP_CLIENT_ENV === 'development'
