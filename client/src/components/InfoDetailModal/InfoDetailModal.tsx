@@ -35,7 +35,6 @@ const InfoDetailModal = () => {
   const firstLevelInfo = useAtomValue(firstLevelInfoAtom);
 
   const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
-  // const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
   const setUserBookmark = useSetAtom(userBookmarkAtom);
   const [userInfo] = useAtom(userInfoAtom);
 
@@ -127,15 +126,19 @@ const InfoDetailModal = () => {
               </p>
             </PopulationInfo>
           </PopulationBox>
-          <Suspense
-            fallback={<MapLoading message={null} width='50px' height='50px' />}>
-            <SecondLevelComponent
-              isDisplay={isSecondLevel}
-              firstLevelInfo={firstLevelInfo}
-              isSecondLevel={isSecondLevel}
-              // graphInfo={graphInfo}
-            />
-          </Suspense>
+          {isSecondLevel && (
+            <Suspense
+              fallback={
+                <MapLoading message={null} width='50px' height='50px' />
+              }>
+              <SecondLevelComponent
+                isDisplay={isSecondLevel}
+                firstLevelInfo={firstLevelInfo}
+                isSecondLevel={isSecondLevel}
+                // graphInfo={graphInfo}
+              />
+            </Suspense>
+          )}
           <TomorrowButton>내일 갈 거야! :&#41;</TomorrowButton>
         </ModalLayout>
       )}

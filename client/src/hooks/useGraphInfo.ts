@@ -47,8 +47,8 @@ const useGraphInfo = (
       cacheTime: QUERY_TIME.CACHE_TIME,
       onSuccess: data => {
         success(data);
-      }
-      // suspense: true
+      },
+      suspense: true
     }
   );
 
