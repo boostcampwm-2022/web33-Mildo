@@ -47,10 +47,12 @@ const MainPage = () => {
   const setIsLoginModalOpen = useUpdateAtom(isLoginModalOpenAtom);
 
   const { data: coordinates } = useQuery<CoordinatesTypes>(
-    'key',
+    ['userCoodinates'],
     (): Promise<CoordinatesTypes> => {
       return new Promise(resolve => {
-        const success = async (geolocationPosition: GeolocationPosition) => {
+        const accessAccept = async (
+          geolocationPosition: GeolocationPosition
+        ) => {
           const latitude = geolocationPosition.coords.latitude;
           const longitude = geolocationPosition.coords.longitude;
           const usersLocationResponse: UsersLocationResponseTypes =
@@ -68,11 +70,11 @@ const MainPage = () => {
           resolve(DEFAULT_COORDINATES);
         };
 
-        const error = () => {
+        const accessDenied = () => {
           resolve(DEFAULT_COORDINATES);
         };
 
-        navigator.geolocation.getCurrentPosition(success, error);
+        navigator.geolocation.getCurrentPosition(accessAccept, accessDenied);
       });
     },
     {
