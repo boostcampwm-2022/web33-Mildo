@@ -42,29 +42,15 @@ const GraphLoadingPageStyle = styled.div<{ isDisplay: boolean }>`
 const InfoDetailModal = () => {
   const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
   const firstLevelInfo = useAtomValue(firstLevelInfoAtom);
-  const [prevFirstLevelInfo, setPrevFirstLevelInfo] = useAtom(
-    prevFirstLevelInfoAtom
-  );
-  const [userInfo, setUserInfo] = useAtom(userInfoAtom);
   const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
+  const setUserBookmark = useSetAtom(userBookmarkAtom);
+  const [userInfo] = useAtom(userInfoAtom);
 
-  const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
   const [titleWidth, setTitleWidth] = useState<number>(0);
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
   const [slidable, setSlidable] = useState<boolean>(true);
 
   const titleWidthRef = useRef<HTMLHeadingElement>(null);
-
-  const success = (data: graphInfoResponseTypes | null) => {
-    if (data) {
-      setGraphInfo(data.data);
-      setPrevFirstLevelInfo(firstLevelInfo);
-    }
-  };
-
-  const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
-  const setUserBookmark = useSetAtom(userBookmarkAtom);
-  const [userInfo] = useAtom(userInfoAtom);
 
   const toggleSecondLevelContents = () => {
     setIsSecondLevel(prev => !prev);
@@ -109,15 +95,6 @@ const InfoDetailModal = () => {
   };
 
   useEffect(() => {
-    if (!isSecondLevel) {
-      setGraphInfo({});
-      return;
-    }
-
-    setPastInformation();
-  }, [isSecondLevel]);
-
-  useEffect(() => {
     if (titleWidthRef && titleWidthRef.current) {
       setTitleWidth(titleWidthRef.current.clientWidth);
     }
@@ -136,7 +113,7 @@ const InfoDetailModal = () => {
   }, []);
 
   useEffect(() => {
-    if (titleWidth + 50 > windowWidth) {
+    if (titleWidth + 150 > windowWidth) {
       setSlidable(true);
       return;
     }
@@ -234,7 +211,9 @@ const InfoDetailModal = () => {
               </Suspense>
             )}
           </GraphLoadingPageStyle>
-          <TomorrowButton>내일 갈 거야! :&#41;</TomorrowButton>
+          <TomorrowButton onClick={onClickTomorrow}>
+            내일 갈 거야! :&#41;
+          </TomorrowButton>
         </ModalLayout>
       )}
     </Modal>

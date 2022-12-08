@@ -85,7 +85,7 @@ const SearchBarAndMyBtn: React.FC = () => {
   const [searchAreaName, setSearchAreaName] = useState('');
   const [relatedAreaInfo, setRelatedAreaInfo] =
     useState<DataRelatedAreaInfoTypes>({});
-  const [searchBarWidth, setSearchBarWidth] = useState(0);
+  const [searchBarWidth, setSearchBarWidth] = useState('100%');
   const userInfo = useAtomValue(userInfoAtom);
 
   const timer = useRef<NodeJS.Timeout | null>(null);
@@ -121,6 +121,8 @@ const SearchBarAndMyBtn: React.FC = () => {
     timer.current = setTimeout(async () => {
       setIsRelatedAreaListOpen(true);
 
+      console.log('??', searchAreaName);
+
       const { data: responseRelatedAreaInfo }: GetRelatedAreaResponseTypes =
         await apis.getRelatedAreaInfo(searchAreaName);
 
@@ -135,7 +137,7 @@ const SearchBarAndMyBtn: React.FC = () => {
         searchBarWidthRef &&
         searchBarWidthRef.current!.clientWidth <= SEARCH_BAR_WIDTH_MAX
       ) {
-        setSearchBarWidth(searchBarWidthRef.current!.clientWidth);
+        setSearchBarWidth(`${searchBarWidthRef.current!.clientWidth}px`);
       }
     };
 

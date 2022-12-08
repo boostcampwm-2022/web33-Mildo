@@ -10,6 +10,7 @@ export const SecondLevelBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  overflow: auto;
 `;
 
 export const TomorrowRanking = styled.div`

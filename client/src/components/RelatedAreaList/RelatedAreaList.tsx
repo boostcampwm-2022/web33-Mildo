@@ -9,8 +9,8 @@ import {
 import RelatedAreaItem from '../RelatedAreaItem/RelatedAreaItem';
 import { markerArray } from '../../atom/markerArray';
 
-const RelatedAreaListStyle = styled.ul<{ width: number }>`
-  width: ${props => props.width}px;
+const RelatedAreaListStyle = styled.ul<{ width: string }>`
+  width: ${props => props.width};
   max-width: ${SEARCH_BAR_WIDTH_MAX}px;
   max-height: 15rem;
   overflow: auto;
@@ -38,7 +38,7 @@ interface DataRelatedAreaInfoTypes {
 interface RelatedAreaListProps {
   searchAreaName: string;
   relatedAreaInfo: DataRelatedAreaInfoTypes;
-  widthValue: number;
+  widthValue: string;
 }
 
 const emptyAreaInfo = {
@@ -85,6 +85,8 @@ const RelatedAreaList: React.FC<RelatedAreaListProps> = ({
   };
 
   useEffect(() => {
+    console.log(isRelatedAreaListOpen);
+
     setIsEmptyRelatedList(
       searchAreaName !== '' && Object.keys(relatedAreaInfo).length === 0
     );
