@@ -10,15 +10,12 @@ const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
         margin: 0px;
         padding: 0px;
-        
-
     }
 
     body {
         font-family: "Noto Sans KR", "Helvetica", "Arial", sans-serif;
         line-height: 1.5;
-        min-height: 100vh;
-        min-height: -webkit-fill-available;
+        height: 100%;
     }
 `;
 
