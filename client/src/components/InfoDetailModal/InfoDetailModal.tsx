@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { useEffect, useState, useRef, Suspense } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import styled, { css } from 'styled-components';
 
@@ -8,6 +8,7 @@ import {
   PopulationInfo,
   Title,
   TitleLocation,
+  TitleBox,
   TomorrowButton,
   ModalLayout,
   TimeLabel
@@ -41,6 +42,25 @@ const GraphLoadingPageStyle = styled.div<{ isDisplay: boolean }>`
 const InfoDetailModal = () => {
   const [isInfoDetailModalOpen] = useAtom(isInfoDetailModalOpenAtom);
   const firstLevelInfo = useAtomValue(firstLevelInfoAtom);
+  const [prevFirstLevelInfo, setPrevFirstLevelInfo] = useAtom(
+    prevFirstLevelInfoAtom
+  );
+  const [userInfo, setUserInfo] = useAtom(userInfoAtom);
+  const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
+
+  const [graphInfo, setGraphInfo] = useState<SecondLevelTimeInfoCacheTypes>({});
+  const [titleWidth, setTitleWidth] = useState<number>(0);
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+  const [slidable, setSlidable] = useState<boolean>(true);
+
+  const titleWidthRef = useRef<HTMLHeadingElement>(null);
+
+  const success = (data: graphInfoResponseTypes | null) => {
+    if (data) {
+      setGraphInfo(data.data);
+      setPrevFirstLevelInfo(firstLevelInfo);
+    }
+  };
 
   const [isSecondLevel, setIsSecondLevel] = useAtom(isSecondLevelAtom);
   const setUserBookmark = useSetAtom(userBookmarkAtom);
@@ -84,6 +104,45 @@ const InfoDetailModal = () => {
     }
   };
 
+  const onClickTomorrow = () => {
+    alert('추후 업데이트 예정입니다.');
+  };
+
+  useEffect(() => {
+    if (!isSecondLevel) {
+      setGraphInfo({});
+      return;
+    }
+
+    setPastInformation();
+  }, [isSecondLevel]);
+
+  useEffect(() => {
+    if (titleWidthRef && titleWidthRef.current) {
+      setTitleWidth(titleWidthRef.current.clientWidth);
+    }
+  }, [firstLevelInfo]);
+
+  useEffect(() => {
+    const checkViewportWidth = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', checkViewportWidth);
+
+    return () => {
+      window.removeEventListener('resize', checkViewportWidth);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (titleWidth + 50 > windowWidth) {
+      setSlidable(true);
+      return;
+    }
+    setSlidable(false);
+  }, [titleWidth, windowWidth]);
+
   return (
     <Modal isOpen={isInfoDetailModalOpen}>
       {firstLevelInfo && (
@@ -112,13 +171,31 @@ const InfoDetailModal = () => {
               onClick={onClickBookmark}
             />
           )}
-          <Title>
-            현재&nbsp;
-            <TitleLocation populationLevel={firstLevelInfo[1].populationLevel}>
-              {firstLevelInfo[0]}
-            </TitleLocation>
-            {INFO_DETAIL_TITLE[firstLevelInfo[1].populationLevel]}
-          </Title>
+          <TitleBox>
+            <Title ref={titleWidthRef} slide={slidable} textWidth={titleWidth}>
+              현재&nbsp;
+              <TitleLocation
+                populationLevel={firstLevelInfo[1].populationLevel}>
+                {firstLevelInfo[0]}
+              </TitleLocation>
+              {INFO_DETAIL_TITLE[firstLevelInfo[1].populationLevel]}
+            </Title>
+            {slidable ? (
+              <Title
+                ref={titleWidthRef}
+                slide={slidable}
+                textWidth={titleWidth}>
+                현재&nbsp;
+                <TitleLocation
+                  populationLevel={firstLevelInfo[1].populationLevel}>
+                  {firstLevelInfo[0]}
+                </TitleLocation>
+                {INFO_DETAIL_TITLE[firstLevelInfo[1].populationLevel]}
+              </Title>
+            ) : (
+              <></>
+            )}
+          </TitleBox>
           <PopulationBox>
             <img src='https://ifh.cc/g/2GQfXw.png' />
             <PopulationInfo>

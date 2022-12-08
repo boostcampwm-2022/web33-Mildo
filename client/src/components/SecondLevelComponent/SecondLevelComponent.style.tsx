@@ -10,9 +10,6 @@ export const SecondLevelBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background-color: ${COLOR_PALETTE.GREY20};
-  border-radius: 10px;
-  overflow: auto;
 `;
 
 export const TomorrowRanking = styled.div`
@@ -20,4 +17,5 @@ export const TomorrowRanking = styled.div`
   height: 30%;
   background-color: ${COLOR_PALETTE.GREY20};
   border-radius: 10px;
+  cursor: pointer;
 `;

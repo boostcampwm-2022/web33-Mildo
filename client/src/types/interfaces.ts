@@ -66,3 +66,8 @@ export interface graphInfoResponseTypes {
   ok: boolean;
   data: SecondLevelTimeInfoCacheTypes;
 }
+
+export interface TitleTypes {
+  slide: boolean;
+  textWidth: number;
+}

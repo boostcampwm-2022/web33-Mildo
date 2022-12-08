@@ -92,3 +92,6 @@ export const QUERY_TIME = {
   STALE_TIME: 5 * 60 * 1000, // 5분
   CACHE_TIME: 30 * 60 * 1000 // 30분
 };
+
+export const SEARCH_BAR_WIDTH_MAX = 439;
+export const DEBOUNCE_TIME = 500;

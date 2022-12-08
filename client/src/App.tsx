@@ -17,6 +17,8 @@ const GlobalStyle = createGlobalStyle`
     body {
         font-family: "Noto Sans KR", "Helvetica", "Arial", sans-serif;
         line-height: 1.5;
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
     }
 `;
 
