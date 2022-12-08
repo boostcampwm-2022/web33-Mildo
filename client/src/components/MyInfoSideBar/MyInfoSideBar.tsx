@@ -161,16 +161,16 @@ const MyInfoSideBar: React.FC = () => {
       return;
     }
 
-    const { _id: userId } = userInfo.data;
+    const { _id: userId, bookmarks } = userInfo.data;
 
     try {
       await apis.deleteBookmark(areaName, userId);
 
       setBookmarkAtom(
-        bookmarkAtom.filter((bookmark: string) => bookmark !== areaName)
+        bookmarks.filter((bookmark: string) => bookmark !== areaName)
       );
 
-      makeBookmarks();
+      return;
     } catch (error) {
       throw error;
     }
@@ -195,12 +195,12 @@ const MyInfoSideBar: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!userInfo.data || !areas) {
+    if (!userInfo.data) {
       return;
     }
 
     makeBookmarks();
-  }, [userInfo, areas]);
+  }, [userInfo, bookmarkAtom]);
 
   const apiServerURL =
     process.env.REACT_APP_CLIENT_ENV === 'development'
