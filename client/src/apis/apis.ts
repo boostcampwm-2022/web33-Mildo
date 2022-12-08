@@ -10,23 +10,6 @@ const request = async (
   method: 'get' | 'post' | 'delete',
   data?: Record<string, unknown> | undefined
 ) => {
-  // axiosInstance.interceptors.request.use(
-  //   config => {
-  //     config.method = method;
-  //     if (data) {
-  //       config.data = data;
-  //     }
-
-  //     console.log(config);
-
-  //     return config;
-  //   },
-  //   error => {
-  //     console.log(error);
-  //     return Promise.reject(error);
-  //   }
-  // );
-
   try {
     const response = await axios({
       url: `${apiServerURL}${path}`,
@@ -37,19 +20,8 @@ const request = async (
 
     return response.data;
   } catch (error) {
-    console.log(error);
+    return { ok: false };
   }
-
-  // axiosInstance.interceptors.response.use(
-  //   response => {
-  //     return response.data;
-  //   },
-  //   error => {
-  //     console.log(error);
-  //   }
-  // );
-
-  return { ok: false };
 };
 
 export default {

@@ -121,8 +121,6 @@ const SearchBarAndMyBtn: React.FC = () => {
     timer.current = setTimeout(async () => {
       setIsRelatedAreaListOpen(true);
 
-      console.log('??', searchAreaName);
-
       const { data: responseRelatedAreaInfo }: GetRelatedAreaResponseTypes =
         await apis.getRelatedAreaInfo(searchAreaName);
 
