@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, Suspense } from 'react';
+import { useEffect, useState, useRef, Suspense, lazy } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import styled, { css } from 'styled-components';
 
@@ -25,10 +25,13 @@ import {
   INFO_DETAIL_TITLE
 } from '../../config/constants';
 import apis from '../../apis/apis';
-import SecondLevelComponent from '../SecondLevelComponent/SecondLevelComponent';
 import { userBookmarkAtom, userInfoAtom } from '../../atom/userInfo';
 import { makeTime } from '../../utils/time.util';
 import MapLoading from '../MapLoading/MapLoading';
+
+const SecondLevelComponent = lazy(
+  () => import('../SecondLevelComponent/SecondLevelComponent')
+);
 
 const GraphLoadingPageStyle = styled.div<{ isDisplay: boolean }>`
   width: 100%;
