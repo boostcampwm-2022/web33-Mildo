@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { isLoginModalOpenAtom } from '../../atom/loginModal';
 import { isMyInfoSideBarOpenAtom } from '../../atom/myInfoSideBar';
-import { createMyButtonSvg } from '../../utils/button.util';
+import { MyButtonSVG } from '../../utils/button.util';
 import RelatedAreaList from '../RelatedAreaList/RelatedAreaList';
 import apis from '../../apis/apis';
 import { isCompleteKorean } from '../../utils/search.util';
@@ -154,11 +154,9 @@ const SearchBarAndMyBtn: React.FC = () => {
         value={searchAreaName}
         ref={searchBarWidthRef}
       />
-      <MyButton
-        onClick={onClickMyButton}
-        dangerouslySetInnerHTML={{
-          __html: createMyButtonSvg()
-        }}></MyButton>
+      <MyButton onClick={onClickMyButton}>
+        <MyButtonSVG />
+      </MyButton>
       <RelatedAreaList
         searchAreaName={searchAreaName}
         relatedAreaInfo={relatedAreaInfo}

@@ -29,6 +29,28 @@ const EmptyAreaItemStyle = styled.li`
   color: ${COLOR_PALETTE.GREY};
 `;
 
+interface PartialMatchAreaItemProps {
+  searchName: string;
+  areaName: string;
+}
+
+const PartialMatchAreaItem: React.FC<PartialMatchAreaItemProps> = ({
+  searchName,
+  areaName
+}) => {
+  return (
+    <>
+      {areaName
+        .replaceAll(searchName, `<>${searchName}<>`)
+        .split('<>')
+        .map(name => {
+          if (name === searchName) return <strong>{searchName}</strong>;
+          return <>{name}</>;
+        })}
+    </>
+  );
+};
+
 interface CoordinatesTypes {
   latitude: number;
   longitude: number;
@@ -44,10 +66,6 @@ interface RelatedSearchListProps {
   areaInfo: DataRelatedAreaInfoTypes;
 }
 
-const printSignatureColor = (searchAreaName: string, areaName: string) => {
-  return areaName.replace(searchAreaName, `<strong>${searchAreaName}</strong>`);
-};
-
 const RelatedAreaItem: React.FC<RelatedSearchListProps> = ({
   searchAreaName,
   areaInfo
@@ -57,12 +75,12 @@ const RelatedAreaItem: React.FC<RelatedSearchListProps> = ({
       {areaInfo.coordinates.latitude === -1 ? (
         <EmptyAreaItemStyle>{areaInfo.areaName}</EmptyAreaItemStyle>
       ) : (
-        <RelatedAreaItemStyle
-          data-name={areaInfo.areaName}
-          dangerouslySetInnerHTML={{
-            __html: printSignatureColor(searchAreaName, areaInfo.areaName)
-          }}
-        />
+        <RelatedAreaItemStyle data-name={areaInfo.areaName}>
+          <PartialMatchAreaItem
+            searchName={searchAreaName}
+            areaName={areaInfo.areaName}
+          />
+        </RelatedAreaItemStyle>
       )}
     </>
   );
