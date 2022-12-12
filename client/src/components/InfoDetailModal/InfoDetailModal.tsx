@@ -193,27 +193,27 @@ const InfoDetailModal = () => {
             </PopulationInfo>
           </PopulationBox>
           <GraphLoadingPageStyle isDisplay={isSecondLevel}>
-            {isSecondLevel && (
-              <Suspense
-                fallback={
-                  <>
-                    <MapLoading
-                      message={null}
-                      width='50px'
-                      height='50px'
-                      customLoadingPageStyle={css`
-                        width: 100%;
-                        height: 100%;
-                      `}
-                    />
-                  </>
-                }>
+            <Suspense
+              fallback={
+                <>
+                  <MapLoading
+                    message={null}
+                    width='50px'
+                    height='50px'
+                    customLoadingPageStyle={css`
+                      width: 100%;
+                      height: 100%;
+                    `}
+                  />
+                </>
+              }>
+              {isSecondLevel && (
                 <SecondLevelComponent
                   firstLevelInfo={firstLevelInfo}
                   isSecondLevel={isSecondLevel}
                 />
-              </Suspense>
-            )}
+              )}
+            </Suspense>
           </GraphLoadingPageStyle>
           <TomorrowButton onClick={onClickTomorrow}>
             내일 갈 거야! :&#41;
