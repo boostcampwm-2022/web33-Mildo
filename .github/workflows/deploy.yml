@@ -26,11 +26,17 @@ jobs:
         working-directory: ${{env.client-directory}}
         run: yarn
         
+#       - name: 클라이언트 env 파일 설정
+#         working-directory: ${{env.client-directory}}
+#         run: |
+#           touch .env
+#           echo REACT_APP_API_SERVER_URL_PRODUCTION=${{ secrets.REACT_APP_API_SERVER_URL_PRODUCTION }}\ >> .env
+
       - name: 클라이언트 env 파일 설정
         working-directory: ${{env.client-directory}}
         run: |
           touch .env
-          echo REACT_APP_API_SERVER_URL_PRODUCTION=${{ secrets.REACT_APP_API_SERVER_URL_PRODUCTION }}\ >> .env
+          echo VITE_API_SERVER_URL_PRODUCTION=${{ secrets.VITE_API_SERVER_URL_PRODUCTION }}\ >> .env
         
       - name: 클라이언트 빌드
         working-directory: ${{env.client-directory}}
@@ -108,6 +114,16 @@ jobs:
             mkdir server
             mkdir cron-server
             
+#       - name: 클라이언트 빌드 폴더 복사
+#         uses: appleboy/scp-action@master
+#         with:
+#           host: ${{ secrets.HOST }}
+#           username: ${{ secrets.USERNAME }}
+#           password: ${{ secrets.PASSWORD }}
+#           port: ${{ secrets.PORT }}
+#           source: client/build
+#           target: "/usr/share/nginx/html"
+          
       - name: 클라이언트 빌드 폴더 복사
         uses: appleboy/scp-action@master
         with:
@@ -115,7 +131,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: client/build
+          source: client/dist
           target: "/usr/share/nginx/html"
 
       - name: API 서버 빌드 폴더 복사
