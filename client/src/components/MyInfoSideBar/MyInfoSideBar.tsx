@@ -203,9 +203,9 @@ const MyInfoSideBar: React.FC = () => {
   }, [userInfo, bookmarkAtom]);
 
   const apiServerURL =
-    process.env.REACT_APP_CLIENT_ENV === 'development'
-      ? process.env.REACT_APP_API_SERVER_URL_DEVELOPMENT
-      : process.env.REACT_APP_API_SERVER_URL_PRODUCTION;
+    import.meta.env.VITE_CLIENT_ENV === 'development'
+      ? import.meta.env.VITE_API_SERVER_URL_DEVELOPMENT
+      : import.meta.env.VITE_API_SERVER_URL_PRODUCTION;
 
   return (
     <Modal
