@@ -4,7 +4,7 @@ import { IoClose } from 'react-icons/io5';
 
 import Modal from '../Modal/Modal';
 import { isLoginModalOpenAtom } from '../../atom/loginModal';
-import { createNaverLoginSvg } from '../../utils/login.util';
+import { NaverLoginSVG } from '../../utils/login.util';
 import { Z_INDEX } from '../../config/constants';
 
 const LoginModalLayout = css`
@@ -71,9 +71,9 @@ const NaverLoginBtn = styled.button`
 `;
 
 const apiServerURL =
-  process.env.REACT_APP_CLIENT_ENV === 'development'
-    ? process.env.REACT_APP_API_SERVER_URL_DEVELOPMENT
-    : process.env.REACT_APP_API_SERVER_URL_PRODUCTION;
+  import.meta.env.VITE_CLIENT_ENV === 'development'
+    ? import.meta.env.VITE_API_SERVER_URL_DEVELOPMENT
+    : import.meta.env.VITE_API_SERVER_URL_PRODUCTION;
 
 const LoginModal = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useAtom(isLoginModalOpenAtom);
@@ -98,11 +98,9 @@ const LoginModal = () => {
         <h2>로그인</h2>
       </TitleBar>
       <a href={`${apiServerURL}/naver/auth/login`}>
-        <NaverLoginBtn
-          dangerouslySetInnerHTML={{
-            __html: createNaverLoginSvg()
-          }}
-        />
+        <NaverLoginBtn>
+          <NaverLoginSVG />
+        </NaverLoginBtn>
       </a>
     </Modal>
   );

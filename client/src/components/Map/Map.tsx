@@ -55,7 +55,7 @@ const Map: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
 
     const mapOptions: naver.maps.MapOptions = {
       center: location,
-      zoom: 14,
+      zoom: 16,
       minZoom: SEOUL_BOUNDS.MIN_ZOOM,
       maxBounds: new naver.maps.LatLngBounds(
         new naver.maps.LatLng(
