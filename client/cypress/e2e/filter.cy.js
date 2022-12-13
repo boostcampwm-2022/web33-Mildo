@@ -14,30 +14,56 @@ describe('필터 렌더링 테스트', () => {
   });
 
   it('필터 선택', () => {
-    cy.get('div>svg>path').should('be.visible');
+    // cy.get('div>svg>path').should('be.visible');
+
+    cy.get('svg[width="35"][height="50"]').should('have.length', 50);
 
     // 전체 해제
-    populationLevels.map((_, index) => {
-      cy.get(`ul>li`).eq(index).click();
+
+    cy.get(`ul>li`).each($li => {
+      cy.wrap($li).click();
     });
+
     // 마커가 하나도 없어야 함
     cy.get('div>svg').should('not.exist');
 
     // 하나씩 눌렀을 때
     populationColors.map((color, index) => {
       cy.get(`ul>li`).eq(index).click();
-      const marker = cy.get('div>svg>path');
 
-      if (marker) {
-        // 해당 컬러 존재
-        marker.should('have.attr', 'fill', color);
+      const marker = cy
+        .get('svg[width="35"][height="50"]')
+        .should('have.length', 0);
+
+      if (!marker) {
+        cy.get('svg[width="35"][height="50"]').should(
+          'have.attr',
+          'fill',
+          color
+        );
         // 다른 컬러는 존재하지 않음
         populationColors
           .filter(other => other !== color)
           .map(other => {
-            marker.should('not.have.attr', 'fill', other);
+            cy.get('svg[width="35"][height="50"]').should(
+              'not.have.attr',
+              'fill',
+              other
+            );
           });
       }
+      // const marker = cy.get('svg[width="35"][height="50"]');
+
+      // if (cy.wrap(marker)) {
+      //   // 해당 컬러 존재
+      //   cy.wrap(marker).should('have.attr', 'fill', color);
+      //   // 다른 컬러는 존재하지 않음
+      //   populationColors
+      //     .filter(other => other !== color)
+      //     .map(other => {
+      //       cy.wrap(marker).should('not.have.attr', 'fill', other);
+      //     });
+      // }
       cy.get(`ul>li`).eq(index).click();
     });
   });
