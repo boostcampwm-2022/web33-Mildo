@@ -135,9 +135,9 @@ const InfoDetailModal = () => {
       {firstLevelInfo && (
         <ModalLayout>
           {isSecondLevel ? (
-            <img src={downChevron} onClick={toggleSecondLevelContents} />
-          ) : (
             <img src={upChevron} onClick={toggleSecondLevelContents} />
+          ) : (
+            <img src={downChevron} onClick={toggleSecondLevelContents} />
           )}
 
           {userInfo.data.isLoggedIn &&
