@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from 'react';
 
 import { isLoginModalOpenAtom } from '../../atom/loginModal';
 import { isMyInfoSideBarOpenAtom } from '../../atom/myInfoSideBar';
-import { MyButtonSVG } from '../../utils/button.util';
 import RelatedAreaList from '../RelatedAreaList/RelatedAreaList';
 import apis from '../../apis/apis';
 import { isCompleteKorean } from '../../utils/search.util';
@@ -14,6 +13,7 @@ import {
   DEBOUNCE_TIME,
   SEARCH_BAR_WIDTH_MAX
 } from '../../config/constants';
+import MyButtonSVG from '../../../public/assets/myButton.svg';
 import { userInfoAtom } from '../../atom/userInfo';
 import { isRelatedAreaListOpenAtom } from '../../atom/relatedAreaList';
 
@@ -155,7 +155,7 @@ const SearchBarAndMyBtn: React.FC = () => {
         ref={searchBarWidthRef}
       />
       <MyButton onClick={onClickMyButton}>
-        <MyButtonSVG />
+        <img src={MyButtonSVG} />
       </MyButton>
       <RelatedAreaList
         searchAreaName={searchAreaName}
