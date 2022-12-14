@@ -1,9 +1,11 @@
-import { Suspense } from 'react';
+import { Suspense, lazy } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { createGlobalStyle } from 'styled-components';
 import MapLoading from './components/MapLoading/MapLoading';
-import MainPage from './pages/MainPage/MainPage';
+// import MainPage from './pages/MainPage/MainPage';
+
+const MainPage = lazy(() => import('./pages/MainPage/MainPage'));
 
 const GlobalStyle = createGlobalStyle`
     *, *::before, *::after {

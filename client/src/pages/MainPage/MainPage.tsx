@@ -1,7 +1,7 @@
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue, useAtom } from 'jotai';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 
 import { userInfoAtom } from '../../atom/userInfo';
 import apis from '../../apis/apis';
@@ -11,8 +11,9 @@ import { isLoginModalOpenAtom } from '../../atom/loginModal';
 import SearchBarAndMyBtn from '../../components/SearchBarAndMyBtn/SearchBarAndMyBtn';
 import DensityFilterList from '../../components/DensityFilterList/DensityFilterList';
 import InfoDetailModal from '../../components/InfoDetailModal/InfoDetailModal';
-import LoginModal from '../../components/LoginModal/LoginModal';
 import MyInfoSideBar from '../../components/MyInfoSideBar/MyInfoSideBar';
+
+const LoginModal = lazy(() => import('../../components/LoginModal/LoginModal'));
 
 const StyledMainPage = styled.div`
   position: absolute;
@@ -43,7 +44,7 @@ const isUserInSeoulOrGwaCheon = (usersLocation: string) => {
 
 const MainPage = () => {
   const userInfo = useAtomValue(userInfoAtom);
-  const setIsLoginModalOpen = useSetAtom(isLoginModalOpenAtom);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useAtom(isLoginModalOpenAtom);
 
   const { data: coordinates } = useQuery<CoordinatesTypes>(
     ['userCoodinates'],
@@ -96,7 +97,7 @@ const MainPage = () => {
       <SearchBarAndMyBtn />
       <DensityFilterList />
       <InfoDetailModal />
-      <LoginModal />
+      {isLoginModalOpen && <LoginModal />}
       <MyInfoSideBar />
     </StyledMainPage>
   );
