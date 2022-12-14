@@ -19,16 +19,25 @@ export default {
   },
   pastInfo: async (req: Request, res: Response) => {
     const { areaName } = req.params;
-    const pastInformation = await redisService.getPastInformation(areaName);
-    if (!pastInformation) {
-      return res.status(500).json({ ok: false });
+    try {
+      const pastInformation = await redisService.getPastInformation(areaName);
+      if (!pastInformation) {
+        const pastInfomation = await seoulService.getPastAreaPopulation(
+          areaName
+        );
+        return res.status(200).json({ ok: true, data: pastInfomation });
+      }
+
+      const sortedInformation = await seoulService.getSortedPastInformation(
+        pastInformation
+      );
+
+      return res.status(200).json({ ok: true, data: sortedInformation });
+    } catch (error) {
+      console.log(error);
+      const pastInfomation = await seoulService.getPastAreaPopulation(areaName);
+      return res.status(200).json({ ok: true, data: pastInfomation });
     }
-
-    const sortedInformation = await seoulService.getSortedPastInformation(
-      pastInformation
-    );
-
-    return res.status(200).json({ ok: true, data: sortedInformation });
   },
   searchArea: async (req: Request, res: Response) => {
     const { areaName } = req.query;
