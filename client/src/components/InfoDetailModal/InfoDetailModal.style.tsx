@@ -16,7 +16,7 @@ export const ModalLayout = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 10px;
-  width: 100%;
+  width: 100vw;
   max-width: 35rem;
   height: auto;
   background-color: white;
