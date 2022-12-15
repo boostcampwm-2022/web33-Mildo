@@ -37,12 +37,18 @@ export const BookmarkIcon = styled.img`
 
 const marquee = (width: number) => keyframes`
 0% {
-  transform: translate(${width}px, 0);
+  -ms-transform: translate(${width}px);
   -webkit-transform: translate(${width}px);
+  -moz-transform: translate(${width}px);
+  -o-transform: translate(${width}px);
+  transform: translate(${width}px, 0);
 }
 100% {
-  transform: translate(-${width}px, 0);
+  -ms-transform: translate(-${width}px);
   -webkit-transform: translate(-${width}px);
+  -moz-transform: translate(-${width}px);
+  -o-transform: translate(-${width}px);
+  transform: translate(-${width}px, 0);
 }
 `;
 
@@ -63,7 +69,7 @@ export const Title = styled.h1<TitleTypes>`
 export const TitleBox = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 50%;
+  gap: ${Math.floor(window.innerWidth / 2)}px;
 `;
 
 interface TitleLocationProps {
