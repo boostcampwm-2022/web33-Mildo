@@ -143,5 +143,19 @@ export default {
       }, initObject);
 
     return sortedInformation;
+  },
+  getPastAreaPopulation: async (
+    areaName: string
+  ): Promise<RedisAllAreasResponseTypes | null> => {
+    const sortedInfomation: RedisAllAreasResponseTypes = {};
+    const pastInfo = await populationRepository.findPastInfo(areaName);
+    pastInfo.forEach(info => {
+      sortedInfomation[info.populationTime.toISOString()] = {
+        populationLevel: info.populationLevel,
+        populationMax: info.populationMax,
+        populationMin: info.populationMin
+      };
+    });
+    return sortedInfomation;
   }
 };
