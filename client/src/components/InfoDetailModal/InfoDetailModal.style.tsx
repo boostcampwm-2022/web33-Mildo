@@ -28,7 +28,6 @@ export const ModalLayout = styled.div`
   z-index: ${Z_INDEX.FILTER};
 `;
 
-// 북마크 on https://ifh.cc/v-6kHtyx.png
 export const BookmarkIcon = styled.img`
   position: absolute;
   top: 0%;

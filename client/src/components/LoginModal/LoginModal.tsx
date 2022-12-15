@@ -1,11 +1,12 @@
 import { useAtom } from 'jotai';
 import styled, { css } from 'styled-components';
-import { IoClose } from 'react-icons/io5';
 
 import Modal from '../Modal/Modal';
 import { isLoginModalOpenAtom } from '../../atom/loginModal';
-import { NaverLoginSVG } from '../../utils/login.util';
 import { Z_INDEX } from '../../config/constants';
+
+import LoginCancel from '../../../public/assets/loginCancel.svg';
+import NaverLoginSVG from '../../../public/assets/naverLogin.svg';
 
 const LoginModalLayout = css`
   position: absolute;
@@ -85,21 +86,14 @@ const LoginModal = () => {
       background={true}
       isClickModalFilter={setIsLoginModalOpen}>
       <TitleBar>
-        <button>
-          <IoClose
-            onClick={() => setIsLoginModalOpen(false)}
-            style={{
-              color: 'white',
-              width: '18px',
-              height: '18px'
-            }}
-          />
+        <button onClick={() => setIsLoginModalOpen(false)}>
+          <img src={LoginCancel} />
         </button>
         <h2>로그인</h2>
       </TitleBar>
       <a href={`${apiServerURL}/naver/auth/login`}>
         <NaverLoginBtn>
-          <NaverLoginSVG />
+          <img src={NaverLoginSVG} />
         </NaverLoginBtn>
       </a>
     </Modal>
