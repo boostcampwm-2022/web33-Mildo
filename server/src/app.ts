@@ -24,7 +24,12 @@ connectRedis();
 
 const SESSION_COOKIE_MAX_AGE = 60 * 60 * 1000;
 
-app.use(cors({ origin: clientURL, credentials: true }));
+app.use(
+  cors({
+    origin: clientURL,
+    credentials: true
+  })
+);
 app.use(
   expressSession({
     secret: `${process.env.SESSION_SECRET}`,

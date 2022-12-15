@@ -153,8 +153,8 @@ const InfoDetailModal = () => {
               onClick={onClickBookmark}
             />
           )}
-          <TitleBox>
-            <Title ref={titleWidthRef} slide={slidable} textWidth={titleWidth}>
+          <TitleBox slide={slidable} textWidth={titleWidth}>
+            <Title ref={titleWidthRef}>
               현재&nbsp;
               <TitleLocation
                 populationLevel={firstLevelInfo[1].populationLevel}>
@@ -163,10 +163,7 @@ const InfoDetailModal = () => {
               {INFO_DETAIL_TITLE[firstLevelInfo[1].populationLevel]}
             </Title>
             {slidable ? (
-              <Title
-                ref={titleWidthRef}
-                slide={slidable}
-                textWidth={titleWidth}>
+              <Title ref={titleWidthRef}>
                 현재&nbsp;
                 <TitleLocation
                   populationLevel={firstLevelInfo[1].populationLevel}>
