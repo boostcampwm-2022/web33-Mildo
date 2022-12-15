@@ -1,8 +1,6 @@
 import React from 'react';
 import styled, { CSSProp, css } from 'styled-components';
 
-import loadingImg from '../../../public/assets/loading.gif';
-
 interface MapLoadingProps {
   message?: string | null;
   width?: string;
@@ -37,7 +35,7 @@ const MapLoading: React.FC<MapLoadingProps> = ({
     <LoadingPageStyle customLoadingPageStyle={customLoadingPageStyle}>
       {message && <h1>{message}</h1>}
       <img
-        src={loadingImg}
+        src='assets/loading.gif'
         width={width}
         height={height}
         aria-label='로딩중입니다...'

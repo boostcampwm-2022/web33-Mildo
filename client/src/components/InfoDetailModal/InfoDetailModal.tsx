@@ -29,12 +29,6 @@ import { userBookmarkAtom, userInfoAtom } from '../../atom/userInfo';
 import { makeTime } from '../../utils/time.util';
 import MapLoading from '../MapLoading/MapLoading';
 
-import bookmarkOff from '../../../public/assets/bookmarkOff.svg';
-import bookmarkOn from '../../../public/assets/bookmarkOn.svg';
-import downChevron from '../../../public/assets/downChevron.svg';
-import upChevron from '../../../public/assets/upChevron.svg';
-import human from '../../../public/assets/human.svg';
-
 const SecondLevelComponent = lazy(
   () => import('../SecondLevelComponent/SecondLevelComponent')
 );
@@ -136,13 +130,13 @@ const InfoDetailModal = () => {
         <ModalLayout>
           {isSecondLevel ? (
             <img
-              src={upChevron}
+              src='/assets/upChevron.svg'
               onClick={toggleSecondLevelContents}
               aria-label='위로 올리기 버튼'
             />
           ) : (
             <img
-              src={downChevron}
+              src='/assets/downChevron.svg'
               onClick={toggleSecondLevelContents}
               aria-label='아래로 내리기 버튼'
             />
@@ -150,9 +144,15 @@ const InfoDetailModal = () => {
 
           {userInfo.data.isLoggedIn &&
           userInfo.data.bookmarks.includes(firstLevelInfo[0]) ? (
-            <BookmarkIcon src={bookmarkOn} onClick={onClickBookmark} />
+            <BookmarkIcon
+              src='/assets/bookmarkOn.svg'
+              onClick={onClickBookmark}
+            />
           ) : (
-            <BookmarkIcon src={bookmarkOff} onClick={onClickBookmark} />
+            <BookmarkIcon
+              src='/assets/bookmarkOff.svg'
+              onClick={onClickBookmark}
+            />
           )}
           <TitleBox>
             <Title ref={titleWidthRef} slide={slidable} textWidth={titleWidth}>
@@ -180,7 +180,7 @@ const InfoDetailModal = () => {
             )}
           </TitleBox>
           <PopulationBox>
-            <img src={human} aria-label='인구 수' />
+            <img src='/assets/human.svg' aria-label='인구 수' />
             <PopulationInfo>
               <div>
                 <p>현재 인구</p>
