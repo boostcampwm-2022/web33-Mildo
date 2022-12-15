@@ -29,12 +29,6 @@ import { userBookmarkAtom, userInfoAtom } from '../../atom/userInfo';
 import { makeTime } from '../../utils/time.util';
 import MapLoading from '../MapLoading/MapLoading';
 
-import bookmarkOff from '../../../public/assets/bookmarkOff.svg';
-import bookmarkOn from '../../../public/assets/bookmarkOn.svg';
-import downChevron from '../../../public/assets/downChevron.svg';
-import upChevron from '../../../public/assets/upChevron.svg';
-import human from '../../../public/assets/human.svg';
-
 const SecondLevelComponent = lazy(
   () => import('../SecondLevelComponent/SecondLevelComponent')
 );
@@ -135,16 +129,28 @@ const InfoDetailModal = () => {
       {firstLevelInfo && (
         <ModalLayout>
           {isSecondLevel ? (
-            <img src={upChevron} onClick={toggleSecondLevelContents} />
+            <img
+              src='/assets/upChevron.svg'
+              onClick={toggleSecondLevelContents}
+            />
           ) : (
-            <img src={downChevron} onClick={toggleSecondLevelContents} />
+            <img
+              src='/assets/downChevron.svg'
+              onClick={toggleSecondLevelContents}
+            />
           )}
 
           {userInfo.data.isLoggedIn &&
           userInfo.data.bookmarks.includes(firstLevelInfo[0]) ? (
-            <BookmarkIcon src={bookmarkOn} onClick={onClickBookmark} />
+            <BookmarkIcon
+              src='/assets/bookmarkOn.svg'
+              onClick={onClickBookmark}
+            />
           ) : (
-            <BookmarkIcon src={bookmarkOff} onClick={onClickBookmark} />
+            <BookmarkIcon
+              src='/assets/bookmarkOff.svg'
+              onClick={onClickBookmark}
+            />
           )}
           <TitleBox>
             <Title ref={titleWidthRef} slide={slidable} textWidth={titleWidth}>
@@ -172,7 +178,7 @@ const InfoDetailModal = () => {
             )}
           </TitleBox>
           <PopulationBox>
-            <img src={human} />
+            <img src='/assets/human.svg' />
             <PopulationInfo>
               <div>
                 <p>현재 인구</p>

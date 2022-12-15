@@ -13,7 +13,6 @@ import {
   DEBOUNCE_TIME,
   SEARCH_BAR_WIDTH_MAX
 } from '../../config/constants';
-import MyButtonSVG from '../../../public/assets/myButton.svg';
 import { userInfoAtom } from '../../atom/userInfo';
 import { isRelatedAreaListOpenAtom } from '../../atom/relatedAreaList';
 
@@ -155,7 +154,7 @@ const SearchBarAndMyBtn: React.FC = () => {
         ref={searchBarWidthRef}
       />
       <MyButton onClick={onClickMyButton}>
-        <img src={MyButtonSVG} />
+        <img src='assets/myButton.svg' />
       </MyButton>
       <RelatedAreaList
         searchAreaName={searchAreaName}
