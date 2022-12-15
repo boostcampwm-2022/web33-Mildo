@@ -41,14 +41,14 @@ const marquee = (width: number) => keyframes`
   -webkit-transform: translate(${width}px);
   -moz-transform: translate(${width}px);
   -o-transform: translate(${width}px);
-  transform: translate(${width}px, 0);
+  transform: translate(${width}px);
 }
 100% {
   -ms-transform: translate(-${width}px);
   -webkit-transform: translate(-${width}px);
   -moz-transform: translate(-${width}px);
   -o-transform: translate(-${width}px);
-  transform: translate(-${width}px, 0);
+  transform: translate(-${width}px);
 }
 `;
 
@@ -69,7 +69,7 @@ export const Title = styled.h1<TitleTypes>`
 export const TitleBox = styled.div`
   display: flex;
   flex-direction: row;
-  gap: ${Math.floor(window.innerWidth / 2)}px;
+  gap: 50%;
 `;
 
 interface TitleLocationProps {
