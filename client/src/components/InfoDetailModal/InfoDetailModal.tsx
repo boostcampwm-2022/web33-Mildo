@@ -135,9 +135,17 @@ const InfoDetailModal = () => {
       {firstLevelInfo && (
         <ModalLayout>
           {isSecondLevel ? (
-            <img src={upChevron} onClick={toggleSecondLevelContents} />
+            <img
+              src={upChevron}
+              onClick={toggleSecondLevelContents}
+              aria-label='위로 올리기 버튼'
+            />
           ) : (
-            <img src={downChevron} onClick={toggleSecondLevelContents} />
+            <img
+              src={downChevron}
+              onClick={toggleSecondLevelContents}
+              aria-label='아래로 내리기 버튼'
+            />
           )}
 
           {userInfo.data.isLoggedIn &&
@@ -172,7 +180,7 @@ const InfoDetailModal = () => {
             )}
           </TitleBox>
           <PopulationBox>
-            <img src={human} />
+            <img src={human} aria-label='인구 수' />
             <PopulationInfo>
               <div>
                 <p>현재 인구</p>
