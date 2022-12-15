@@ -141,7 +141,6 @@ const InfoDetailModal = () => {
               aria-label='아래로 내리기 버튼'
             />
           )}
-
           {userInfo.data.isLoggedIn &&
           userInfo.data.bookmarks.includes(firstLevelInfo[0]) ? (
             <BookmarkIcon
