@@ -41,7 +41,7 @@ const marquee = (width: number) => keyframes`
   -webkit-transform: translate(${width}px);
   -moz-transform: translate(${width}px);
   -o-transform: translate(${width}px);
-  transform: translate(${width}px);
+  transform: translate(${width}px); 
 }
 100% {
   -ms-transform: translate(-${width}px);
@@ -52,24 +52,24 @@ const marquee = (width: number) => keyframes`
 }
 `;
 
-export const Title = styled.h1<TitleTypes>`
+export const Title = styled.h1`
   display: inline-block;
   text-align: center;
   font-size: 1rem;
   white-space: nowrap;
   will-change: transform;
+`;
+
+export const TitleBox = styled.div<TitleTypes>`
+  display: flex;
+  flex-direction: row;
+  gap: 50%;
   animation: ${props =>
     props.slide
       ? css`
           ${marquee(props.textWidth)} 10s linear infinite
         `
       : ''};
-`;
-
-export const TitleBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 50%;
 `;
 
 interface TitleLocationProps {
