@@ -38,9 +38,11 @@ export const BookmarkIcon = styled.img`
 const marquee = (width: number) => keyframes`
 0% {
   transform: translate(${width}px, 0);
+  -webkit-transform: translate(${width}px);
 }
 100% {
   transform: translate(-${width}px, 0);
+  -webkit-transform: translate(-${width}px);
 }
 `;
 
