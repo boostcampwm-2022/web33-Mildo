@@ -63,7 +63,8 @@ export const Title = styled.h1`
 export const TitleBox = styled.div<TitleTypes>`
   display: flex;
   flex-direction: row;
-  transform: translate(50%);
+  transform: translate(${props => (props.slide ? 50 : 0)}%);
+  justify-content: ${props => (props.slide ? 'normal' : 'center')};
   gap: 50%;
   width: 100%;
   animation: ${props =>
