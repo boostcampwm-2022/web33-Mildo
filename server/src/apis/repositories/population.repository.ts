@@ -17,5 +17,11 @@ export default {
     const recentData = await Population.find().sort({ created: -1 }).limit(50);
     // console.log(recentData);
     return recentData;
+  },
+  findPastInfo: async (areaName: string) => {
+    const pastData = await Population.find({ areaName })
+      .sort({ created: -1 })
+      .limit(48);
+    return pastData;
   }
 };
