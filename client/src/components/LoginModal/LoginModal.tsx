@@ -5,9 +5,6 @@ import Modal from '../Modal/Modal';
 import { isLoginModalOpenAtom } from '../../atom/loginModal';
 import { Z_INDEX } from '../../config/constants';
 
-import LoginCancel from '../../../public/assets/loginCancel.svg';
-import NaverLoginSVG from '../../../public/assets/naverLogin.svg';
-
 const LoginModalLayout = css`
   position: absolute;
   top: 35%;
@@ -87,13 +84,13 @@ const LoginModal = () => {
       isClickModalFilter={setIsLoginModalOpen}>
       <TitleBar>
         <button onClick={() => setIsLoginModalOpen(false)}>
-          <img src={LoginCancel} />
+          <img src='/assets/loginCancel.svg' />
         </button>
         <h2>로그인</h2>
       </TitleBar>
       <a href={`${apiServerURL}/naver/auth/login`}>
         <NaverLoginBtn>
-          <img src={NaverLoginSVG} />
+          <img src='/assets/naverLogin.svg' />
         </NaverLoginBtn>
       </a>
     </Modal>
