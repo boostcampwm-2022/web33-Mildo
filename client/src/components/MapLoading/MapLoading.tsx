@@ -36,7 +36,12 @@ const MapLoading: React.FC<MapLoadingProps> = ({
   return (
     <LoadingPageStyle customLoadingPageStyle={customLoadingPageStyle}>
       {message && <h1>{message}</h1>}
-      <img src={loadingImg} width={width} height={height} />
+      <img
+        src={loadingImg}
+        width={width}
+        height={height}
+        aria-label='로딩중입니다...'
+      />
     </LoadingPageStyle>
   );
 };

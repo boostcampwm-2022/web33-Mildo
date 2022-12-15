@@ -87,13 +87,13 @@ const LoginModal = () => {
       isClickModalFilter={setIsLoginModalOpen}>
       <TitleBar>
         <button onClick={() => setIsLoginModalOpen(false)}>
-          <img src={LoginCancel} />
+          <img src={LoginCancel} aria-label='로그인 취소하기 버튼' />
         </button>
         <h2>로그인</h2>
       </TitleBar>
       <a href={`${apiServerURL}/naver/auth/login`}>
         <NaverLoginBtn>
-          <img src={NaverLoginSVG} />
+          <img src={NaverLoginSVG} aria-label='네이버 로그인 버튼' />
         </NaverLoginBtn>
       </a>
     </Modal>
