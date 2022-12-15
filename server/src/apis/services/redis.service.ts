@@ -35,38 +35,34 @@ export default {
   getPastInformation: async (
     areaName: string
   ): Promise<RedisAllAreasResponseTypes | null> => {
-    try {
-      const keys = await redisRepository.getAllKeys();
+    const keys = await redisRepository.getAllKeys();
 
-      if (!keys) {
-        return null;
-      }
-
-      const filteredKeys = keys.filter((item: string) => item !== 'recent');
-
-      const areasPromise = filteredKeys.map(async key => {
-        const valueJson = await redisRepository.get(key);
-        if (!valueJson) {
-          return null;
-        }
-        return JSON.parse(valueJson);
-      });
-
-      const response: RedisAllAreasResponseTypes = {};
-      const areas = await Promise.all(areasPromise);
-      areas.map(area => {
-        const target = area[areaName];
-        const populationTime = target.populationTime;
-        response[populationTime] = {
-          populationMin: target.populationMin,
-          populationMax: target.populationMax,
-          populationLevel: target.populationLevel
-        };
-      });
-
-      return response;
-    } catch (error) {
+    if (!keys) {
       return null;
     }
+
+    const filteredKeys = keys.filter((item: string) => item !== 'recent');
+
+    const areasPromise = filteredKeys.map(async key => {
+      const valueJson = await redisRepository.get(key);
+      if (!valueJson) {
+        return null;
+      }
+      return JSON.parse(valueJson);
+    });
+
+    const response: RedisAllAreasResponseTypes = {};
+    const areas = await Promise.all(areasPromise);
+    areas.map(area => {
+      const target = area[areaName];
+      const populationTime = target.populationTime;
+      response[populationTime] = {
+        populationMin: target.populationMin,
+        populationMax: target.populationMax,
+        populationLevel: target.populationLevel
+      };
+    });
+
+    return response;
   }
 };
